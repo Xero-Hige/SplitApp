@@ -3,6 +3,9 @@ package ar.uba.fi.splitapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 public class NewEventActivity extends AppCompatActivity {
 
@@ -12,6 +15,16 @@ public class NewEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        for (int i = 1; i < 21; i++) {
+            View templateItem = inflater.inflate(R.layout.eventTemplateItem, null);
+
+            TextView text = (TextView) templateItem.findViewById(R.id.templateName);
+            text.setText("Template #" + String.valueOf(i));
+
+            //templateItem.setOnClickListener();
+        }
     }
 
 }
