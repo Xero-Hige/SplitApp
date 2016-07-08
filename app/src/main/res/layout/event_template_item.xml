@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/eventTemplateItem"
+                android:id="@+id/event_template_item"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@color/icons"
@@ -14,7 +14,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <TextView
-        android:id="@+id/templateName"
+        android:id="@+id/template_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
