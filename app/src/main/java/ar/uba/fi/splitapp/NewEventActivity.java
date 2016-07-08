@@ -1,5 +1,6 @@
 package ar.uba.fi.splitapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +14,7 @@ public class NewEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toogitbar);
         setSupportActionBar(toolbar);
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -23,7 +24,10 @@ public class NewEventActivity extends AppCompatActivity {
             TextView text = (TextView) templateItem.findViewById(R.id.templateName);
             text.setText("Template #" + String.valueOf(i));
 
-            //templateItem.setOnClickListener();
+            templateItem.setOnClickListener(v->{
+                Intent eventDetail = new Intent(NewEventActivity.this,NewEventDetailsActivity.class);
+                startActivity(eventDetail);
+            });
         }
     }
 
