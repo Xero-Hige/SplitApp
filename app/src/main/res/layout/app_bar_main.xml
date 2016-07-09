@@ -8,10 +8,9 @@
     android:fitsSystemWindows="true"
     tools:context="ar.uba.fi.splitapp.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -35,20 +34,24 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 
-    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:elevation="3dp"
         android:src="@android:drawable/ic_dialog_email"/>
-
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
