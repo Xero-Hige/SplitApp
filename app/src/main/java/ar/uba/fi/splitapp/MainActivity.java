@@ -144,11 +144,9 @@ public class MainActivity extends AppCompatActivity
 
             switch (position) {
                 case 0:
-                    ActiveEventsFragment tab1 = new ActiveEventsFragment();
-                    return tab1;
+                    return new ActiveEventsFragment();
                 case 1:
-                    ActiveEventsFragment tab2 = new ActiveEventsFragment();
-                    return tab2;
+                    return new EndedEventsFragment();
                 default:
                     return null;
             }
