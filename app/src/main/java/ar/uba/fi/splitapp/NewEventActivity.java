@@ -28,8 +28,8 @@ public class NewEventActivity extends AppCompatActivity {
             TextView text = (TextView) templateItem.findViewById(R.id.template_name);
             text.setText("Template #" + String.valueOf(i));
 
-            templateItem.setOnClickListener(v->{
-                Intent eventDetail = new Intent(NewEventActivity.this,NewEventDetailsActivity.class);
+            templateItem.setOnClickListener(v -> {
+                Intent eventDetail = new Intent(NewEventActivity.this, NewEventDetailsActivity.class);
                 startActivity(eventDetail);
             });
 
