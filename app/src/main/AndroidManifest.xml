@@ -37,6 +37,8 @@
             android:label="@string/title_activity_new_event_details"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".ActiveEventsFragment">
+        </activity>
     </application>
 
 </manifest>
