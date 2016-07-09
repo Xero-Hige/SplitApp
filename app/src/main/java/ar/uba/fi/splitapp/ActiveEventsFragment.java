@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class ActiveEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -22,7 +25,10 @@ public class ActiveEventsFragment extends Fragment {
             View templateItem = inflater.inflate(R.layout.event_active_item, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.event_name);
-            text.setText("Template #" + String.valueOf(i));
+            text.setText("Evento #" + String.valueOf(i));
+
+            TextView date = (TextView) templateItem.findViewById(R.id.event_date);
+            date.setText(DateFormat.getDateInstance().format(new Date()));
 
             templateItem.setOnClickListener(v -> {
                 Intent eventDetail = new Intent(getContext(), NewEventDetailsActivity.class);
