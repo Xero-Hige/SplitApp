@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
+apply from: '../config/quality.gradle'
 apply plugin: 'me.tatarka.retrolambda'
+
+retrolambda {
+    jvmArgs '-noverify'
+}
 
 android {
     compileSdkVersion 24
