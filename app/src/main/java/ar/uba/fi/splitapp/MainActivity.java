@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Eventos Activos"));
@@ -101,24 +103,23 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Utility.showMessage("No anda", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_gallery) {
-
+            Utility.showMessage("Tampoco anda", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_slideshow) {
-
+            Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_manage) {
-
+            Utility.showMessage("Cortala!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_share) {
-
+            Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_send) {
-
+            Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
