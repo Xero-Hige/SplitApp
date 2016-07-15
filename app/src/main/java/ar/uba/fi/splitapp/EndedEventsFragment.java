@@ -24,7 +24,7 @@ public class EndedEventsFragment extends Fragment {
             View templateItem = inflater.inflate(R.layout.event_ended_item, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.event_name);
-            text.setText("Evento #" + String.valueOf(i));
+            text.setText("Evento #" + i);
 
             TextView date = (TextView) templateItem.findViewById(R.id.event_date);
             date.setText("Realizado: " + DateFormat.getDateInstance().format(new Date()));

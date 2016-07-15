@@ -24,7 +24,7 @@ public class ActiveEventsFragment extends Fragment {
             View templateItem = inflater.inflate(R.layout.event_active_item, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.event_name);
-            text.setText("Evento #" + String.valueOf(i));
+            text.setText("Evento #" + i);
 
             TextView date = (TextView) templateItem.findViewById(R.id.event_date);
             date.setText(DateFormat.getDateInstance().format(new Date()));
