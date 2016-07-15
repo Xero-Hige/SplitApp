@@ -1,14 +1,10 @@
-#Slack integration
 notifications:
   slack:
     rooms:
-          - splitap:Vnw3VIpk6kvUlap76ExiMYOA#build_status
+    - splitap:Vnw3VIpk6kvUlap76ExiMYOA#build_status
     email: false
-##############################
 language: android
-
 jdk: oraclejdk8
-
 env:
   global:
     - ANDROID_TARGET=android-24
@@ -26,6 +22,7 @@ android:
 before_script:
 
 before_install:
+  - openssl aes-256-cbc -K $encrypted_b8711ceb9a5c_key -iv $encrypted_b8711ceb9a5c_iv -in google-services.json.enc -out ./google-services.json -d
 
 script:
   - ./gradlew build --continue
