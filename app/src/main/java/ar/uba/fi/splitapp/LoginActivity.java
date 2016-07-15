@@ -19,11 +19,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,11 +78,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return false;
         });
 
+        ImageView logo = (ImageView) findViewById(R.id.logo);
+        Animation rerotate = AnimationUtils.loadAnimation(this, R.anim.rerotate);
+
+        AnimationTask rotate = new AnimationTask(logo, rerotate); //FIXME: Names
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(view -> attemptLogin());
 
         mLoginFormView = findViewById(R.id.email_login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        rotate.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void populateAutoComplete() {
@@ -274,6 +284,48 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    private class AnimationTask extends AsyncTask<Void, Void, Boolean> {
+
+        private ImageView mImageView;
+        private Animation mAnimation;
+        private int mRotateCount = 0;
+
+        AnimationTask(ImageView view, Animation animation) {
+            mImageView = view;
+            mAnimation = animation;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            while (true) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    return true;
+                }
+                runOnUiThread(this::animate);
+            }
+        }
+
+        private void animate() {
+
+            if (mRotateCount % 2 == 0) {
+                mImageView.startAnimation(mAnimation);
+                mImageView.setImageDrawable(getResources().getDrawable(R.drawable.logo_b));
+                mRotateCount++;
+            } else {
+                mImageView.startAnimation(mAnimation);
+                mImageView.setImageDrawable(getResources().getDrawable(R.drawable.logo_a));
+                mRotateCount++;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        }
     }
 
     /**
