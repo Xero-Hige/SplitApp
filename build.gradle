@@ -11,6 +11,8 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
 
         classpath 'me.tatarka:gradle-retrolambda:3.2.5' //Enables lambdas
+
+        classpath 'com.google.gms:google-services:3.0.0' //FIREBASE
     }
 }
 
