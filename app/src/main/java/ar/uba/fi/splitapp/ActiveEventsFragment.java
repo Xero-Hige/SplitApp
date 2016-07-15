@@ -30,7 +30,7 @@ public class ActiveEventsFragment extends Fragment {
             date.setText(DateFormat.getDateInstance().format(new Date()));
 
             templateItem.setOnClickListener(v -> {
-                Intent eventDetail = new Intent(getContext(), NewEventDetailsActivity.class);
+                Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
                 startActivity(eventDetail);
             });
 

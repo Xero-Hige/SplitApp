@@ -22,108 +22,124 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="ar.uba.fi.splitapp.EventDescriptionActivity"
-        tools:showIn="@layout/activity_event_description">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
-            android:id="@+id/content"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@+id/imageView3"
-            android:layout_alignParentTop="true">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:showIn="@layout/activity_new_event">
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:src="@android:drawable/ic_menu_today"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageButton"
-                android:layout_toEndOf="@+id/imageButton"
-                android:text="Algun dia"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@android:drawable/ic_menu_today"/>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/textView2"
-                android:layout_toEndOf="@+id/imageButton2"
-                android:text="Alguna hora"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageButton"
+                    android:layout_toEndOf="@+id/imageButton"
+                    android:text="Algun dia"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:src="@android:drawable/ic_menu_today"/>
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textView2"
+                    android:layout_toEndOf="@+id/imageButton2"
+                    android:text="Alguna hora"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/imageButton"
-                android:src="@android:drawable/ic_menu_today"/>
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@android:drawable/ic_menu_today"/>
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageButton3"
-                android:layout_toEndOf="@+id/imageButton3"
-                android:text="En lo de tobi"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/imageButton"
+                    android:src="@android:drawable/ic_menu_today"/>
 
-            <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/imageButton3"
-                android:src="@android:drawable/ic_menu_today"/>
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageButton3"
+                    android:layout_toEndOf="@+id/imageButton3"
+                    android:text="En lo de tobi"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageButton4"
-                android:layout_alignStart="@+id/textView4"
-                android:text="No va nadie"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <ImageButton
+                    android:id="@+id/imageButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/imageButton3"
+                    android:src="@android:drawable/ic_menu_today"/>
 
-            <ExpandableListView
-                android:id="@+id/expandableListView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageButton4"
+                    android:layout_alignStart="@+id/textView4"
+                    android:text="No va nadie"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <!--<android.support.v7.widget.LinearLayoutCompat-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content">-->
+                <!--<com.github.aakira.expandablelayout.ExpandableWeightLayout-->
+                <!--android:id="@+id/expandableLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:layout_weight="3"-->
+                <!--app:ael_duration="1000"-->
+                <!--app:ael_interpolator="anticipateOvershoot">-->
+
+                <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:src="@drawable/a" />-->
+                <!--</com.github.aakira.expandablelayout.ExpandableWeightLayout>-->
+                <!--</android.support.v7.widget.LinearLayoutCompat>-->
+
+
+            </RelativeLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
+            android:scaleType="centerCrop"
             android:src="@drawable/b"/>
-    </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
