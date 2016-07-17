@@ -32,14 +32,14 @@
             android:textColor="@color/primary_text"
             android:textSize="20sp"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/view_event"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:background="@color/icons"
-            android:src="@drawable/ic_menu_camera"/>
+            android:src="@drawable/more"/>
 
         <TextView
             android:id="@+id/event_date"

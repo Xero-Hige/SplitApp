@@ -50,6 +50,7 @@
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_marginRight="@dimen/fab_margin"
             android:elevation="3dp"
-            android:src="@android:drawable/ic_dialog_email"/>
+            android:src="@drawable/add"
+            android:tint="@color/icons"/>
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
