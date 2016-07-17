@@ -299,13 +299,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                return true;
+            }
             while (true) {
+                runOnUiThread(this::animate);
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     return true;
                 }
-                runOnUiThread(this::animate);
             }
         }
 
