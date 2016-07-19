@@ -36,6 +36,17 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.github.aakira:expandable-layout:1.5.1@aar' //Expandables
     compile 'com.facebook.android:facebook-android-sdk:[4,5)' //Facebook
+
+    compile 'com.google.guava:guava:19.0'
+    //--Image
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    //--Circular
+    compile 'com.pkmmte.view:circularimageview:1.1'
+    //--Others Image Views
+    compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
+    //--REST
+    compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+
 }
 
 apply plugin: 'com.google.gms.google-services' //FIREBASE
