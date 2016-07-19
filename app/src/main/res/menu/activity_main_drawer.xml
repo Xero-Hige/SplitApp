@@ -3,7 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/new_event"
             android:icon="@drawable/add"
             android:title="Nuevo Evento"/>
         <item
@@ -23,13 +23,17 @@
     <item android:title="">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_settings"
                 android:icon="@drawable/settings"
                 android:title="Ajustes"/>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_help"
                 android:icon="@drawable/help"
                 android:title="Ayuda"/>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/messenger_button_send_round_shadow"
+                android:title="Log Out"/>
         </menu>
     </item>
 

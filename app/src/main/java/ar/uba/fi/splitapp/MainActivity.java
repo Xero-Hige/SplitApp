@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.pkmmte.view.CircularImageView;
 
 public class MainActivity extends AppCompatActivity
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.new_event) {
             Utility.showMessage("No anda", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_gallery) {
             Utility.showMessage("Tampoco anda", Utility.getViewgroup(this), "Ok");
@@ -137,15 +138,24 @@ public class MainActivity extends AppCompatActivity
             Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_manage) {
             Utility.showMessage("Cortala!", Utility.getViewgroup(this), "Ok");
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_settings) {
             Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_help) {
             Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
+        } else if (id == R.id.nav_logout) {
+            logOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logOut() {
+        LoginManager.getInstance().logOut();
+        Intent mainActivityIntent = new Intent(this, LoginActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
     }
 
 
