@@ -17,6 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.facebook.Profile;
+import com.pkmmte.view.CircularImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +48,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        addNavHeader(navigationView);
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Eventos Activos"));
@@ -69,6 +77,19 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    private void addNavHeader(NavigationView navigationView) {
+        View header = navigationView.getHeaderView(0);
+        CircularImageView userPic = (CircularImageView) header.findViewById(R.id.user_pic);
+        Profile profile = Profile.getCurrentProfile();
+        Glide.with(this.getApplicationContext())
+                .load(profile.getProfilePictureUri(200, 200))
+                .centerCrop()
+                .into(userPic);
+        TextView username = (TextView) header.findViewById(R.id.user_id);
+        username.setText(profile.getName());
+
     }
 
     @Override
