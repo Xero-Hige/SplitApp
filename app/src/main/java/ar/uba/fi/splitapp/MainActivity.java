@@ -1,6 +1,8 @@
 package ar.uba.fi.splitapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -91,6 +94,10 @@ public class MainActivity extends AppCompatActivity
         TextView username = (TextView) header.findViewById(R.id.user_id);
         username.setText(profile.getName());
 
+        ImageView background = (ImageView) header.findViewById(R.id.nav_background);
+        TestTask t = new TestTask(this.getApplicationContext(), profile, background);
+        t.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     @Override
@@ -158,6 +165,35 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+    private class TestTask extends AsyncTask<Void, Void, Boolean> {
+
+        Context context;
+        Profile profile;
+        ImageView imageView;
+        String url = "";
+
+        TestTask(Context context, Profile profile, ImageView imageView) {
+            this.context = context;
+            this.profile = profile;
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            url = FacebookManager.getCoverUrl(profile.getId());
+            return url != null;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                Glide.with(context)
+                        .load(url)
+                        .centerCrop()
+                        .into(imageView);
+            }
+        }
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
