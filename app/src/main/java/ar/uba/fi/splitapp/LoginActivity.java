@@ -31,6 +31,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -77,6 +78,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
+        Profile profile = Profile.getCurrentProfile();
+        if (profile != null) {
+            startMainActivity();
+        }
+
+
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -118,9 +125,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(mainActivityIntent);
-                finish();
+                startMainActivity();
             }
 
             @Override
@@ -259,6 +264,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    private void startMainActivity() {
+        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -323,7 +334,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -427,9 +437,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(success);
 
             if (success) {
-                Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(mainActivityIntent);
-                finish();
+                startMainActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
