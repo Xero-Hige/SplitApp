@@ -1,7 +1,11 @@
 package ar.uba.fi.splitapp;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.HttpMethod;
@@ -28,7 +32,7 @@ public final class FacebookManager {
     private FacebookManager() {
     }
 
-    public static String getCoverUrl(String userId) {
+    private static String getCoverUrl(String userId) {
         final String[] result = {""};
         SplitAppLogger.writeLog(SplitAppLogger.DEBG, "/" + userId + "?fields=cover");
         Bundle params = new Bundle();
@@ -57,6 +61,44 @@ public final class FacebookManager {
         return result[0];
     }
 
+    public static void fillWithUserCover(String userId, ImageView view, Context context) {
+        ImageFillerTask task = new ImageFillerTask(FacebookManager::getCoverUrl, userId, view, context);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
+    private interface UrlGetter {
+        String execute(String id);
+    }
+
+    private static class ImageFillerTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final UrlGetter mGetter;
+        private final String mResId;
+        private final ImageView mView;
+        private final Context mContext;
+        private String mUrl;
+
+        ImageFillerTask(UrlGetter getter, String resId, ImageView view, Context context) {
+            mGetter = getter;
+            mResId = resId;
+            mView = view;
+            mContext = context;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            mUrl = mGetter.execute(mResId);
+            return mUrl != null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (!success) {
+                return;
+            }
+
+            Glide.with(mContext).load(mUrl).centerCrop().into(mView);
+        }
+    }
 }
 

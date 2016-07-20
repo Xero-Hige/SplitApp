@@ -1,8 +1,6 @@
 package ar.uba.fi.splitapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -95,8 +93,7 @@ public class MainActivity extends AppCompatActivity
         username.setText(profile.getName());
 
         ImageView background = (ImageView) header.findViewById(R.id.nav_background);
-        TestTask t = new TestTask(this.getApplicationContext(), profile, background);
-        t.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        FacebookManager.fillWithUserCover(profile.getId(), background, getApplicationContext());
 
     }
 
@@ -163,36 +160,6 @@ public class MainActivity extends AppCompatActivity
         Intent mainActivityIntent = new Intent(this, LoginActivity.class);
         startActivity(mainActivityIntent);
         finish();
-    }
-
-    private class TestTask extends AsyncTask<Void, Void, Boolean> {
-
-        Context context;
-        Profile profile;
-        ImageView imageView;
-        String url = "";
-
-        TestTask(Context context, Profile profile, ImageView imageView) {
-            this.context = context;
-            this.profile = profile;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            url = FacebookManager.getCoverUrl(profile.getId());
-            return url != null;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            if (success) {
-                Glide.with(context)
-                        .load(url)
-                        .centerCrop()
-                        .into(imageView);
-            }
-        }
     }
 
     /**
