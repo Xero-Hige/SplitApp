@@ -60,9 +60,14 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".FriendChooserActivity"
-                  android:screenOrientation="sensorPortrait">
+        <activity
+            android:name=".FriendChooserActivity"
+            android:screenOrientation="sensorPortrait">
         </activity>
+        <activity
+            android:name=".ChatSessionActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

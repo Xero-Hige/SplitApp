@@ -1,5 +1,6 @@
 package ar.uba.fi.splitapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -39,6 +40,10 @@ public class FriendChooserActivity extends AppCompatActivity {
                         final int finalI = i;
                         friendLayout.setOnClickListener(v -> {
                             Utility.showMessage("Agregaste a: " + names.get(finalI), Utility.getViewgroup(this));
+                            Intent chat = new Intent(this, ChatSessionActivity.class);
+                            chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_ID, ids.get(finalI));
+                            chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_NAME, names.get(finalI));
+                            startActivity(chat);
                             //finish();
                         });
 
