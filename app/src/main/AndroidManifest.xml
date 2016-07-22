@@ -32,8 +32,7 @@
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity
@@ -58,7 +57,12 @@
         <activity
             android:name=".EventDescriptionActivity"
             android:label="@string/title_activity_event_description"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".FriendChooserActivity"
+                  android:screenOrientation="sensorPortrait"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
