@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
         ImageView background = (ImageView) header.findViewById(R.id.nav_background);
         FacebookManager.fillWithUserCover(profile.getId(), background, getApplicationContext());
 
+        FacebookManager.getFriends(profile.getId());
     }
 
     @Override

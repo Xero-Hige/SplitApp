@@ -10,7 +10,11 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.HttpMethod;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ${FILE}
@@ -34,7 +38,6 @@ public final class FacebookManager {
 
     private static String getCoverUrl(String userId) {
         final String[] result = {""};
-        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "/" + userId + "?fields=cover");
         Bundle params = new Bundle();
         params.putString("fields", "cover");
 
@@ -48,9 +51,6 @@ public final class FacebookManager {
                         return;
                     }
 
-                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, response.toString());
-
-
                     try {
                         result[0] = response.getJSONObject().getJSONObject("cover").getString("source");
 
@@ -59,6 +59,33 @@ public final class FacebookManager {
                 }
         ).executeAndWait();
         return result[0];
+    }
+
+    public static List<String> getFriends(String userId) {
+        final ArrayList[] friends = new ArrayList[]{null};
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + userId + "/friends",
+                null,
+                HttpMethod.GET,
+                response -> {
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Done: " + response.getJSONObject().toString());
+                    try {
+                        JSONArray list = response.getJSONObject().getJSONArray("data");
+                        friends[0] = new ArrayList<>();
+
+                        for (int i = 0; i < list.length(); i++) {
+                            SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Friend: " + list.getString(i));
+                            friends[0].add(list.getString(i));
+                        }
+
+                    } catch (JSONException e) {
+                        SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Can't decrypt friends JSON");
+                    }
+                }
+        ).executeAsync();
+        return friends[0];
     }
 
     public static void fillWithUserCover(String userId, ImageView view, Context context) {

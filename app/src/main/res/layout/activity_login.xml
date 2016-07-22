@@ -12,10 +12,14 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerInParent="true"
         android:src="@drawable/logo_a"/>
 
     <LinearLayout
@@ -34,45 +38,45 @@
             android:layout_marginBottom="8dp"
             android:visibility="gone"/>
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+        <!--<LinearLayout-->
+        <!--android:id="@+id/email_login_form"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-                <AutoCompleteTextView
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
+        <!--<AutoCompleteTextView-->
+        <!--android:id="@+id/email"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/prompt_email"-->
+        <!--android:inputType="textEmailAddress"-->
+        <!--android:maxLines="1"-->
+        <!--android:singleLine="true"/>-->
 
-            </android.support.design.widget.TextInputLayout>
+        <!--</android.support.design.widget.TextInputLayout>-->
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true"/>
+        <!--<EditText-->
+        <!--android:id="@+id/password"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/prompt_password"-->
+        <!--android:imeActionId="@+id/login"-->
+        <!--android:imeActionLabel="@string/action_sign_in_short"-->
+        <!--android:imeOptions="actionUnspecified"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:maxLines="1"-->
+        <!--android:singleLine="true"/>-->
 
-            </android.support.design.widget.TextInputLayout>
+        <!--</android.support.design.widget.TextInputLayout>-->
 
             <!--<Button-->
             <!--android:id="@+id/email_sign_in_button"-->
@@ -90,7 +94,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="30dp"
                 android:layout_marginTop="30dp"/>
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
     </LinearLayout>
 
