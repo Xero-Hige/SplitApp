@@ -8,6 +8,7 @@
     <color name="colorPrimaryLight_T">#80FFCCBC</color>
     <color name="colorAccent">#8BC34A</color>
     <color name="colorPrimary_text">#212121</color>
+    <color name="colorPrimary_text_T">#80212121</color>
     <color name="colorSecondary_text">#727272</color>
     <color name="primary">#FF5722</color>
     <color name="primary_dark">#E64A19</color>
@@ -17,6 +18,6 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
-    <color name="icons_T">#80FFFFFF</color>
+    <color name="icons_T">#80ffffff</color>
     <color name="divider">#B6B6B6</color>
 </resources>
