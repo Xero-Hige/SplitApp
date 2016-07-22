@@ -12,9 +12,9 @@ import com.facebook.HttpMethod;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ${FILE}
@@ -37,7 +37,7 @@ public final class FacebookManager {
     }
 
     private static String getCoverUrl(String userId) {
-        final String[] result = {""};
+        final String[] result = {null};
         Bundle params = new Bundle();
         params.putString("fields", "cover");
 
@@ -48,11 +48,15 @@ public final class FacebookManager {
                 HttpMethod.GET,
                 response -> {
                     if (response == null) {
+                        SplitAppLogger.writeLog(SplitAppLogger.WARN, "Cover null response");
                         return;
                     }
 
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Cover response: " + response.toString());
+
                     try {
                         result[0] = response.getJSONObject().getJSONObject("cover").getString("source");
+                        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Cover response: " + result[0]);
 
                     } catch (JSONException e) {
                     }
@@ -61,8 +65,42 @@ public final class FacebookManager {
         return result[0];
     }
 
-    public static List<String> getFriends(String userId) {
-        final ArrayList[] friends = new ArrayList[]{null};
+    private static String getUserPicUrl(String userId) {
+        final String[] result = {null};
+        Bundle params = new Bundle();
+        params.putBoolean("redirect", false);
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + userId + "/picture",
+                params,
+                HttpMethod.GET,
+                response -> {
+                    if (response == null) {
+                        SplitAppLogger.writeLog(SplitAppLogger.WARN, "Picture null response");
+                        return;
+                    }
+
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + response.toString());
+
+                    try {
+                        result[0] = response.getJSONObject().getJSONObject("data").getString("url");
+                        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + result[0]);
+
+                    } catch (JSONException e) {
+                    }
+                }
+        ).executeAndWait();
+        return result[0];
+    }
+
+    public static void executeWithFriendlist(String userId, FriendsCallback callback) {
+        ExecuteWithFriendsTask task = new ExecuteWithFriendsTask(userId, callback);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private static ArrayList[] getFriends(String userId) {
+        final ArrayList[] friends = new ArrayList[]{null, null};
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -74,18 +112,20 @@ public final class FacebookManager {
                     try {
                         JSONArray list = response.getJSONObject().getJSONArray("data");
                         friends[0] = new ArrayList<>();
+                        friends[1] = new ArrayList<>();
 
                         for (int i = 0; i < list.length(); i++) {
-                            SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Friend: " + list.getString(i));
-                            friends[0].add(list.getString(i));
+                            JSONObject friend = list.getJSONObject(i);
+                            friends[0].add(friend.getString("name"));
+                            friends[1].add(friend.getString("id"));
                         }
 
                     } catch (JSONException e) {
                         SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Can't decrypt friends JSON");
                     }
                 }
-        ).executeAsync();
-        return friends[0];
+        ).executeAndWait();
+        return friends;
     }
 
     public static void fillWithUserCover(String userId, ImageView view, Context context) {
@@ -93,8 +133,51 @@ public final class FacebookManager {
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public static void fillWithUserPic(String userId, ImageView view, Context context) {
+        ImageFillerTask task = new ImageFillerTask(FacebookManager::getUserPicUrl, userId, view, context);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+
+    public interface FriendsCallback {
+        void execute(ArrayList<String> names, ArrayList<String> ids);
+    }
+
     private interface UrlGetter {
         String execute(String id);
+    }
+
+    private static class ExecuteWithFriendsTask extends AsyncTask<Void, Void, Boolean> {
+
+        String userId;
+        FriendsCallback callback;
+        ArrayList<String> friendsIds;
+        ArrayList<String> friendsNames;
+
+
+        ExecuteWithFriendsTask(String userId, FriendsCallback callback) {
+            this.userId = userId;
+            this.callback = callback;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            ArrayList[] friendsData = getFriends(userId);
+            if (friendsData == null) {
+                return false;
+            }
+            friendsNames = friendsData[0];
+            friendsIds = friendsData[1];
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (!success) {
+                return;
+            }
+            callback.execute(friendsNames, friendsIds);
+        }
     }
 
     private static class ImageFillerTask extends AsyncTask<Void, Void, Boolean> {
@@ -120,11 +203,15 @@ public final class FacebookManager {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            if (!success) {
+            if (!success || mView == null) {
                 return;
             }
-
-            Glide.with(mContext).load(mUrl).centerCrop().into(mView);
+            try {
+                Glide.with(mContext).load(mUrl).centerCrop().into(mView);
+            } catch (NullPointerException e) {
+                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Null pointer: " + e.getMessage());
+                Glide.with(mContext).load(R.drawable.logo).centerCrop().into(mView);
+            }
         }
     }
 }
