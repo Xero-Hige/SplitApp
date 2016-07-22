@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.pkmmte.view.CircularImageView;
@@ -85,17 +84,14 @@ public class MainActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         CircularImageView userPic = (CircularImageView) header.findViewById(R.id.user_pic);
         Profile profile = Profile.getCurrentProfile();
-        Glide.with(this.getApplicationContext())
-                .load(profile.getProfilePictureUri(200, 200))
-                .centerCrop()
-                .into(userPic);
+
+        FacebookManager.fillWithUserPic(profile.getId(), userPic, getApplicationContext());
         TextView username = (TextView) header.findViewById(R.id.user_id);
+
         username.setText(profile.getName());
 
         ImageView background = (ImageView) header.findViewById(R.id.nav_background);
         FacebookManager.fillWithUserCover(profile.getId(), background, getApplicationContext());
-
-        FacebookManager.getFriends(profile.getId());
     }
 
     @Override

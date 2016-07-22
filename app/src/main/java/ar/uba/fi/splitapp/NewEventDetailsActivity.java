@@ -1,8 +1,10 @@
 package ar.uba.fi.splitapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.RelativeLayout;
 
 public class NewEventDetailsActivity extends AppCompatActivity {
 
@@ -13,6 +15,11 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        RelativeLayout addFriend = (RelativeLayout) findViewById(R.id.add_friend);
+        addFriend.setOnClickListener(v -> {
+            Intent friendListIntent = new Intent(this, FriendChooserActivity.class);
+            startActivityForResult(friendListIntent, 0);
+        });
     }
 
 }
