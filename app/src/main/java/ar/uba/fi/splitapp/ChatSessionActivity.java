@@ -89,18 +89,18 @@ public class ChatSessionActivity extends AppCompatActivity {
         scrollDownFB.setOnClickListener(listener -> scrollToLast());
     }
 
-//    /**
-//     * Called when you are no longer visible to the user. You will next receive either onRestart(),
-//     * onDestroy(), or nothing, depending on later user activity.
-//     * <p>
-//     * Derived classes must call through to the super class's implementation of this method.
-//     * If they do not, an exception will be thrown.
-//     */
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        MessagesListener.stopListening();
-//    }
+    /**
+     * Called when you are no longer visible to the user. You will next receive either onRestart(),
+     * onDestroy(), or nothing, depending on later user activity.
+     * <p>
+     * Derived classes must call through to the super class's implementation of this method.
+     * If they do not, an exception will be thrown.
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        MockServer.setSession(null);
+    }
 
     private void addSendListener() {
         ImageButton sendButton = (ImageButton) this.findViewById(R.id.send);
@@ -116,7 +116,7 @@ public class ChatSessionActivity extends AppCompatActivity {
                         return;
                     }
 
-                    //sendMessage(message);
+                    sendMessage(message);
 
                     msgView.setText("");
                     Utility.hideKeyboard(this);
@@ -124,10 +124,9 @@ public class ChatSessionActivity extends AppCompatActivity {
                 });
     }
 
-//    private void sendMessage(String message) {
-//        SendMessageTask task = new SendMessageTask(mFriendId, message);
-//        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//    }
+    private void sendMessage(String message) {
+        MockServer.sendFriendMessage(message, mFriendId);
+    }
 
 //    private void loadOldMessages() {
 //        StringResourcesHandler.executeQuery(mFriendId, StringResourcesHandler.USER_CHAT, UserHandler.getToken()
@@ -196,20 +195,6 @@ public class ChatSessionActivity extends AppCompatActivity {
         addResponse(R.layout.chat_session_friend, mFriendName, mFriendId, message);
     }
 
-//    /**
-//     * Called after onCreate(Bundle) — or after onRestart() when the activity had been stopped, but
-//     * is now again being displayed to the user. It will be followed by onResume().
-//     * <p>
-//     * Derived classes must call through to the super class's implementation of this method.
-//     * If they do not, an exception will be thrown.
-//     */
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        MessagesListener.startListening(UserHandler.getToken(), mFriendId
-//                , this);
-//    }
-
     private void addResponse(int layoutId, String username, String userId, String message) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View layout = inflater.inflate(layoutId, null);
@@ -225,6 +210,19 @@ public class ChatSessionActivity extends AppCompatActivity {
 
         runOnUiThread(() -> mMessagesLayout.addView(layout));
         runOnUiThread(this::scrollToLast);
+    }
+
+    /**
+     * Called after onCreate(Bundle) — or after onRestart() when the activity had been stopped, but
+     * is now again being displayed to the user. It will be followed by onResume().
+     * <p>
+     * Derived classes must call through to the super class's implementation of this method.
+     * If they do not, an exception will be thrown.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MockServer.setSession(this);
     }
 
 //    private class SendMessageTask extends AsyncTask<Void, Void, Boolean> {
