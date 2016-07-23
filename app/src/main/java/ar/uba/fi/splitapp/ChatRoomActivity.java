@@ -37,7 +37,7 @@ import com.github.siyamed.shapeimageview.BubbleImageView;
 /**
  * Chat session activity. Represents a chat session between 2 users.
  */
-public class ChatSessionActivity extends AppCompatActivity {
+public class ChatRoomActivity extends AppCompatActivity {
 
     /**
      * Intent extra field: Friend name
@@ -222,7 +222,7 @@ public class ChatSessionActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        MockServer.setChatSession(this);
+        MockServer.setChatRoom(this);
     }
 
 //    private class SendMessageTask extends AsyncTask<Void, Void, Boolean> {
