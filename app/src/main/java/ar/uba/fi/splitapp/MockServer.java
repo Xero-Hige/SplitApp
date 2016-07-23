@@ -3,7 +3,13 @@ package ar.uba.fi.splitapp;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -79,28 +85,51 @@ public final class MockServer {
         if (mSession != null) {
             mSession.runOnUiThread(() -> mSession.addResponse(message, friendId));
         } else {
-            showNotification("Nuevo mensaje de " + sender + ": ", message);
+            Bitmap bitmap = FacebookManager.getUserImage(appContext, friendId);
+            showNotification("Nuevo mensaje de " + sender + ": ", message, bitmap);
         }
         mMessages.add(new String[]{friendId, message});
     }
 
-
-    private static void showNotification(String header, String message) {
-        Bitmap bitmap = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.logo);
+    private static void showNotification(String header, String message, Bitmap icon) {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(appContext)
-                .setSmallIcon(R.drawable.people)
-                .setLargeIcon(bitmap)
+                .setSmallIcon(R.drawable.logo)
+                .setLargeIcon(MockServer.getCircleBitmap(icon))
                 .setContentTitle(header)
                 .setContentText(message)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri);
+                .setSound(defaultSoundUri)
+                .setColor(appContext.getResources().getColor(R.color.colorPrimaryLight));
 
         NotificationManager notificationManager
                 = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private static Bitmap getCircleBitmap(Bitmap bitmap) {
+        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
+
+        final int color = Color.RED;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawOval(rectF, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        bitmap.recycle();
+
+        return output;
     }
 
     public static void setChatSession(ChatSessionActivity session) {

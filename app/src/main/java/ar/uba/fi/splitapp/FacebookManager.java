@@ -1,6 +1,8 @@
 package ar.uba.fi.splitapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -14,6 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -57,35 +63,6 @@ public final class FacebookManager {
                     try {
                         result[0] = response.getJSONObject().getJSONObject("cover").getString("source");
                         SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Cover response: " + result[0]);
-
-                    } catch (JSONException e) {
-                    }
-                }
-        ).executeAndWait();
-        return result[0];
-    }
-
-    private static String getUserPicUrl(String userId) {
-        final String[] result = {null};
-        Bundle params = new Bundle();
-        params.putBoolean("redirect", false);
-
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/" + userId + "/picture",
-                params,
-                HttpMethod.GET,
-                response -> {
-                    if (response == null) {
-                        SplitAppLogger.writeLog(SplitAppLogger.WARN, "Picture null response");
-                        return;
-                    }
-
-                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + response.toString());
-
-                    try {
-                        result[0] = response.getJSONObject().getJSONObject("data").getString("url");
-                        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + result[0]);
 
                     } catch (JSONException e) {
                     }
@@ -138,6 +115,50 @@ public final class FacebookManager {
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public static Bitmap getUserImage(Context context, String userId) {
+        try {
+            URL url = new URL(FacebookManager.getUserPicUrl(userId));
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.logo);
+        }
+    }
+
+    private static String getUserPicUrl(String userId) {
+        final String[] result = {null};
+        Bundle params = new Bundle();
+        params.putBoolean("redirect", false);
+        params.putString("type", "large");
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/" + userId + "/picture",
+                params,
+                HttpMethod.GET,
+                response -> {
+                    if (response == null) {
+                        SplitAppLogger.writeLog(SplitAppLogger.WARN, "Picture null response");
+                        return;
+                    }
+
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + response.toString());
+
+                    try {
+                        result[0] = response.getJSONObject().getJSONObject("data").getString("url");
+                        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + result[0]);
+
+                    } catch (JSONException e) {
+                    }
+                }
+        ).executeAndWait();
+        return result[0];
+    }
 
     public interface FriendsCallback {
         void execute(ArrayList<String> names, ArrayList<String> ids);
