@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.Profile;
-import com.github.siyamed.shapeimageview.BubbleImageView;
+import com.pkmmte.view.CircularImageView;
 
 /**
  * @author Xero-Hige
@@ -199,7 +199,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View layout = inflater.inflate(layoutId, null);
 
-        BubbleImageView imageView = (BubbleImageView) layout.findViewById(R.id.chat_user_img);
+        CircularImageView imageView = (CircularImageView) layout.findViewById(R.id.chat_user_img);
         FacebookManager.fillWithUserPic(userId, imageView, getApplicationContext());
 
         TextView nameTextView = (TextView) layout.findViewById(R.id.chat_user_name);

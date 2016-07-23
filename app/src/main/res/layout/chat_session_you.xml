@@ -10,7 +10,7 @@
                 android:paddingStart="15dp"
                 android:paddingTop="5dp">
 
-    <com.github.siyamed.shapeimageview.BubbleImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/chat_user_img"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -20,11 +20,9 @@
         android:baselineAlignBottom="false"
         android:elevation="10dp"
         app:border="true"
-        app:shadow="true"
-        app:siArrowPosition="left"
-        app:siBorderColor="@color/accent"
-        app:siBorderWidth="1dp"
-        app:siSquare="true"/>
+        app:border_color="@color/accent"
+        app:border_width="2dp"
+        app:shadow="true"/>
 
     <TextView
         android:id="@+id/chat_user_name"
@@ -33,26 +31,41 @@
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/chat_user_img"
         android:textAlignment="textStart"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         android:textStyle="italic"/>
 
-    <TextView
-        android:id="@+id/chat_user_msg"
+    <me.himanshusoni.chatmessageview.ChatMessageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/chat_user_name"
         android:layout_gravity="bottom"
         android:layout_toStartOf="@+id/chat_user_img"
-        android:background="@color/primary_light"
-        android:clickable="false"
-        android:elegantTextHeight="true"
-        android:elevation="10dp"
-        android:minHeight="47dp"
-        android:padding="5dp"
-        android:singleLine="false"
-        android:textAlignment="inherit"
-        android:textIsSelectable="true"
-        android:textSize="15sp"
-        android:textStyle="bold"/>
+        app:cmv_arrowGravity="start"
+        app:cmv_arrowMargin="3dp"
+        app:cmv_arrowPosition="right"
+        app:cmv_backgroundColor="@color/accent_T"
+        app:cmv_backgroundColorPressed="@color/accent"
+        app:cmv_contentPadding="2dp"
+        app:cmv_cornerRadius="3dp"
+        app:cmv_showArrow="true">
+
+        <TextView
+            android:id="@+id/chat_user_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/icons"
+            android:clickable="false"
+            android:elegantTextHeight="true"
+            android:elevation="10dp"
+            android:minHeight="47dp"
+            android:padding="5dp"
+            android:singleLine="false"
+            android:textAlignment="inherit"
+            android:textColor="@color/colorPrimary_text"
+            android:textIsSelectable="false"
+            android:textSize="15sp"
+            />
+    </me.himanshusoni.chatmessageview.ChatMessageView>
 </RelativeLayout>
