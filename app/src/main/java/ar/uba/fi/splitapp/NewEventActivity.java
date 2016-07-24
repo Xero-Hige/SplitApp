@@ -13,6 +13,8 @@ public class NewEventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FacebookManager.checkInit(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
