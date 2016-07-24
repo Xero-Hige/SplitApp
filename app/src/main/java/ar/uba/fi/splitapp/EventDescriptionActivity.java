@@ -22,13 +22,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        ExpandableLinearLayout expandableLayout = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
+        ExpandableLinearLayout my_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
         RelativeLayout expand = (RelativeLayout) findViewById(R.id.expand_my_task);
-        expand.setOnClickListener(v -> {
-            expandableLayout.toggle();
-        });
+        expand.setOnClickListener(v -> my_tasks.toggle());
 
-
+        ExpandableLinearLayout all_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_all_tasks);
+        expand = (RelativeLayout) findViewById(R.id.expand_all_tasks);
+        expand.setOnClickListener(v -> all_tasks.toggle());
     }
 
 }
