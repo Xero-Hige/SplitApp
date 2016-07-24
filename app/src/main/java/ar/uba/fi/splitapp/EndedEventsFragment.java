@@ -30,7 +30,7 @@ public class EndedEventsFragment extends Fragment {
             date.setText("Realizado: " + DateFormat.getDateInstance().format(new Date()));
 
             templateItem.setOnClickListener(v -> {
-                Intent eventDetail = new Intent(getContext(), NewEventDetailsActivity.class);
+                Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
                 startActivity(eventDetail);
             });
 
