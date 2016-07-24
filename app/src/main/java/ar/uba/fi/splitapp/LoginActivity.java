@@ -76,8 +76,6 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
         fbCallbackManager = CallbackManager.Factory.create();
         addLoginButton();
 
