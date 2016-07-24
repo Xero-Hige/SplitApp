@@ -76,11 +76,22 @@ public final class FacebookManager {
     }
 
     public static void checkInit(Activity activity) {
-        if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null) {
+        try {
+            Profile.getCurrentProfile();
+
+        } catch (RuntimeException e) {
+            FacebookSdk.sdkInitialize(activity.getApplicationContext());
             Intent login = new Intent(activity, LoginActivity.class);
+            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.getApplicationContext().startActivity(login);
             activity.finish();
+        }
+        if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null) {
             FacebookSdk.sdkInitialize(activity.getApplicationContext());
+            Intent login = new Intent(activity, LoginActivity.class);
+            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.getApplicationContext().startActivity(login);
+            activity.finish();
         }
     }
 
