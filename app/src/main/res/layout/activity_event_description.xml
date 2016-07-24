@@ -120,25 +120,137 @@
                     android:text="No va nadie"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-                <!--<android.support.v7.widget.LinearLayoutCompat-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content">-->
-                <!--<com.github.aakira.expandablelayout.ExpandableWeightLayout-->
-                <!--android:id="@+id/expandableLayout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="20dp"-->
-                <!--android:layout_weight="3"-->
-                <!--app:ael_duration="1000"-->
-                <!--app:ael_interpolator="anticipateOvershoot">-->
 
-                <!--<ImageView-->
+                <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/my_tasks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/imageButton4"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/colorPrimary"
+                    android:elevation="20dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/expand_my_task"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_above="@+id/expandable_my_tasks"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center">
+
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/drop_down"
+                            />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/my_task_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_toStartOf="@+id/expand_my_task"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Gente"
+                        android:textColor="@color/icons"
+                        android:textSize="12sp"/>
+
+                    <com.github.aakira.expandablelayout.ExpandableLinearLayout
+                        android:id="@+id/expandable_my_tasks"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_below="@id/my_task_label"
+                        android:background="@color/colorPrimaryLight"
+                        android:orientation="vertical"
+                        app:ael_duration="400"
+                        app:ael_expanded="false">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="
+    sample.sample.sample.sample.sample.sample.sample.sample.sample.sample.\n
+    "
+                            android:textColor="@color/icons"
+                            android:textSize="16sp"
+                            />
+                    </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+                </RelativeLayout>
+
+                <!--<RelativeLayout-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:layout_below="@+id/my_tasks"-->
+                <!--android:background="@color/colorPrimary"-->
+                <!--android:elevation="20dp"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--android:id="@+id/all_tasks">-->
+
+
+                <!--<RelativeLayout-->
+                <!--android:id="@+id/expand2"-->
+                <!--android:layout_width="48dp"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_alignBottom="@+id/expandableLayout2"-->
+                <!--android:layout_alignParentEnd="true">-->
+
+                <!--<View-->
+                <!--android:layout_width="12dp"-->
+                <!--android:layout_height="12dp"-->
+                <!--android:background="@drawable/drop_down"-->
+                <!--/>-->
+                <!--</RelativeLayout>-->
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="48dp"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:gravity="center"-->
+                <!--android:padding="8dp"-->
+                <!--android:textColor="@color/icons"-->
+                <!--android:textSize="12sp"-->
+                <!--android:text="Gente"-->
+                <!--android:layout_toStartOf="@+id/expand2"/>-->
+
+                <!--<com.github.aakira.expandablelayout.ExpandableLinearLayout-->
+                <!--android:id="@+id/expandableLayout2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="120dp"-->
+                <!--android:orientation="vertical"-->
+                <!--app:ael_duration="400"-->
+                <!--app:ael_expanded="false"-->
+                <!--android:background="@color/colorPrimaryLight">-->
+
+                <!--<TextView-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_centerInParent="true"-->
-                <!--android:src="@drawable/a" />-->
-                <!--</com.github.aakira.expandablelayout.ExpandableWeightLayout>-->
-                <!--</android.support.v7.widget.LinearLayoutCompat>-->
-
+                <!--android:gravity="center"-->
+                <!--android:padding="10dp"-->
+                <!--android:text="-->
+                <!--sample.sample.sample.sample.sample.sample.sample.sample.sample.sample.\n-->
+                <!--"-->
+                <!--android:textColor="@color/icons"-->
+                <!--android:textSize="16sp"-->
+                <!--/>-->
+                <!--</com.github.aakira.expandablelayout.ExpandableLinearLayout>-->
+                <!--</RelativeLayout>-->
 
             </RelativeLayout>
 
