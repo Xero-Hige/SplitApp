@@ -211,7 +211,7 @@
                             android:id="@+id/expand_all_tasks"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:layout_alignBottom="@+id/expandable_all_tasks"
+                            android:layout_above="@+id/expandable_all_tasks"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentTop="true"
                             android:gravity="center">
@@ -238,21 +238,28 @@
                         <com.github.aakira.expandablelayout.ExpandableLinearLayout
                             android:id="@+id/expandable_all_tasks"
                             android:layout_width="match_parent"
-                            android:layout_height="120dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@id/all_task_label"
                             android:background="@color/colorPrimaryLight"
                             android:orientation="vertical"
                             app:ael_duration="400"
                             app:ael_expanded="false">
 
-                            <LinearLayout
-                                android:id="@+id/all_tasks_list"
-                                android:layout_width="match_parent"
+                            <android.support.v4.widget.NestedScrollView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:gravity="center"
-                                android:orientation="vertical"
-                                android:padding="10dp"/>
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                                <LinearLayout
+                                    android:id="@+id/all_tasks_list"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:divider="@color/colorPrimaryLight_T"
+                                    android:dividerPadding="5dp"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="10dp"/>
+                            </android.support.v4.widget.NestedScrollView>
                         </com.github.aakira.expandablelayout.ExpandableLinearLayout>
                     </RelativeLayout>
                 </LinearLayout>

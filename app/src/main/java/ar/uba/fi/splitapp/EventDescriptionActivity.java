@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,8 +35,56 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         addExpandables();
 
+        addTaskStatus();
+
+        LinearLayout templates = (LinearLayout) findViewById(R.id.my_tasks_list);
+        LayoutInflater inflater = getLayoutInflater();
+
+        setMyTasks(templates, inflater);
+    }
+
+    private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
+        for (int i = 1; i < 21; i++) {
+            View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
+
+            TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+            text.setText("Tarea #" + i);
+
+            EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
+            TextView price = (TextView) templateItem.findViewById(R.id.price);
+
+            CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
+
+            price_in.setVisibility(View.VISIBLE);
+            price.setVisibility(View.GONE);
+            done.setChecked(false);
+
+            done.setOnClickListener(v -> {
+                if (!done.isChecked()) {
+                    price_in.setText("");
+                    price.setText("");
+                    price_in.setVisibility(View.VISIBLE);
+                    price.setVisibility(View.GONE);
+                    done.setChecked(false);
+                } else {
+                    String settled_price = price_in.getText().toString();
+                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                    price_in.setVisibility(View.GONE);
+                    price.setVisibility(View.VISIBLE);
+                    done.setChecked(true);
+                }
+            });
+
+
+            CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
+
+            templates.addView(templateItem);
+        }
+    }
+
+    private void addTaskStatus() {
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
-        LinearLayout templates2 = (LinearLayout) findViewById(R.id.my_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
         for (int i = 1; i < 21; i++) {
@@ -49,11 +99,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
             CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
 
-            //templates.addView(templateItem);
-            templates2.addView(templateItem);
+            templates.addView(templateItem);
         }
-        my_tasks.initLayout(true);
-        all_tasks.initLayout(true);
     }
 
     private void addExpandables() {
