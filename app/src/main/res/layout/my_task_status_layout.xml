@@ -43,7 +43,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:hint="Gasto"
+        android:hint="Monto"
         android:inputType="numberDecimal"
         android:padding="10dp"
         android:textAlignment="center"
