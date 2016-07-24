@@ -132,13 +132,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.new_event) {
-            Utility.showMessage("No anda", Utility.getViewgroup(this), "Ok");
+            Intent newEventIntent = new Intent(MainActivity.this, NewEventActivity.class);
+            startActivity(newEventIntent);
         } else if (id == R.id.nav_gallery) {
             Utility.showMessage("Tampoco anda", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_slideshow) {
             Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_manage) {
-            Utility.showMessage("Cortala!", Utility.getViewgroup(this), "Ok");
+            Intent newManageIntent = new Intent(MainActivity.this, ManageTemplate.class);
+            startActivity(newManageIntent);
         } else if (id == R.id.nav_settings) {
             Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_help) {
