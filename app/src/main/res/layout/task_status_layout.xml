@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/task_name"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/task_status"
+        android:layout_alignParentStart="false"
+        android:layout_alignTop="@+id/task_status"
+        android:padding="10dp"
+        android:text="Coca-Cola"
+        android:textAlignment="center"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/task_status"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="Pendiente"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:textSize="16sp"/>
+
+    <com.pkmmte.view.CircularImageView
+        android:id="@+id/task_profile_pic"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/settings"
+        android:src="@drawable/people"/>
+
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="center"
+        android:src="@drawable/more"/>
+</RelativeLayout>
