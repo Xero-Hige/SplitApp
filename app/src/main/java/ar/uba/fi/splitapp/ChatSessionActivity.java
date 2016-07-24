@@ -65,6 +65,8 @@ public class ChatSessionActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle bundle) {
+        FacebookManager.checkInit(this);
+
         super.onCreate(bundle);
         setContentView(R.layout.activity_chat_session);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

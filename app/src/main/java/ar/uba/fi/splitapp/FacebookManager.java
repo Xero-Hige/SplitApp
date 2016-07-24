@@ -1,6 +1,8 @@
 package ar.uba.fi.splitapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,8 +11,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,6 +73,26 @@ public final class FacebookManager {
                 }
         ).executeAndWait();
         return result[0];
+    }
+
+    public static void checkInit(Activity activity) {
+        try {
+            Profile.getCurrentProfile();
+
+        } catch (RuntimeException e) {
+            FacebookSdk.sdkInitialize(activity.getApplicationContext());
+            Intent login = new Intent(activity, LoginActivity.class);
+            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.getApplicationContext().startActivity(login);
+            activity.finish();
+        }
+        if (Profile.getCurrentProfile() == null || AccessToken.getCurrentAccessToken() == null) {
+            FacebookSdk.sdkInitialize(activity.getApplicationContext());
+            Intent login = new Intent(activity, LoginActivity.class);
+            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.getApplicationContext().startActivity(login);
+            activity.finish();
+        }
     }
 
     public static void executeWithFriendlist(String userId, FriendsCallback callback) {

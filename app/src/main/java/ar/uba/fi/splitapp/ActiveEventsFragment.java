@@ -16,6 +16,9 @@ import java.util.Date;
 public class ActiveEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        FacebookManager.checkInit(this.getActivity());
+
         View fragment = inflater.inflate(R.layout.fragment_active_events, container, false);
 
         LinearLayout templates = (LinearLayout) fragment.findViewById(R.id.active_events_list);

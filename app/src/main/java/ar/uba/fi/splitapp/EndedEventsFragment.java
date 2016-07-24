@@ -16,6 +16,8 @@ import java.util.Date;
 public class EndedEventsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FacebookManager.checkInit(this.getActivity());
+
         View fragment = inflater.inflate(R.layout.fragment_ended_events, container, false);
 
         LinearLayout templates = (LinearLayout) fragment.findViewById(R.id.ended_events_list);
