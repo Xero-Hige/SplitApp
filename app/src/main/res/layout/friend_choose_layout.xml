@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/friend_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingBottom="2dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
@@ -23,41 +23,49 @@
         android:id="@+id/friend_chooser_pic"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="5dp"
+        android:elevation="3dp"
         android:paddingBottom="@dimen/nav_header_vertical_spacing"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:border="true"
-        app:border_color="@color/accent"
+        app:border_color="@color/accent_T"
         app:border_width="4dp"/>
 
-    <RelativeLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/friend_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/friend_chooser_pic"
-        android:layout_alignEnd="@+id/friend_background"
-        android:layout_alignTop="@+id/friend_background"
+        android:layout_alignBottom="@+id/label"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/label"
+        android:layout_toEndOf="@+id/label"
+        android:background="@color/icons_T"
+        android:text="Morci"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorPrimary_text"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/label"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/label"
+        android:layout_toStartOf="@+id/label"
+        android:background="@color/icons_T"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorPrimary_text"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/friend_chooser_pic"
-        android:clickable="true">
+        android:background="@color/icons_T"
+        android:text="Invitar a: "
+        android:textColor="@color/colorPrimary_text"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/friend_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/label"
-            android:layout_toEndOf="@+id/label"
-            android:text="Morci"
-            android:textColor="@color/colorPrimary_text_T"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Invitar a: "
-            android:textColor="@color/colorPrimary_text_T"/>
-    </RelativeLayout>
 </RelativeLayout>
