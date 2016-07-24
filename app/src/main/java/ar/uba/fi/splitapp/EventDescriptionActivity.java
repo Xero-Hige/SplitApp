@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.Profile;
+import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.pkmmte.view.CircularImageView;
 
@@ -108,9 +112,45 @@ public class EventDescriptionActivity extends AppCompatActivity {
         RelativeLayout expand = (RelativeLayout) findViewById(R.id.expand_my_task);
         expand.setOnClickListener(v -> my_tasks.toggle());
 
+        ImageView button = (ImageView) findViewById(R.id.expand_my_task_icon);
+        Animation rotate = AnimationUtils.loadAnimation(this, R.anim.rerotate);
+
+        final ImageView finalButton1 = button;
+        my_tasks.setListener(new ExpandableLayoutListenerAdapter() {
+            @Override
+            public void onPreOpen() {
+                finalButton1.startAnimation(rotate);
+                finalButton1.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+            }
+
+            @Override
+            public void onPreClose() {
+                finalButton1.startAnimation(rotate);
+                finalButton1.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+            }
+        });
+
+
         all_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_all_tasks);
         expand = (RelativeLayout) findViewById(R.id.expand_all_tasks);
         expand.setOnClickListener(v -> all_tasks.toggle());
+
+        button = (ImageView) findViewById(R.id.expand_all_task_icon);
+
+        final ImageView finalButton = button;
+        all_tasks.setListener(new ExpandableLayoutListenerAdapter() {
+            @Override
+            public void onPreOpen() {
+                finalButton.startAnimation(rotate);
+                finalButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+            }
+
+            @Override
+            public void onPreClose() {
+                finalButton.startAnimation(rotate);
+                finalButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+            }
+        });
     }
 
 }
