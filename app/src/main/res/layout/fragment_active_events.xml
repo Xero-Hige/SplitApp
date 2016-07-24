@@ -30,11 +30,11 @@
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/adsense_size"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/b"/>
+            android:src="@drawable/addsense"/>
     </RelativeLayout>
 
 </RelativeLayout>
