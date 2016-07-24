@@ -44,7 +44,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
-        for (int i = 1; i < 21; i++) {
+        for (int i = 1; i < 10; i++) {
             View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);
@@ -87,7 +87,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
-        for (int i = 1; i < 21; i++) {
+        for (int i = 1; i < 10; i++) {
             View templateItem = inflater.inflate(R.layout.task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);

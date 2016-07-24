@@ -164,9 +164,9 @@
                             android:layout_toStartOf="@+id/expand_my_task"
                             android:gravity="center"
                             android:padding="8dp"
-                            android:text="Gente"
+                            android:text="Mis Tareas"
                             android:textColor="@color/icons"
-                            android:textSize="12sp"/>
+                            android:textSize="16sp"/>
 
                         <com.github.aakira.expandablelayout.ExpandableLinearLayout
                             android:id="@+id/expandable_my_tasks"
@@ -231,9 +231,9 @@
                             android:layout_toStartOf="@+id/expand_all_tasks"
                             android:gravity="center"
                             android:padding="8dp"
-                            android:text="Gente"
+                            android:text="Todas las tareas"
                             android:textColor="@color/icons"
-                            android:textSize="12sp"/>
+                            android:textSize="16sp"/>
 
                         <com.github.aakira.expandablelayout.ExpandableLinearLayout
                             android:id="@+id/expandable_all_tasks"
