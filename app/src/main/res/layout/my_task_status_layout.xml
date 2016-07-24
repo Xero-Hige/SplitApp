@@ -26,14 +26,14 @@
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/task_completed"
-        android:layout_marginBottom="6dp"
-        android:layout_toStartOf="@+id/settings"
+        android:layout_alignTop="@+id/task_name"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
         android:singleLine="true"
         android:text="$244"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary_text"
+        android:textIsSelectable="false"
         android:textSize="16sp"/>
 
     <EditText
