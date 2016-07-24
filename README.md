@@ -5,6 +5,6 @@
 
 ### Downloads
 
-* [Latest Release](https://github.com/Xero-Hige/SplitApp/releases/download/v0.0.11alpha/SplitApp0.0.11alpha.apk)
+* [Latest Release](https://github.com/Xero-Hige/SplitApp/releases/download/v0.0.12/SplitApp0.0.12alpha.apk)
 
 * [Old releases](https://github.com/Xero-Hige/SplitApp/releases)
