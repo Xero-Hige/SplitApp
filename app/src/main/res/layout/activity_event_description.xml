@@ -187,6 +187,8 @@
                                     android:id="@+id/my_tasks_list"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:divider="@color/colorPrimaryLight_T"
+                                    android:dividerPadding="5dp"
                                     android:gravity="center"
                                     android:orientation="vertical"
                                     android:padding="10dp"/>
