@@ -46,32 +46,30 @@ public class LoginActivity extends AppCompatActivity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null && !accessToken.isExpired()) {
             startMainActivity();
-        } else {
-            accessTokenTracker = new AccessTokenTracker() {
-                @Override
-                protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
-                    if (newAccessToken == null) {
-                        return;
-                    }
-                    accessTokenTracker.stopTracking();
-                    startMainActivity();
-                }
-            };
         }
 
-        Profile profile = Profile.getCurrentProfile();
-        if (profile == null) {
-            profileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                    if (currentProfile == null) {
-                        return;
-                    }
-                    profileTracker.stopTracking();
-                    startMainActivity();
+//        accessTokenTracker = new AccessTokenTracker() {
+//            @Override
+//            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
+//                if (newAccessToken == null) {
+//                    return;
+//                }
+//                accessTokenTracker.stopTracking();
+//                startMainActivity();
+//            }
+//        };
+
+
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                if (currentProfile == null) {
+                    return;
                 }
-            };
-        }
+                profileTracker.stopTracking();
+                startMainActivity();
+            }
+        };
 
 
         setContentView(R.layout.activity_login);

@@ -18,7 +18,6 @@ import android.support.v4.app.NotificationCompat;
 import com.facebook.Profile;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ${FILE}
@@ -62,23 +61,33 @@ public final class MockServer {
         }
     }
 
-    public static void sendGroupMessage(String message, List<String> friendsId) {
-        if (mSession == null) {
+    public static void sendGroupMessage(String message, String groupName) {
+        if (mRoom == null) {
             return;
         }
-        mSession.addResponse(message, Profile.getCurrentProfile().getId());
+        mRoom.addResponse(message, Profile.getCurrentProfile().getId());
 
-        AddGroupResponseTask task = new AddGroupResponseTask(friendsId);
+        AddGroupResponseTask task = new AddGroupResponseTask(groupName);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private static void addGResponse1(List<String> friendsId) throws InterruptedException {
+    private static void addGResponse1(String id, String name) throws InterruptedException {
         Thread.sleep(1000);
-        publishResponse(friendsId.get(0), "", "Sisi, no te hagas drama");
+        publishGResponse(id, name, "Sisi, no te hagas drama");
         Thread.sleep(2000);
-        publishResponse(friendsId.get(1), "", "Yo ya compre, pero colgue en avisar");
+        publishGResponse(id, name, "Yo ya compre, pero colgue en avisar");
         Thread.sleep(1000);
-        publishResponse(friendsId.get(1), "", "Ahi lo marco");
+        publishGResponse(id, name, "Ahi lo marco");
+    }
+
+    private static void publishGResponse(String friendId, String sender, String message) {
+        if (mRoom != null) {
+            mRoom.runOnUiThread(() -> mRoom.addResponse(message, friendId));
+        } else {
+            Bitmap bitmap = FacebookManager.getUserImage(appContext, friendId);
+            showNotification("Nuevo mensaje de " + sender + ": ", message, bitmap);
+        }
+        mMessages.add(new String[]{friendId, message});
     }
 
     private static void publishResponse(String friendId, String sender, String message) {
@@ -177,39 +186,39 @@ public final class MockServer {
 
     private static class AddGroupResponseTask extends AsyncTask<Void, Void, Boolean> {
 
-        List<String> mFriendsId;
+        String mGroupName;
 
-        AddGroupResponseTask(List<String> friendsId) {
-            mFriendsId = friendsId;
+        AddGroupResponseTask(String groupName) {
+            mGroupName = groupName;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            switch (mMessageNumber) {
+            switch (mGMessageNumber) {
                 case 1:
                     try {
-                        addGResponse1(mFriendsId);
+                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 2:
                     try {
-                        addGResponse1(mFriendsId);
+                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 3:
                     try {
-                        addGResponse1(mFriendsId);
+                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 4:
                     try {
-                        addGResponse1(mFriendsId);
+                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

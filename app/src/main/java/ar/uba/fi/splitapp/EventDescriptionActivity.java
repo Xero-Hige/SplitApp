@@ -171,8 +171,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_chat) {
             Intent intent = new Intent(this, ChatRoomActivity.class);
-            intent.putExtra(ChatRoomActivity.EXTRA_FRIEND_ID, Profile.getCurrentProfile().getId());
-            intent.putExtra(ChatRoomActivity.EXTRA_FRIEND_NAME, Profile.getCurrentProfile().getFirstName());
+            intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_IDS, Profile.getCurrentProfile().getId());
+            intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_NAMES, Profile.getCurrentProfile().getFirstName());
             startActivity(intent);
         }
         if (id == R.id.action_settings) {

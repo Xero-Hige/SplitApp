@@ -40,21 +40,19 @@ import com.pkmmte.view.CircularImageView;
 public class ChatRoomActivity extends AppCompatActivity {
 
     /**
-     * Intent extra field: Friend name
-     */
-    public static final String EXTRA_FRIEND_NAME = "friendname";
-    /**
      * Intent extra field: Friend user id
      */
-    public static final String EXTRA_FRIEND_ID = "friendid";
+    public static final String EXTRA_FRIENDS_IDS = "ids";
+    public static final String EXTRA_FRIENDS_NAMES = "names";
+    public static final String EXTRA_GROUP_NAME = "group";
 
-    private static final int DATA_FIELDS = 2;
+    private static final int DATA_FIELDS = 1;
 
     private LinearLayout mMessagesLayout;
 
-    private String mFriendId;
-    private String mFriendName;
-
+    private String[] mFriendId;
+    private String[] mFriendName;
+    private String mTitle;
 
     /**
      * Perform initialization of all fragments and loaders.
@@ -73,10 +71,10 @@ public class ChatRoomActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        mFriendName = intent.getStringExtra(EXTRA_FRIEND_NAME);
-        mFriendId = intent.getStringExtra(EXTRA_FRIEND_ID);
-
-        this.setTitle(mFriendName);
+        mFriendId = intent.getStringArrayExtra(EXTRA_FRIENDS_IDS);
+        mTitle = intent.getStringExtra(EXTRA_GROUP_NAME);
+        mFriendName = intent.getStringArrayExtra(EXTRA_FRIENDS_NAMES);
+        this.setTitle(mTitle);
 
         mMessagesLayout = (LinearLayout) this.findViewById(R.id.messages);
 
@@ -84,7 +82,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         addSendListener();
 
         ImageView img = (ImageView) findViewById(R.id.backdrop);
-        FacebookManager.fillWithUserCover(mFriendId, img, getApplicationContext());
+        FacebookManager.fillWithUserCover(Profile.getCurrentProfile().getId(), img, getApplicationContext());
 
         FloatingActionButton scrollDownFB = (FloatingActionButton) this.findViewById(R.id.fab);
         assert scrollDownFB != null; //Debug assert
@@ -127,7 +125,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String message) {
-        MockServer.sendFriendMessage(message, mFriendId, mFriendName);
+        MockServer.sendGroupMessage(message, mTitle);
     }
 
 //    private void loadOldMessages() {
@@ -177,8 +175,8 @@ public class ChatRoomActivity extends AppCompatActivity {
      * @param userId  Sender id
      */
     public void addResponse(String message, String userId) {
-        if (userId.equals(mFriendId)) {
-            addFriendResponse(message);
+        if (userId.equals(Profile.getCurrentProfile().getId())) {
+            addFriendResponse(message, Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
             return;
         }
         if (userId.equals(Profile.getCurrentProfile().getId())) {
@@ -189,12 +187,13 @@ public class ChatRoomActivity extends AppCompatActivity {
                 + userId + " - " + message);
     }
 
+
     private void addPersonalResponse(String message) {
         addResponse(R.layout.chat_session_you, "Tu", Profile.getCurrentProfile().getId(), message);
     }
 
-    private void addFriendResponse(String message) {
-        addResponse(R.layout.chat_session_friend, mFriendName, mFriendId, message);
+    private void addFriendResponse(String message, String friendName, String friendId) {
+        addResponse(R.layout.chat_session_friend, friendName, friendId, message);
     }
 
     private void addResponse(int layoutId, String username, String userId, String message) {
