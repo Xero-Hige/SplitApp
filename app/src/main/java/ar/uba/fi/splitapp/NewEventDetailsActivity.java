@@ -10,21 +10,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.Locale;
-import java.util.function.Function;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class NewEventDetailsActivity extends AppCompatActivity {
 
-    TextView fecha;
-    TextView hora;
-    RelativeLayout fecha_lay;
-    RelativeLayout reloj_lay;
+    private TextView mDateTV;
+    private TextView mTimeTV;
+    private Calendar mCalendar = Calendar.getInstance();
+
+    DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+        mCalendar.set(Calendar.YEAR, year);
+        mCalendar.set(Calendar.MONTH, monthOfYear);
+        mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        updateLabel();
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,74 +37,63 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_event_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ImageView calendario;
-        calendario = (ImageView)findViewById(R.id.imageView);
-
-        ImageView reloj;
-        reloj = (ImageView)findViewById(R.id.imageView7);
-
-        fecha = (TextView) findViewById(R.id.editText3);
-        hora = (TextView) findViewById(R.id.hora);
-        fecha_lay = (RelativeLayout) findViewById(R.id.layout_fecha);
-        reloj_lay = (RelativeLayout) findViewById(R.id.layout_hora);
 
         long dates = System.currentTimeMillis();
 
-        SimpleDateFormat fechasf = new SimpleDateFormat("EEE dd MMM yyyy");
-        SimpleDateFormat horario = new SimpleDateFormat("HH:mm");
-        String fechaString = fechasf.format(dates);
-        String horarioString = horario.format(dates);
-        fecha.setText(fechaString);
-        hora.setText(horarioString);
+        setDatePicker(dates);
+        setTimePicker(dates);
+        setFriendChooser();
+    }
 
+    private void setFriendChooser() {
         RelativeLayout addFriend = (RelativeLayout) findViewById(R.id.add_friend);
         addFriend.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(this, FriendChooserActivity.class);
             startActivityForResult(friendListIntent, 0);
         });
+    }
 
-        fecha_lay.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
-            new DatePickerDialog(NewEventDetailsActivity.this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
-
+    private void setTimePicker(long dates) {
+        mTimeTV = (TextView) findViewById(R.id.hora);
+        RelativeLayout reloj_lay = (RelativeLayout) findViewById(R.id.layout_hora);
+        SimpleDateFormat horario = new SimpleDateFormat("HH:mm");
+        String horarioString = horario.format(dates);
+        mTimeTV.setText(horarioString);
         reloj_lay.setOnClickListener(v -> {
-            // TODO Auto-generated method stub
-            Calendar mcurrentTime = Calendar.getInstance();
-            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-            int minute = mcurrentTime.get(Calendar.MINUTE);
+            Calendar mCurrentTime = Calendar.getInstance();
+            int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = mCurrentTime.get(Calendar.MINUTE);
             TimePickerDialog mTimePicker;
-            mTimePicker = new TimePickerDialog(NewEventDetailsActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                    hora.setText( selectedHour + ":" + selectedMinute);
-                }
-            }, hour, minute, true);//Yes 24 hour time
+            mTimePicker = new TimePickerDialog(NewEventDetailsActivity.this,
+                    (timePicker, selectedHour, selectedMinute) -> mTimeTV.setText(
+                            selectedHour + ":" + selectedMinute), hour, minute, true);
             mTimePicker.setTitle("Elegir Hora");
             mTimePicker.show();
 
         });
-
     }
 
-    Calendar myCalendar = Calendar.getInstance();
-
-    DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-        // TODO Auto-generated method stub
-        myCalendar.set(Calendar.YEAR, year);
-        myCalendar.set(Calendar.MONTH, monthOfYear);
-        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        updateLabel();
-    };
-
-
+    private void setDatePicker(long dates) {
+        mDateTV = (TextView) findViewById(R.id.editText3);
+        RelativeLayout fecha_lay = (RelativeLayout) findViewById(R.id.layout_fecha);
+        SimpleDateFormat fechasf = new SimpleDateFormat("EEE dd MMM yyyy");
+        String fechaString = fechasf.format(dates);
+        mDateTV.setText(fechaString);
+        fecha_lay.setOnClickListener(v -> {
+            new DatePickerDialog(NewEventDetailsActivity.this,
+                    date,
+                    mCalendar.get(Calendar.YEAR),
+                    mCalendar.get(Calendar.MONTH),
+                    mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+    }
 
     private void updateLabel() {
 
         String myFormat = "dd/MM/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        fecha.setText(sdf.format(myCalendar.getTime()));
+        mDateTV.setText(sdf.format(mCalendar.getTime()));
     }
 
 }
