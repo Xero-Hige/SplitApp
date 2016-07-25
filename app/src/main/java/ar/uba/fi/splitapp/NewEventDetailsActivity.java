@@ -49,7 +49,11 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         setDatePicker(dates);
         setTimePicker(dates);
         setFriendChooser();
+        setLocationPicker();
 
+    }
+
+    private void setLocationPicker() {
         mLocationLabel = (TextView) findViewById(R.id.location_label);
         RelativeLayout location = (RelativeLayout) findViewById(R.id.location_lay);
         location.setOnClickListener(v -> {
@@ -60,7 +64,6 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-
     }
 
     private void setFriendChooser() {
