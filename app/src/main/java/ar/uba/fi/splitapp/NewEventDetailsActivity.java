@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
@@ -34,7 +33,6 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         updateLabel();
     };
-    private GoogleApiClient mGoogleApiClient;
     private TextView mLocationLabel;
 
     @Override
