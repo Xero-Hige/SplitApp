@@ -54,7 +54,7 @@ public class NewEventDetailsActivity extends AppCompatActivity {
     }
 
     private void setTimePicker(long dates) {
-        mTimeTV = (TextView) findViewById(R.id.hora);
+        mTimeTV = (TextView) findViewById(R.id.time_label);
         RelativeLayout reloj_lay = (RelativeLayout) findViewById(R.id.layout_hora);
         SimpleDateFormat horario = new SimpleDateFormat("HH:mm");
         String horarioString = horario.format(dates);
@@ -74,7 +74,7 @@ public class NewEventDetailsActivity extends AppCompatActivity {
     }
 
     private void setDatePicker(long dates) {
-        mDateTV = (TextView) findViewById(R.id.editText3);
+        mDateTV = (TextView) findViewById(R.id.date_label);
         RelativeLayout fecha_lay = (RelativeLayout) findViewById(R.id.layout_fecha);
         SimpleDateFormat fechasf = new SimpleDateFormat("EEE dd MMM yyyy");
         String fechaString = fechasf.format(dates);
