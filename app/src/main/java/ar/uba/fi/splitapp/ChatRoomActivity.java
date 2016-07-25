@@ -68,7 +68,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         FacebookManager.checkInit(this);
 
         super.onCreate(bundle);
-        setContentView(R.layout.activity_chat_session);
+        setContentView(R.layout.activity_chat_room);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

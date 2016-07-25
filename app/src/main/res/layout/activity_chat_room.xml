@@ -6,7 +6,7 @@
                                                  android:layout_height="match_parent"
                                                  android:background="@color/cardview_light_background"
                                                  android:fitsSystemWindows="true"
-                                                 tools:context="ar.uba.fi.splitapp.ChatSessionActivity">
+                                                 tools:context="ar.uba.fi.splitapp.ChatRoomActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

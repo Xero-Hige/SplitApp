@@ -84,6 +84,10 @@
             android:name=".ChatSessionActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ChatRoomActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
