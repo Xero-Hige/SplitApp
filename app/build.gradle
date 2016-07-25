@@ -56,6 +56,8 @@ dependencies {
 
     compile 'com.google.firebase:firebase-crash:9.2.1'
 
+    compile 'com.google.android.gms:play-services-places:9.2.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services' //FIREBASE

@@ -13,21 +13,29 @@ import android.support.v7.widget.Toolbar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class NewEventDetailsActivity extends AppCompatActivity {
 
+    int PLACE_PICKER_REQUEST = 1;
     private TextView mDateTV;
     private TextView mTimeTV;
     private Calendar mCalendar = Calendar.getInstance();
-
     DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
         mCalendar.set(Calendar.YEAR, year);
         mCalendar.set(Calendar.MONTH, monthOfYear);
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         updateLabel();
     };
+    private GoogleApiClient mGoogleApiClient;
+    private TextView mLocationLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,18 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         setDatePicker(dates);
         setTimePicker(dates);
         setFriendChooser();
+
+        mLocationLabel = (TextView) findViewById(R.id.location_label);
+        RelativeLayout location = (RelativeLayout) findViewById(R.id.location_lay);
+        location.setOnClickListener(v -> {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            try {
+                startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     private void setFriendChooser() {
@@ -86,6 +106,16 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                     mCalendar.get(Calendar.MONTH),
                     mCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place selectedPlace = PlacePicker.getPlace(data, this);
+                Utility.showMessage(selectedPlace.getAddress().toString() + "\n" + selectedPlace.getLatLng().toString(), Utility.getViewgroup(this));
+                mLocationLabel.setText(selectedPlace.getAddress().toString());
+            }
+        }
     }
 
     private void updateLabel() {
