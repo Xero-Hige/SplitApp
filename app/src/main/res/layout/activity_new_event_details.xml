@@ -49,127 +49,162 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/editText">
+            android:layout_below="@+id/editText"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/group_add"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:src="@drawable/group_add"/>
 
             <TextView
                 android:id="@+id/editText2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageView5"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignTop="@+id/imageView5"
+                android:layout_toEndOf="@+id/imageView5"
+                android:gravity="center"
                 android:paddingStart="10dp"
                 android:singleLine="true"
                 android:text="Agregar participante"
-                android:gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimary_text"
-                android:layout_alignTop="@+id/imageView5"
-                android:layout_toEndOf="@+id/imageView5"
-                android:layout_alignBottom="@+id/imageView5"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentStart="false" />
+                android:textColor="@color/colorPrimary_text"/>
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/location"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/add_friend"
-            android:layout_alignParentStart="true" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/pencil"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/imageView4"
-            android:layout_alignParentStart="true" />
-
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ubicación"
-            android:layout_alignTop="@+id/imageView4"
-            android:layout_toEndOf="@+id/imageView4" />
-
-        <EditText
-            android:id="@+id/editText5"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre del Evento"
-            android:layout_alignTop="@+id/imageView6"
-            android:layout_toEndOf="@+id/imageView6" />
-
         <RelativeLayout
+            android:id="@+id/lay_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editText5"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/location_lay"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/pencil"/>
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/imageView6"
+                android:hint="Detalle"
+                android:paddingStart="10dp"
+                android:textColorHint="@color/secondary_text"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
             android:id="@+id/layout_fecha"
-            android:layout_alignParentStart="true">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/lay_details"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
 
 
             <TextView
+                android:id="@+id/date_label"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/editText3"
-                android:textSize="@dimen/activity_vertical_margin"
-                android:textAlignment="textStart"
-                android:gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@+id/imageView"
+                android:layout_alignBottom="@+id/imageView"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentTop="true"
-                android:layout_alignBottom="@+id/imageView" />
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/imageView"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorPrimary_text"
+                android:textSize="@dimen/activity_vertical_margin"/>
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/clock"
-                android:layout_marginTop="45dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/today"/>
+
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/location_lay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/add_friend"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/location"/>
+
+            <TextView
+                android:id="@+id/location_label"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/imageView4"
+                android:hint="Ubicación"
+                android:paddingStart="10dp"
+                android:text="Ubicacion"
+                android:textColor="@color/colorPrimary_text"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/layout_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/layout_fecha"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/layout_fecha">
+            android:layout_below="@+id/layout_fecha"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/imageView7"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginTop="25dp"
-                android:src="@drawable/clock"
-                android:layout_below="@+id/imageView"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:contentDescription=""
+                android:src="@drawable/clock"/>
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/hora"
-                android:textSize="@dimen/activity_vertical_margin"
-                android:textAlignment="textStart"
-                android:gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_alignTop="@+id/imageView7"
+                android:id="@+id/time_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/imageView7"
-                android:layout_toEndOf="@+id/imageView7" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/imageView7"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/imageView7"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorPrimary_text"
+                android:textSize="@dimen/activity_vertical_margin"/>
+
         </RelativeLayout>
 
     </RelativeLayout>
