@@ -48,16 +48,16 @@ public class LoginActivity extends AppCompatActivity {
             startMainActivity();
         }
 
-//        accessTokenTracker = new AccessTokenTracker() {
-//            @Override
-//            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
-//                if (newAccessToken == null) {
-//                    return;
-//                }
-//                accessTokenTracker.stopTracking();
-//                startMainActivity();
-//            }
-//        };
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
+                if (newAccessToken == null) {
+                    return;
+                }
+                accessTokenTracker.stopTracking();
+                startMainActivity();
+            }
+        };
 
 
         profileTracker = new ProfileTracker() {

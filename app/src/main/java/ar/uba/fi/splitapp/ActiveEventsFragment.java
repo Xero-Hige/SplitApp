@@ -38,6 +38,21 @@ public class ActiveEventsFragment extends Fragment {
             });
 
             templates.addView(templateItem);
+
+            templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+
+//            text = (TextView) templateItem.findViewById(R.id.event_name);
+//            text.setText("Evento #" + i);
+//
+//            TextView date = (TextView) templateItem.findViewById(R.id.event_date);
+//            date.setText(DateFormat.getDateInstance().format(new Date()));
+//
+//            templateItem.setOnClickListener(v -> {
+//                Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
+//                startActivity(eventDetail);
+//            });
+
+            templates.addView(templateItem);
         }
 
         return fragment;
