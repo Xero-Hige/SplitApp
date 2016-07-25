@@ -14,8 +14,8 @@ android {
         applicationId "ar.uba.fi.splitapp"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 0
-        versionName "0.15"
+        versionCode 6
+        versionName "Sugar Food"
     }
     buildTypes {
         release {
