@@ -27,6 +27,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_event_description">Event Description</string>
     <string name="facebook_app_id">518123865060770</string>
+    <string name="title_activity_what_to_buy">Qué comprar</string>
+    <string name="title_activity_where_to_buy">Dónde Comprar</string>
 
     <string name="hecho">Hecho</string>
 
