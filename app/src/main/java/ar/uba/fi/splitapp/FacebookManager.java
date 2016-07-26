@@ -131,12 +131,12 @@ public final class FacebookManager {
 
     public static void fillWithUserCover(String userId, ImageView view, Context context) {
         ImageFillerTask task = new ImageFillerTask(FacebookManager::getCoverUrl, userId, view, context);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     public static void fillWithUserPic(String userId, ImageView view, Context context) {
         ImageFillerTask task = new ImageFillerTask(FacebookManager::getUserPicUrl, userId, view, context);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     public static Bitmap getUserImage(Context context, String userId) {
