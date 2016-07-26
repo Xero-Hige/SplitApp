@@ -97,7 +97,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                startMainActivity();
+                String token = AccessToken.getCurrentAccessToken().getToken();
+                String userId = Profile.getCurrentProfile().getId();
+                ServerHandler.signIn(userId, token,
+                        v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                Utility.getViewgroup(LoginActivity.this)),
+                        v -> startMainActivity());
             }
 
             @Override
