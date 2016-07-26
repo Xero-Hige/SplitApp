@@ -56,7 +56,7 @@ public class ActiveEventsFragment extends Fragment {
 
         templates.addView(templateItem);
 
-        templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
 
         view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
         FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, getActivity().getApplicationContext());
@@ -69,7 +69,7 @@ public class ActiveEventsFragment extends Fragment {
 
         templates.addView(templateItem);
 
-        templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
 
         view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
         FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, getActivity().getApplicationContext());
