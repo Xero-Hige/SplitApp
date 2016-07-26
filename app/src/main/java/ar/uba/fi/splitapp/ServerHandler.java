@@ -1,12 +1,13 @@
 package ar.uba.fi.splitapp;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -40,85 +41,92 @@ import java.util.Locale;
 public final class ServerHandler {
 
     /**
-     * Query type: Candidates for the user
+     * Urls
      */
-    public static final int USER_CANDIDATES = 0;
+    public static final int USER_TOKEN = 0;
+    public static final int EVENT_LIST = 1;
+    public static final int EVENT_DETAIL = 2;
+    public static final int EVENT_TASKS = 3;
+    public static final int EVENT_INVITEE = 4;
+    public static final int EVENT_TRANSACTION = 5;
+    public static final int EVENT_TEMPLATE = 6;
     /**
-     * Query type: Matches for the user
-     */
-    public static final int USER_MATCHES = 1;
-    /**
-     * Query type: Chat for the user
-     */
-    public static final int USER_CHAT = 2;
-    /**
-     * Query type: Information of the user
-     */
-    public static final int USER_INFO = 3;
-    /**
-     * Query type: New matches for the service
-     */
-    public static final int SERVICE_MATCHES = 4;
-    /**
-     * Query type: New matches for the service
-     */
-    public static final int SERVICE_CHAT = 5;
-    /**
-     * Result Token: Failed to get
+     * Tokens
      */
     public static final String FAILED_TOKEN = "-";
-    /**
-     * Result Token: Error occurred while fetching
-     */
     public static final String ERROR_TOKEN = "";
-    /**
-     * Sign up result: User already exists
-     */
     public static final String SIGNUP_USEREXIST = "E";
-    /**
-     * Sign up result: Sign up failed
-     */
     public static final String SIGNUP_FAILED = "F";
-    /**
-     * Sign up result: Sign up successful
-     */
     public static final String SIGNUP_SUCCESS = "S";
-    private static final String CANDIDATES_URL = "users";
-    private static final String CHATMSG_URL = "chats";
-    private static final String USERINFO_URL = "user";
-    private static final String NEW_MATCHES_URL = "matches";
-    private static final String NEW_CHATS_URL = "chats/new";
-    private static final String SERVER_URL = "";
+    private static final String SERVER_URL = "http://splitapp.medicmanager.com.ar/public/index.php/";
+    private static final String TOKEN_BASE_URL = "tokens";
+    private static final String TOKEN_MOD_URL = "";
+    private static final String EVENT_LIST_BASE_URL = "events";
+    private static final String EVENT_LIST_MOD_URL = "";
+    private static final String EVENT_DETAIL_BASE_URL = "events";
+    private static final String EVENT_DETAIL_MOD_URL = "";
+    private static final String EVENT_TASKS_BASE_URL = "events";
+    private static final String EVENT_TASKS_MOD_URL = "/eventTask";
+    private static final String EVENT_INVITEE_BASE_URL = "events";
+    private static final String EVENT_INVITEE_MOD_URL = "/eventInvitee";
+    private static final String EVENT_TRANSACTION_BASE_URL = "events";
+    private static final String EVENT_TRANSACTION_MOD_URL = "/settlementTransactions";
+    private static final String EVENT_TEMPLATE_BASE_URL = "eventsTemplates";
+    private static final String EVENT_TEMPLATE_MOD_URL = "";
+    /**
+     * Private
+     */
     private static final int MAX_TRIES = 30;
-    private static final String LOGIN_URL = "user";
-    private static final String DELETE_URL = "users";
-    private static final String SIGNUP_URL = "users";
-    private static final String UPDATE_URL = "users";
-    private static final String AVATAR_URL = "users/photo";
-    private static final String MATCHES_URL = "matches";
-    private static final String MESSAGES_URL = "chats";
+
     private static String mToken = ERROR_TOKEN;
 
     private ServerHandler() {
     }
 
-    private static String getUrlByType(Integer type) {
-        String url = SERVER_URL;
-        switch (type) {
-            case USER_CANDIDATES:
-                return url + CANDIDATES_URL;
-            case USER_MATCHES:
-                return url + MATCHES_URL;
-            case USER_CHAT:
-                return url + CHATMSG_URL;
-            case USER_INFO:
-                return url + USERINFO_URL;
-            case SERVICE_MATCHES:
-                return url + NEW_MATCHES_URL;
-            case SERVICE_CHAT:
-                return url + NEW_CHATS_URL;
+    private static String getUrl(int urlType, String resId) {
+        String resUrl = (resId.equals("") ? "" : String.format(Locale.ENGLISH, "/%s", resId));
+        return SERVER_URL + getBaseUrl(urlType) + resUrl + getModUrl(urlType);
+    }
+
+    private static String getModUrl(int urlType) {
+        switch (urlType) {
+            case USER_TOKEN:
+                return TOKEN_MOD_URL;
+            case EVENT_LIST:
+                return EVENT_LIST_MOD_URL;
+            case EVENT_DETAIL:
+                return EVENT_DETAIL_MOD_URL;
+            case EVENT_TASKS:
+                return EVENT_TASKS_MOD_URL;
+            case EVENT_INVITEE:
+                return EVENT_INVITEE_MOD_URL;
+            case EVENT_TRANSACTION:
+                return EVENT_TRANSACTION_MOD_URL;
+            case EVENT_TEMPLATE:
+                return EVENT_TEMPLATE_MOD_URL;
             default:
-                return "";
+                throw new IllegalArgumentException();
+        }
+    }
+
+    private static String getBaseUrl(int urlType) {
+        switch (urlType) {
+            case USER_TOKEN:
+                return TOKEN_BASE_URL;
+            case EVENT_LIST:
+                return EVENT_LIST_BASE_URL;
+            case EVENT_DETAIL:
+                return EVENT_DETAIL_BASE_URL;
+            case EVENT_TASKS:
+                return EVENT_TASKS_BASE_URL;
+            case EVENT_INVITEE:
+                return EVENT_INVITEE_BASE_URL;
+            case EVENT_TRANSACTION:
+                return EVENT_TRANSACTION_BASE_URL;
+            case EVENT_TEMPLATE:
+                return EVENT_TEMPLATE_BASE_URL;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -128,8 +136,8 @@ public final class ServerHandler {
      * @param requestType Request type (One of the listed request types)
      * @param operation   Callback operation
      */
-    public static void executeGet(int requestType, CallbackOperation operation) {
-        executeGet(requestType, operation);
+    public static void executeGet(int requestType, String facebookId, String facebookToken, CallbackOperation operation) {
+        executeGet("", requestType, facebookId, facebookToken, operation);
     }
 
     /**
@@ -139,20 +147,23 @@ public final class ServerHandler {
      * @param requestType Request type (One of the listed request types)
      * @param operation   Callback operation
      */
-    public static void executeGet(String resId, int requestType, CallbackOperation operation) {
-        FetchDataTask task = new FetchDataTask(requestType, resId, mToken, operation);
+    public static void executeGet(String resId, int requestType, String facebookId, String facebookToken, CallbackOperation operation) {
+        GetDataTask task = new GetDataTask(requestType, resId, facebookId, facebookToken, operation);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private static List<JSONObject> fetchData(String queryUrl) {
-        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin fetch " + queryUrl);
+    private static List<JSONObject> getFromServer(String queryUrl, String fbId, String fbToken) {
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin GET " + queryUrl);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-
-        String result;
+        HttpEntity<String> result;
 
         try {
-            result = restTemplate.getForObject(queryUrl, String.class, "Android");
+            HttpEntity<String> entity = new HttpEntity<String>(getAuthHeader(fbId, fbToken));
+            result = restTemplate.exchange(queryUrl,
+                    HttpMethod.GET,
+                    entity,
+                    String.class);
         } catch (HttpServerErrorException e) {
             SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
             return null;
@@ -163,19 +174,19 @@ public final class ServerHandler {
             SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Failed to connect: " + e.getMessage());
             return null;
         }
-        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End fetch " + queryUrl);
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End GET " + queryUrl);
 
         if (result == null) {
-            SplitAppLogger.writeLog(SplitAppLogger.WARN, "Empty response from :" + queryUrl);
+            SplitAppLogger.writeLog(SplitAppLogger.WARN, "Empty GET response from :" + queryUrl);
             return new LinkedList<>();
         }
 
-        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Fetch result: \n" + result);
+        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "GET result: \n" + result);
 
         JSONArray data;
 
         try {
-            JSONObject response = new JSONObject(result);
+            JSONObject response = new JSONObject(result.getBody());
             data = response.getJSONArray("data");
         } catch (JSONException e) {
             return new LinkedList<>();
@@ -194,9 +205,12 @@ public final class ServerHandler {
         return objectsList;
     }
 
-    private static void addAuthHeader(String password, String user, HttpHeaders requestHeaders) {
-        requestHeaders.add("Authorization", String.format(Locale.ENGLISH,
-                "Authorization := username=\"%s\" pass=\"%s\"", user, password));
+    private static HttpHeaders getAuthHeader(String fbId, String fbToken) {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("X-Auth-Token", mToken);
+        requestHeaders.add("facebook_id", fbId);
+        requestHeaders.add("facebook_token", fbToken);
+        return requestHeaders;
     }
 
     /**
@@ -441,31 +455,25 @@ public final class ServerHandler {
 //        return sent;
 //    }
 
-    private static class FetchDataTask extends AsyncTask<Void, Void, Boolean> {
+    private static class GetDataTask extends AsyncTask<Void, Void, Boolean> {
 
         private final CallbackOperation mCallbackOp;
         private String mResourceUrl;
         private List<JSONObject> mData;
+        private String mFbId;
+        private String mFbToken;
 
-        FetchDataTask(int resourceType, String resourceId, String token, CallbackOperation callbackOperation) {
-            setImageUrl(resourceType, resourceId, token);
+        GetDataTask(int resourceType, String resourceId, String facebookId, String facebookToken, CallbackOperation callbackOperation) {
+            mResourceUrl = getUrl(resourceType, resourceId);
             this.mCallbackOp = callbackOperation;
             this.mData = null;
-        }
-
-        private void setImageUrl(int resourceType, String resId, String token) {
-            String url = getUrlByType(resourceType);
-            Uri.Builder uriBuilder = Uri.parse(url).buildUpon();
-            uriBuilder.appendQueryParameter("token", token);
-            if (!resId.equals("")) {
-                uriBuilder.appendQueryParameter("res_id", resId);
-            }
-            this.mResourceUrl = uriBuilder.build().toString();
+            mFbId = facebookId;
+            mFbToken = facebookToken;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            mData = fetchData(mResourceUrl);
+            mData = getFromServer(mResourceUrl, mFbId, mFbToken);
             return mData != null;
         }
 
