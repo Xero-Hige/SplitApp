@@ -59,6 +59,12 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
+            android:name=".DebtActivity"
+            android:label="@string/title_payments"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".TemplateActivity"
             android:label="@string/title_template"
             android:screenOrientation="sensorPortrait"

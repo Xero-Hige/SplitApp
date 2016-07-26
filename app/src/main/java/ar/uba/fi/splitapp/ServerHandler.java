@@ -253,22 +253,6 @@ public final class ServerHandler {
         });
     }
 
-    public static void getEvents(CallbackOperation onSucces, CallbackOperation onError) {
-        ServerHandler.executeGet(EVENT_LIST, face_id, "", result -> {
-            if (result == null || result.size() == 0) {
-                onError.execute(result);
-            } else {
-                try {
-                    mToken = result.get(0).getString("events");
-                } catch (JSONException e) {
-                    onError.execute(result);
-                    return;
-                }
-                onSucces.execute(result);
-            }
-        });
-    }
-
 //    /**
 //     * Fetches token from server and returns it
 //     *
