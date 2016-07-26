@@ -129,7 +129,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
 //    private void loadOldMessages() {
-//        StringResourcesHandler.executeQuery(mFriendId, StringResourcesHandler.USER_CHAT, UserHandler.getToken()
+//        StringResourcesHandler.executeGet(mFriendId, StringResourcesHandler.USER_CHAT, UserHandler.getToken()
 //                , data -> {
 //                    for (int index = 0; index < data.size(); index++) {
 //                        String[] messageData = data.get(index);

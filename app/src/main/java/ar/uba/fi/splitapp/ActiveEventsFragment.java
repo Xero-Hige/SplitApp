@@ -102,7 +102,6 @@ public class ActiveEventsFragment extends Fragment {
         }
 
 
-
         return fragment;
     }
 

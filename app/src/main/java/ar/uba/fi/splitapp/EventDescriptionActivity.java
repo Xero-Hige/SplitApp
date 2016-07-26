@@ -30,9 +30,6 @@ import org.json.JSONObject;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 
-    private ExpandableLinearLayout my_tasks;
-    private ExpandableLinearLayout all_tasks;
-
     String json_prop = "{\n" +
             "      \"name\": \"asd\",\n" +
             "      \"when\": \"2016-07-25 19:30:00\",\n" +
@@ -62,6 +59,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        },\n" +
             "      ]\n" +
             "    }";
+    private ExpandableLinearLayout my_tasks;
+    private ExpandableLinearLayout all_tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +159,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             text.setText(tarea);
 
             TextView date = (TextView) templateItem.findViewById(R.id.task_status);
-            if (hecho){
+            if (hecho) {
                 date.setText("Hecho");
             } else {
                 date.setText("Pendiente");
