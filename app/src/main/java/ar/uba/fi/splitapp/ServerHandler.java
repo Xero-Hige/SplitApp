@@ -2,7 +2,6 @@ package ar.uba.fi.splitapp;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -14,8 +13,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -79,8 +76,6 @@ public final class ServerHandler {
 
     private static String mToken = ERROR_TOKEN;
 
-    private static String face_id;
-
     private ServerHandler() {
     }
 
@@ -131,7 +126,7 @@ public final class ServerHandler {
         }
     }
 
-    private static List<JSONObject> getFromServer(String queryUrl, String fbId, String fbToken) {
+    private static JSONObject getFromServer(String queryUrl, String fbId, String fbToken) {
         SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin GET " + queryUrl);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -157,31 +152,17 @@ public final class ServerHandler {
 
         if (result == null) {
             SplitAppLogger.writeLog(SplitAppLogger.WARN, "Empty GET response from :" + queryUrl);
-            return new LinkedList<>();
+            return null;
         }
 
         SplitAppLogger.writeLog(SplitAppLogger.DEBG, "GET result: \n" + result);
 
-        JSONArray data;
-
         try {
             JSONObject response = new JSONObject(result.getBody());
-            data = response.getJSONArray("data");
+            return response;
         } catch (JSONException e) {
-            return new LinkedList<>();
+            return null;
         }
-
-        LinkedList<JSONObject> objectsList = new LinkedList<>();
-
-        for (int i = 0; i < data.length(); i++) {
-            try {
-                objectsList.push(data.getJSONObject(i));
-            } catch (JSONException e) {
-                return new LinkedList<>();
-            }
-        }
-
-        return objectsList;
     }
 
     private static HttpHeaders getAuthHeader(String fbId, String fbToken) {
@@ -217,6 +198,70 @@ public final class ServerHandler {
         return true;
     }
 
+    private static JSONObject postToServer(String queryUrl, JSONObject body, String fbId, String fbToken) {
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin POST " + queryUrl);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+
+        HttpEntity<String> result;
+
+        try {
+            HttpEntity<String> entity = new HttpEntity<>(body.toString(), getAuthHeader(fbId, fbToken));
+            result = restTemplate.postForEntity(queryUrl, entity, String.class);
+        } catch (HttpServerErrorException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
+            return null;
+        } catch (HttpClientErrorException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage());
+            return null;
+        } catch (ResourceAccessException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Failed to connect: " + e.getMessage());
+            return null;
+        }
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End POST " + queryUrl);
+
+        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "POST result: \n" + result);
+
+        try {
+            JSONObject response = new JSONObject(result.getBody());
+            return response;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    private static JSONObject putToServer(String queryUrl, JSONObject body, String fbId, String fbToken) {
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin PUT " + queryUrl);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+
+        HttpEntity<String> result;
+
+        try {
+            HttpEntity<String> entity = new HttpEntity<>(body.toString(), getAuthHeader(fbId, fbToken));
+            result = restTemplate.exchange(queryUrl, HttpMethod.PUT, entity, String.class);
+        } catch (HttpServerErrorException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
+            return null;
+        } catch (HttpClientErrorException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage());
+            return null;
+        } catch (ResourceAccessException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Failed to connect: " + e.getMessage());
+            return null;
+        }
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End PUT " + queryUrl);
+
+        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "PUT result: \n" + result);
+
+        try {
+            JSONObject response = new JSONObject(result.getBody());
+            return response;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
     /**
      * Logouts from the current session
      */
@@ -238,14 +283,13 @@ public final class ServerHandler {
                               JsonCallbackOperation onSucces,
                               JsonCallbackOperation onError) {
         ServerHandler.executeGet(USER_TOKEN, facebookId, facebookToken, result -> {
-            if (result == null || result.size() == 0) {
-                onError.execute(result);
+            if (result == null) {
+                onError.execute(null);
             } else {
                 try {
-                    mToken = result.get(0).getString("token");
-                    face_id = facebookId;
+                    mToken = result.getJSONObject("data").getString("token");
                 } catch (JSONException e) {
-                    onError.execute(result);
+                    onError.execute(null);
                     return;
                 }
                 onSucces.execute(result);
@@ -253,6 +297,7 @@ public final class ServerHandler {
         });
     }
 
+//<<<<<<< HEAD
 //    /**
 //     * Fetches token from server and returns it
 //     *
@@ -292,28 +337,22 @@ public final class ServerHandler {
 //            if (e.getStatusCode().value() == 401) {
 //                mToken = FAILED_TOKEN;
 //                return FAILED_TOKEN;
+//=======
+//    public static void getEvents(CallbackOperation onSucces, CallbackOperation onError) {
+//        ServerHandler.executeGet(EVENT_LIST, face_id, "", result -> {
+//            if (result == null || result.size() == 0) {
+//                onError.execute(result);
+//            } else {
+//                try {
+//                    mToken = result.get(0).getString("events");
+//                } catch (JSONException e) {
+//                    onError.execute(result);
+//                    return;
+//                }
+//                onSucces.execute(result);
 //            }
-//            mToken = ERROR_TOKEN;
-//            return mToken;
-//        } catch (ResourceAccessException e) {
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_WARN, "Failed to connect: " + e.getMessage());
-//            mToken = ERROR_TOKEN;
-//            return mToken;
-//        }
-//
-//        int statusCode = response.getStatusCode().value();
-//
-//        if (statusCode != 200) {
-//            String errorMessage = "Failed login post: "
-//                    + response.getStatusCode().value()
-//                    + " " + response.getStatusCode().getReasonPhrase();
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, errorMessage);
-//        }
-//
-//        mToken = response.getBody();
-//        return response.getBody();
+//        });
 //    }
-
 
     public static void executeGet(int requestType, String facebookId, String facebookToken, JsonCallbackOperation operation) {
         executeGet("", requestType, facebookId, facebookToken, operation);
@@ -324,158 +363,58 @@ public final class ServerHandler {
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public static void executeGet(int requestType, JsonCallbackOperation operation) {
+        executeGet("", requestType, operation);
+    }
+
+    public static void executeGet(String resId, int requestType, JsonCallbackOperation operation) {
+        executeGet(resId, requestType, "", "", operation);
+    }
+
+    public static void executeDelete(int requestType, BoolCallbackOperation operation) {
+        executeDelete("", requestType, operation);
+    }
+
+    public static void executeDelete(String resId, int requestType, BoolCallbackOperation operation) {
+        executeDelete(resId, requestType, "", "", operation);
+    }
+
     public static void executeDelete(String resId, int requestType, String facebookId, String facebookToken, BoolCallbackOperation operation) {
         DeleteDataTask task = new DeleteDataTask(requestType, resId, facebookId, facebookToken, operation);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-//    /**
-//     * Deletes user profile of the current logged in user
-//     *
-//     * @param token Session token
-//     * @return true if success
-//     */
-//    public static boolean deleteProfile(String token) {
+    public static void executePost(int requestType, JSONObject body, JsonCallbackOperation operation) {
+        executePost("", requestType, body, operation);
+    }
 
-//
-//    /**
-//     * Creates a new user with the info
-//     *
-//     * @param email    User email
-//     * @param password User password
-//     * @param userdata Map containing userdata as field:value
-//     * @return Sign up result (one of the listed results const)
-//     */
-//    public static String signUp(String email, String password, Map<String, String> userdata) {
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        String user = getUsernameFrom(email);
-//
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        addAuthHeader(password, user, requestHeaders);
-//
-//        String name = userdata.get("name");
-//        String age = userdata.get("age");
-//        String sex = userdata.get("sex");
-//        String interest = userdata.get("interest");
-//
-//        StringWriter sWriter = new StringWriter();
-//        CSVWriter writer = new CSVWriter(sWriter, ',');
-//        String[] line = {name, age, user, email, sex, " ", interest};
-//        writer.writeNext(line);
-//        String body = "User=" + sWriter.toString();
-//
-//        HttpEntity<?> requestEntity = new HttpEntity<>(body, requestHeaders);
-//
-//        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-//
-//        ResponseEntity<String> response;
-//
-//        try {
-//            response = restTemplate.exchange(getSignupUrl(), HttpMethod.POST,
-//                    requestEntity, String.class);
-//        } catch (HttpServerErrorException e) {
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
-//            return SIGNUP_FAILED;
-//        } catch (HttpClientErrorException e) {
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage());
-//            if (e.getStatusCode().value() == 401) {
-//                return SIGNUP_USEREXIST;
-//            }
-//            return SIGNUP_FAILED;
-//        } catch (ResourceAccessException e) {
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_WARN, "Failed to connect: " + e.getMessage());
-//            return SIGNUP_FAILED;
-//        }
-//
-//        int statusCode = response.getStatusCode().value();
-//
-//        if (statusCode != 201) {
-//            String errorMessage = "Failed login post: "
-//                    + response.getStatusCode().value()
-//                    + " " + response.getStatusCode().getReasonPhrase();
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, errorMessage);
-//            return SIGNUP_FAILED;
-//        }
-//
-//        mToken = response.getBody();
-//        return SIGNUP_SUCCESS;
-//    }
-//    /**
-//     * Updates user info
-//     *
-//     * @param token    Session token
-//     * @param userdata Map containing userdata as field:value
-//     * @return true if success
-//     */
-//    public static boolean updateInfo(String token, Map<String, String> userdata) {
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        String name = userdata.get("name");
-//        String age = userdata.get("age");
-//        String sex = userdata.get("sex");
-//        String interest = userdata.get("interest");
-//
-//        StringWriter sWriter = new StringWriter();
-//        CSVWriter writer = new CSVWriter(sWriter, ',');
-//        String[] line = {name, age, sex, interest};
-//        writer.writeNext(line);
-//        String body = "User=" + sWriter.toString();
-//
-//        Uri.Builder uriBuilder = Uri.parse(getUpdateUrl()).buildUpon();
-//        uriBuilder.appendQueryParameter("token", token);
-//        String updateUrl = uriBuilder.build().toString();
-//
-//        try {
-//            restTemplate.put(updateUrl, body);
-//        } catch (Exception e) {
-//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Exception on update: " + e.getMessage());
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    /**
-//     * Sends a message from the active user
-//     *
-//     * @param token      session token
-//     * @param receiverId receiver id
-//     * @param message    message to send
-//     * @return true if success
-//     */
-//    public static boolean sendMessage(String token, String receiverId, String message) {
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        String bodyTemplate = "user_id=%s&msg=%s";
-//
-//        String body = String.format(Locale.ENGLISH, bodyTemplate, receiverId, message);
-//
-//        Uri.Builder uriBuilder = Uri.parse(getMessagesUrl()).buildUpon();
-//        uriBuilder.appendQueryParameter("token", token);
-//        String matchesUrl = uriBuilder.build().toString();
-//
-//        boolean sent = false;
-//        int tries = 0;
-//        while (!sent && tries < MAX_TRIES) {
-//            try {
-//                restTemplate.postForEntity(matchesUrl, body, String.class);
-//                sent = true;
-//            } catch (Exception e) {
-//                SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Exception on msg send: " + e.getMessage());
-//                tries += 1;
-//            }
-//        }
-//
-//        return sent;
-//    }
+    public static void executePost(String resId, int requestType, JSONObject body, JsonCallbackOperation operation) {
+        executePost(resId, requestType, "", "", body, operation);
+    }
+
+    public static void executePost(String resId, int requestType, String facebookId, String facebookToken, JSONObject body, JsonCallbackOperation operation) {
+        PostDataTask task = new PostDataTask(requestType, resId, facebookId, facebookToken, body, operation);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public static void executePut(int requestType, JSONObject body, JsonCallbackOperation operation) {
+        executePut("", requestType, body, operation);
+    }
+
+    public static void executePut(String resId, int requestType, JSONObject body, JsonCallbackOperation operation) {
+        executePut(resId, requestType, "", "", body, operation);
+    }
+
+    public static void executePut(String resId, int requestType, String facebookId, String facebookToken, JSONObject body, JsonCallbackOperation operation) {
+        PutDataTask task = new PutDataTask(requestType, resId, facebookId, facebookToken, body, operation);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
     /**
      * Callbacks interface
      */
     public interface JsonCallbackOperation {
-        void execute(List<JSONObject> data);
+        void execute(JSONObject data);
     }
 
     public interface BoolCallbackOperation {
@@ -486,7 +425,7 @@ public final class ServerHandler {
 
         private final JsonCallbackOperation mCallbackOp;
         private String mResourceUrl;
-        private List<JSONObject> mData;
+        private JSONObject mData;
         private String mFbId;
         private String mFbToken;
 
@@ -507,7 +446,75 @@ public final class ServerHandler {
         @Override
         protected void onPostExecute(final Boolean success) {
             if (!success) {
-                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to get data from server");
+                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to GET data from server");
+            }
+            mCallbackOp.execute(mData);
+        }
+
+    }
+
+    private static class PostDataTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final JsonCallbackOperation mCallbackOp;
+        private String mResourceUrl;
+        private JSONObject mData;
+        private String mFbId;
+        private String mFbToken;
+        private JSONObject mBody;
+
+        PostDataTask(int resourceType, String resourceId, String facebookId, String facebookToken, JSONObject object, JsonCallbackOperation callbackOperation) {
+            mResourceUrl = getUrl(resourceType, resourceId);
+            this.mCallbackOp = callbackOperation;
+            this.mData = null;
+            mFbId = facebookId;
+            mFbToken = facebookToken;
+            mBody = object;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            mData = postToServer(mResourceUrl, mBody, mFbId, mFbToken);
+            return mData != null;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (!success) {
+                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to POST data to server");
+            }
+            mCallbackOp.execute(mData);
+        }
+
+    }
+
+    private static class PutDataTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final JsonCallbackOperation mCallbackOp;
+        private String mResourceUrl;
+        private JSONObject mData;
+        private String mFbId;
+        private String mFbToken;
+        private JSONObject mBody;
+
+        PutDataTask(int resourceType, String resourceId, String facebookId, String facebookToken, JSONObject object, JsonCallbackOperation callbackOperation) {
+            mResourceUrl = getUrl(resourceType, resourceId);
+            this.mCallbackOp = callbackOperation;
+            this.mData = null;
+            mFbId = facebookId;
+            mFbToken = facebookToken;
+            mBody = object;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            mData = putToServer(mResourceUrl, mBody, mFbId, mFbToken);
+            return mData != null;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (!success) {
+                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to PUT data to server");
             }
             mCallbackOp.execute(mData);
         }
