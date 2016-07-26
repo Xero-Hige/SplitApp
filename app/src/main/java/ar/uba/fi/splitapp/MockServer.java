@@ -90,16 +90,6 @@ public final class MockServer {
         mMessages.add(new String[]{friendId, message});
     }
 
-    private static void publishResponse(String friendId, String sender, String message) {
-        if (mSession != null) {
-            mSession.runOnUiThread(() -> mSession.addResponse(message, friendId));
-        } else {
-            Bitmap bitmap = FacebookManager.getUserImage(appContext, friendId);
-            showNotification("Nuevo mensaje de " + sender + ": ", message, bitmap);
-        }
-        mMessages.add(new String[]{friendId, message});
-    }
-
     private static void showNotification(String header, String message, Bitmap icon) {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -165,6 +155,16 @@ public final class MockServer {
         publishResponse(friendId, mFriendName, message);
         Thread.sleep(2000);
         publishResponse(friendId, mFriendName, "Gracias por agregarme al evento");
+    }
+
+    private static void publishResponse(String friendId, String sender, String message) {
+        if (mSession != null) {
+            mSession.runOnUiThread(() -> mSession.addResponse(message, friendId));
+        } else {
+            Bitmap bitmap = FacebookManager.getUserImage(appContext, friendId);
+            showNotification("Nuevo mensaje de " + sender + ": ", message, bitmap);
+        }
+        mMessages.add(new String[]{friendId, message});
     }
 
     private static void addResponse2(String friendId, String mFriendName) throws InterruptedException {
