@@ -40,9 +40,6 @@ import java.util.Locale;
  */
 public final class ServerHandler {
 
-    /**
-     * Urls
-     */
     public static final int USER_TOKEN = 0;
     public static final int EVENT_LIST = 1;
     public static final int EVENT_DETAIL = 2;
@@ -50,17 +47,17 @@ public final class ServerHandler {
     public static final int EVENT_INVITEE = 4;
     public static final int EVENT_TRANSACTION = 5;
     public static final int EVENT_TEMPLATE = 6;
-    /**
-     * Tokens
-     */
+
     public static final String FAILED_TOKEN = "-";
     public static final String ERROR_TOKEN = "";
     public static final String SIGNUP_USEREXIST = "E";
     public static final String SIGNUP_FAILED = "F";
     public static final String SIGNUP_SUCCESS = "S";
+
     private static final String SERVER_URL = "http://splitapp.medicmanager.com.ar/public/index.php/";
     private static final String TOKEN_BASE_URL = "tokens";
     private static final String TOKEN_MOD_URL = "";
+
     private static final String EVENT_LIST_BASE_URL = "events";
     private static final String EVENT_LIST_MOD_URL = "";
     private static final String EVENT_DETAIL_BASE_URL = "events";
@@ -73,6 +70,7 @@ public final class ServerHandler {
     private static final String EVENT_TRANSACTION_MOD_URL = "/settlementTransactions";
     private static final String EVENT_TEMPLATE_BASE_URL = "eventsTemplates";
     private static final String EVENT_TEMPLATE_MOD_URL = "";
+
     /**
      * Private
      */
@@ -128,28 +126,6 @@ public final class ServerHandler {
             default:
                 throw new IllegalArgumentException();
         }
-    }
-
-    /**
-     * Executes a query in a detached thread. Once it finishes executes the callback
-     *
-     * @param requestType Request type (One of the listed request types)
-     * @param operation   Callback operation
-     */
-    public static void executeGet(int requestType, String facebookId, String facebookToken, CallbackOperation operation) {
-        executeGet("", requestType, facebookId, facebookToken, operation);
-    }
-
-    /**
-     * Executes a query in a detached thread. Once it finishes executes the callback
-     *
-     * @param resId       Queried resource id
-     * @param requestType Request type (One of the listed request types)
-     * @param operation   Callback operation
-     */
-    public static void executeGet(String resId, int requestType, String facebookId, String facebookToken, CallbackOperation operation) {
-        GetDataTask task = new GetDataTask(requestType, resId, facebookId, facebookToken, operation);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private static List<JSONObject> getFromServer(String queryUrl, String fbId, String fbToken) {
@@ -220,6 +196,34 @@ public final class ServerHandler {
         mToken = "";
     }
 
+    /**
+     * Get the current session token
+     *
+     * @return The current session token. If not possible, one of the listed Error tokens
+     */
+    public static String getToken() {
+        return mToken;
+    }
+
+    public static void signIn(String facebookId,
+                              String facebookToken,
+                              CallbackOperation onSucces,
+                              CallbackOperation onError) {
+        ServerHandler.executeGet(USER_TOKEN, facebookId, facebookToken, result -> {
+            if (result == null || result.size() == 0) {
+                onError.execute(result);
+            } else {
+                try {
+                    mToken = result.get(0).getString("token");
+                } catch (JSONException e) {
+                    onError.execute(result);
+                    return;
+                }
+                onSucces.execute(result);
+            }
+        });
+    }
+
 //    /**
 //     * Fetches token from server and returns it
 //     *
@@ -282,19 +286,25 @@ public final class ServerHandler {
 //    }
 
     /**
-     * Get the current session token
+     * Executes a query in a detached thread. Once it finishes executes the callback
      *
-     * @return The current session token. If not possible, one of the listed Error tokens
+     * @param requestType Request type (One of the listed request types)
+     * @param operation   Callback operation
      */
-    public static String getToken() {
-        return mToken;
+    public static void executeGet(int requestType, String facebookId, String facebookToken, CallbackOperation operation) {
+        executeGet("", requestType, facebookId, facebookToken, operation);
     }
 
     /**
-     * Callbacks interface
+     * Executes a query in a detached thread. Once it finishes executes the callback
+     *
+     * @param resId       Queried resource id
+     * @param requestType Request type (One of the listed request types)
+     * @param operation   Callback operation
      */
-    public interface CallbackOperation {
-        void execute(List<JSONObject> data);
+    public static void executeGet(String resId, int requestType, String facebookId, String facebookToken, CallbackOperation operation) {
+        GetDataTask task = new GetDataTask(requestType, resId, facebookId, facebookToken, operation);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 //    /**
@@ -454,6 +464,13 @@ public final class ServerHandler {
 //
 //        return sent;
 //    }
+
+    /**
+     * Callbacks interface
+     */
+    public interface CallbackOperation {
+        void execute(List<JSONObject> data);
+    }
 
     private static class GetDataTask extends AsyncTask<Void, Void, Boolean> {
 
