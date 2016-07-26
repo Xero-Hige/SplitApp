@@ -24,10 +24,44 @@ import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.pkmmte.view.CircularImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class EventDescriptionActivity extends AppCompatActivity {
 
     private ExpandableLinearLayout my_tasks;
     private ExpandableLinearLayout all_tasks;
+
+    String json_prop = "{\n" +
+            "      \"name\": \"asd\",\n" +
+            "      \"when\": \"2016-07-25 19:30:00\",\n" +
+            "      \"when_iso\": \"2016-07-25T19:30:00-03:00\",\n" +
+            "      \"lat\": -53.04,\n" +
+            "      \"long\": -53.04,\n" +
+            "      \"invitees\": [\n" +
+            "        {\n" +
+            "          \"facebook_id\": 231231231\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"facebook_id\": 244\n" +
+            "        }\n" +
+            "      ],\n" +
+            "      \"tasks\": [\n" +
+            "        {\n" +
+            "          \"assignee\": 231231231,\n" +
+            "          \"name\": \"COMPRAR PAN\",\n" +
+            "          \"cost\": 4.50,\n" +
+            "          \"done\": true\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"assignee\": 231231231,\n" +
+            "          \"name\": \"COMPRAR PAN\",\n" +
+            "          \"cost\": null,\n" +
+            "          \"done\": false\n" +
+            "        },\n" +
+            "      ]\n" +
+            "    }";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +130,42 @@ public class EventDescriptionActivity extends AppCompatActivity {
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
-        for (int i = 1; i < 10; i++) {
+        JSONArray cant_tareas;
+
+        try {
+            JSONObject objeto = new JSONObject(json_prop);
+            cant_tareas = objeto.getJSONArray("tasks");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        int tareas = cant_tareas.length();
+
+        for (int i = 1; i < tareas; i++) {
             View templateItem = inflater.inflate(R.layout.task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);
-            text.setText("Tarea #" + i);
+            String tarea;
+            boolean hecho;
+            try {
+                tarea = cant_tareas.getJSONObject(i).getString("name");
+                hecho = cant_tareas.getJSONObject(i).getBoolean("done");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
+
+
+            text.setText(tarea);
 
             TextView date = (TextView) templateItem.findViewById(R.id.task_status);
-            date.setText("Pendiente");
+            if (hecho){
+                date.setText("Hecho");
+            } else {
+                date.setText("Pendiente");
+            }
+
 
             CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
