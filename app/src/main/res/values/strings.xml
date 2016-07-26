@@ -28,4 +28,6 @@
     <string name="title_activity_event_description">Event Description</string>
     <string name="facebook_app_id">518123865060770</string>
 
+    <string name="hecho">Hecho</string>
+
 </resources>

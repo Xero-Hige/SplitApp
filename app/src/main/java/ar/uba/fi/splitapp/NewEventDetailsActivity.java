@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -51,6 +52,13 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         setFriendChooser();
         setLocationPicker();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.new_event_taskbar, menu);
+        return true;
     }
 
     private void setLocationPicker() {
