@@ -200,6 +200,38 @@ public final class ServerHandler {
         return true;
     }
 
+    private static JSONObject postToServer(String queryUrl, JSONObject body, String fbId, String fbToken) {
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin POST " + queryUrl);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+
+        HttpEntity<String> result;
+
+        try {
+            HttpEntity<String> entity = new HttpEntity<>(body.toString(), getAuthHeader(fbId, fbToken));
+            result = restTemplate.postForEntity(queryUrl, entity, String.class);
+        } catch (HttpServerErrorException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
+            return null;
+        } catch (HttpClientErrorException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage());
+            return null;
+        } catch (ResourceAccessException e) {
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Failed to connect: " + e.getMessage());
+            return null;
+        }
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End POST " + queryUrl);
+
+        SplitAppLogger.writeLog(SplitAppLogger.DEBG, "POST result: \n" + result);
+
+        try {
+            JSONObject response = new JSONObject(result.getBody());
+            return response;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
     /**
      * Logouts from the current session
      */
@@ -325,6 +357,11 @@ public final class ServerHandler {
 
     public static void executeDelete(String resId, int requestType, String facebookId, String facebookToken, BoolCallbackOperation operation) {
         DeleteDataTask task = new DeleteDataTask(requestType, resId, facebookId, facebookToken, operation);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public static void executePost(String resId, int requestType, String facebookId, String facebookToken, JSONObject body, JsonCallbackOperation operation) {
+        PostDataTask task = new PostDataTask(requestType, resId, facebookId, facebookToken, body, operation);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -512,6 +549,41 @@ public final class ServerHandler {
         }
 
     }
+
+    private static class PostDataTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final JsonCallbackOperation mCallbackOp;
+        private String mResourceUrl;
+        private JSONObject mData;
+        private String mFbId;
+        private String mFbToken;
+        private JSONObject mBody;
+
+        PostDataTask(int resourceType, String resourceId, String facebookId, String facebookToken, JSONObject object, JsonCallbackOperation callbackOperation) {
+            mResourceUrl = getUrl(resourceType, resourceId);
+            this.mCallbackOp = callbackOperation;
+            this.mData = null;
+            mFbId = facebookId;
+            mFbToken = facebookToken;
+            mBody = object;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            mData = postToServer(mResourceUrl, mBody, mFbId, mFbToken);
+            return mData != null;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (!success) {
+                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to get data from server");
+            }
+            mCallbackOp.execute(mData);
+        }
+
+    }
+
 
     private static class DeleteDataTask extends AsyncTask<Void, Void, Boolean> {
 
