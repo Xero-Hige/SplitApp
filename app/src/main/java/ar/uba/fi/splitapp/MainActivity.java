@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         CircularImageView userPic = (CircularImageView) header.findViewById(R.id.user_pic);
         Profile profile = Profile.getCurrentProfile();
-        assert profile != null;
 
         FacebookManager.fillWithUserPic(profile.getId(), userPic, getApplicationContext());
         TextView username = (TextView) header.findViewById(R.id.user_id);
