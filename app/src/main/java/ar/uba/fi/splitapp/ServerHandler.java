@@ -71,12 +71,15 @@ public final class ServerHandler {
     private static final String EVENT_TEMPLATE_BASE_URL = "eventsTemplates";
     private static final String EVENT_TEMPLATE_MOD_URL = "";
 
+
     /**
      * Private
      */
     private static final int MAX_TRIES = 30;
 
     private static String mToken = ERROR_TOKEN;
+
+    private static String face_id;
 
     private ServerHandler() {
     }
@@ -184,8 +187,8 @@ public final class ServerHandler {
     private static HttpHeaders getAuthHeader(String fbId, String fbToken) {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("X-Auth-Token", mToken);
-        requestHeaders.add("facebook_id", fbId);
-        requestHeaders.add("facebook_token", fbToken);
+        requestHeaders.add("x-Auth-Facebook-ID", fbId);
+        requestHeaders.add("x-Auth-Facebook-Token", fbToken);
         return requestHeaders;
     }
 
@@ -215,6 +218,23 @@ public final class ServerHandler {
             } else {
                 try {
                     mToken = result.get(0).getString("token");
+                    face_id = facebookId;
+                } catch (JSONException e) {
+                    onError.execute(result);
+                    return;
+                }
+                onSucces.execute(result);
+            }
+        });
+    }
+
+    public static void getEvents(CallbackOperation onSucces, CallbackOperation onError) {
+        ServerHandler.executeGet(EVENT_LIST, face_id, "", result -> {
+            if (result == null || result.size() == 0) {
+                onError.execute(result);
+            } else {
+                try {
+                    mToken = result.get(0).getString("events");
                 } catch (JSONException e) {
                     onError.execute(result);
                     return;
