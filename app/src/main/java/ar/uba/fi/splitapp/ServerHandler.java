@@ -2,7 +2,6 @@ package ar.uba.fi.splitapp;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -14,8 +13,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -131,7 +128,7 @@ public final class ServerHandler {
         }
     }
 
-    private static List<JSONObject> getFromServer(String queryUrl, String fbId, String fbToken) {
+    private static JSONObject getFromServer(String queryUrl, String fbId, String fbToken) {
         SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "Begin GET " + queryUrl);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
@@ -157,31 +154,17 @@ public final class ServerHandler {
 
         if (result == null) {
             SplitAppLogger.writeLog(SplitAppLogger.WARN, "Empty GET response from :" + queryUrl);
-            return new LinkedList<>();
+            return null;
         }
 
         SplitAppLogger.writeLog(SplitAppLogger.DEBG, "GET result: \n" + result);
 
-        JSONArray data;
-
         try {
             JSONObject response = new JSONObject(result.getBody());
-            data = response.getJSONArray("data");
+            return response;
         } catch (JSONException e) {
-            return new LinkedList<>();
+            return null;
         }
-
-        LinkedList<JSONObject> objectsList = new LinkedList<>();
-
-        for (int i = 0; i < data.length(); i++) {
-            try {
-                objectsList.push(data.getJSONObject(i));
-            } catch (JSONException e) {
-                return new LinkedList<>();
-            }
-        }
-
-        return objectsList;
     }
 
     private static HttpHeaders getAuthHeader(String fbId, String fbToken) {
@@ -238,14 +221,14 @@ public final class ServerHandler {
                               JsonCallbackOperation onSucces,
                               JsonCallbackOperation onError) {
         ServerHandler.executeGet(USER_TOKEN, facebookId, facebookToken, result -> {
-            if (result == null || result.size() == 0) {
-                onError.execute(result);
+            if (result == null) {
+                onError.execute(null);
             } else {
                 try {
-                    mToken = result.get(0).getString("token");
+                    mToken = result.getJSONObject("data").getString("token");
                     face_id = facebookId;
                 } catch (JSONException e) {
-                    onError.execute(result);
+                    onError.execute(null);
                     return;
                 }
                 onSucces.execute(result);
@@ -253,21 +236,21 @@ public final class ServerHandler {
         });
     }
 
-    public static void getEvents(CallbackOperation onSucces, CallbackOperation onError) {
-        ServerHandler.executeGet(EVENT_LIST, face_id, "", result -> {
-            if (result == null || result.size() == 0) {
-                onError.execute(result);
-            } else {
-                try {
-                    mToken = result.get(0).getString("events");
-                } catch (JSONException e) {
-                    onError.execute(result);
-                    return;
-                }
-                onSucces.execute(result);
-            }
-        });
-    }
+//    public static void getEvents(CallbackOperation onSucces, CallbackOperation onError) {
+//        ServerHandler.executeGet(EVENT_LIST, face_id, "", result -> {
+//            if (result == null || result.size() == 0) {
+//                onError.execute(result);
+//            } else {
+//                try {
+//                    mToken = result.get(0).getString("events");
+//                } catch (JSONException e) {
+//                    onError.execute(result);
+//                    return;
+//                }
+//                onSucces.execute(result);
+//            }
+//        });
+//    }
 
 //    /**
 //     * Fetches token from server and returns it
@@ -491,7 +474,7 @@ public final class ServerHandler {
      * Callbacks interface
      */
     public interface JsonCallbackOperation {
-        void execute(List<JSONObject> data);
+        void execute(JSONObject data);
     }
 
     public interface BoolCallbackOperation {
@@ -502,7 +485,7 @@ public final class ServerHandler {
 
         private final JsonCallbackOperation mCallbackOp;
         private String mResourceUrl;
-        private List<JSONObject> mData;
+        private JSONObject mData;
         private String mFbId;
         private String mFbToken;
 
