@@ -19,8 +19,6 @@ public class PaymetnListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paymetn_list);
 
-        super.onCreate(savedInstanceState);
-
         LinearLayout payments = (LinearLayout) findViewById(R.id.payments_container);
         LayoutInflater inflater = getLayoutInflater();
 
