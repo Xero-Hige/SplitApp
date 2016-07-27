@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/icons_T"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp">
+
+    <TextView
+        android:id="@+id/payment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/payment_icon"
+        android:padding="10dp"
+        android:text="Efectivo"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="16sp"/>
+
+    <ImageView
+        android:id="@+id/payment_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:padding="6dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/people"/>
+
+</RelativeLayout>
