@@ -26,10 +26,12 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         FacebookManager.checkInit(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_template_layout);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

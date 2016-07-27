@@ -75,7 +75,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_description);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(eventMain, 0);
+            }
+        });
 
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -144,7 +156,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 4; i++) {
             View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);
@@ -397,7 +409,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
             startActivity(intent);
         }
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, WhereToBuyActivity.class); // TODO: Mover al menu de la tarea
+            startActivity(intent);
+//            return true;
         }
 
         return super.onOptionsItemSelected(item);

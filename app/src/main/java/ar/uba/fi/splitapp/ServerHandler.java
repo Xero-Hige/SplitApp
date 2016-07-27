@@ -388,10 +388,13 @@ public final class ServerHandler {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            SplitAppLogger.writeLog(SplitAppLogger.INFO, "ON POST EXECUTE");
             if (!success) {
                 SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to GET data from server");
             }
+            SplitAppLogger.writeLog(SplitAppLogger.INFO, "ON POST EXECUTE 2");
             mCallbackOp.execute(mData);
+            SplitAppLogger.writeLog(SplitAppLogger.INFO, "ON POST EXECUTE 3");
         }
 
     }

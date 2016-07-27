@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -53,6 +54,17 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_event_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent eventNew = new Intent(getApplicationContext(), NewEventActivity.class);
+                startActivityForResult(eventNew, 0);
+            }
+        });
 
         long dates = System.currentTimeMillis();
 
