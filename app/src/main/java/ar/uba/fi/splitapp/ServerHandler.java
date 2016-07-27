@@ -297,6 +297,47 @@ public final class ServerHandler {
         });
     }
 
+//<<<<<<< HEAD
+//    /**
+//     * Fetches token from server and returns it
+//     *
+//     * @param email    User email
+//     * @param password User password
+//     * @param location User location
+//     * @return Token string. If error, one of the listed error tokens
+//     */
+//    static String getLoginToken(String email, String password, String location) {
+//
+//        mToken = null;
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        String user = getUsernameFrom(email);
+//
+//        HttpHeaders requestHeaders = new HttpHeaders();
+//        addAuthHeader(password, user, requestHeaders);
+//
+//        String body = String.format(Locale.ENGLISH, "localization=%s", location);
+//
+//        HttpEntity<?> requestEntity = new HttpEntity<>(body, requestHeaders);
+//
+//        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+//
+//        ResponseEntity<String> response;
+//
+//        try {
+//            response = restTemplate.exchange(getLoginUrl(), HttpMethod.POST,
+//                    requestEntity, String.class);
+//        } catch (HttpServerErrorException e) {
+//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
+//            mToken = ERROR_TOKEN;
+//            return mToken;
+//        } catch (HttpClientErrorException e) {
+//            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage());
+//            if (e.getStatusCode().value() == 401) {
+//                mToken = FAILED_TOKEN;
+//                return FAILED_TOKEN;
+//=======
 //    public static void getEvents(CallbackOperation onSucces, CallbackOperation onError) {
 //        ServerHandler.executeGet(EVENT_LIST, face_id, "", result -> {
 //            if (result == null || result.size() == 0) {

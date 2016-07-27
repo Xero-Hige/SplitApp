@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.pkmmte.view.CircularImageView;
 
@@ -28,10 +29,10 @@ public class ActiveEventsFragment extends Fragment {
 
         LinearLayout templates = (LinearLayout) fragment.findViewById(R.id.active_events_list);
 
-        /*Mock*/
+        //Mock
         View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
-        CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        /*CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
         FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, getActivity().getApplicationContext());
 
         view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
@@ -81,7 +82,9 @@ public class ActiveEventsFragment extends Fragment {
         Glide.with(getActivity().getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
 
         templates.addView(templateItem);
-            /*Mock*/
+            *//*Mock*/
+
+
 
         for (int i = 1; i < 21; i++) {
             templateItem = inflater.inflate(R.layout.event_active_item, null);

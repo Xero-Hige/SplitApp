@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.pkmmte.view.CircularImageView;
@@ -137,12 +138,15 @@ public class MainActivity extends AppCompatActivity
             Intent newEventIntent = new Intent(MainActivity.this, NewEventActivity.class);
             startActivity(newEventIntent);
         } else if (id == R.id.nav_gallery) {
-            Utility.showMessage("Tampoco anda", Utility.getViewgroup(this), "Ok");
+            //Misma clase
         } else if (id == R.id.nav_slideshow) {
             Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_manage) {
             Intent newManageIntent = new Intent(MainActivity.this, ManageTemplate.class);
             startActivity(newManageIntent);
+        } else if (id == R.id.nav_debt) {
+            Intent newDebtIntent = new Intent(MainActivity.this, DebtActivity.class);
+            startActivity(newDebtIntent);
         } else if (id == R.id.nav_settings) {
             Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_help) {
