@@ -241,21 +241,20 @@ public class EventDescriptionActivity extends AppCompatActivity {
         RelativeLayout expand = (RelativeLayout) findViewById(R.id.expand_my_task);
         expand.setOnClickListener(v -> mMyTasks.toggle());
 
-        ImageView button = (ImageView) findViewById(R.id.expand_my_task_icon);
-        Animation rotate = AnimationUtils.loadAnimation(this, R.anim.rerotate);
+        ImageView myTasksButton = (ImageView) findViewById(R.id.expand_my_task_icon);
+        Animation rotateMyTasks = AnimationUtils.loadAnimation(this, R.anim.rerotate);
 
-        final ImageView finalButton1 = button;
         mMyTasks.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
-                finalButton1.startAnimation(rotate);
-                finalButton1.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+                myTasksButton.startAnimation(rotateMyTasks);
+                myTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
             }
 
             @Override
             public void onPreClose() {
-                finalButton1.startAnimation(rotate);
-                finalButton1.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+                myTasksButton.startAnimation(rotateMyTasks);
+                myTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
             }
         });
 
@@ -263,20 +262,20 @@ public class EventDescriptionActivity extends AppCompatActivity {
         expand = (RelativeLayout) findViewById(R.id.expand_all_tasks);
         expand.setOnClickListener(v -> mAllTasks.toggle());
 
-        button = (ImageView) findViewById(R.id.expand_all_task_icon);
+        ImageView allTasksButton = (ImageView) findViewById(R.id.expand_all_task_icon);
+        Animation rotateAllTasks = AnimationUtils.loadAnimation(this, R.anim.rerotate);
 
-        final ImageView finalButton = button;
         mAllTasks.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
-                finalButton.startAnimation(rotate);
-                finalButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+                allTasksButton.startAnimation(rotateAllTasks);
+                allTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
             }
 
             @Override
             public void onPreClose() {
-                finalButton.startAnimation(rotate);
-                finalButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+                allTasksButton.startAnimation(rotateAllTasks);
+                allTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
             }
         });
 
@@ -284,20 +283,20 @@ public class EventDescriptionActivity extends AppCompatActivity {
         expand = (RelativeLayout) findViewById(R.id.expand_settle);
         expand.setOnClickListener(v -> mSettle.toggle());
 
-        button = (ImageView) findViewById(R.id.expand_settle_icon);
+        ImageView settleButton = (ImageView) findViewById(R.id.expand_settle_icon);
+        Animation rotateSettle = AnimationUtils.loadAnimation(this, R.anim.rerotate);
 
-        final ImageView finalButton2 = button;
-        mAllTasks.setListener(new ExpandableLayoutListenerAdapter() {
+        mSettle.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
-                finalButton2.startAnimation(rotate);
-                finalButton2.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+                settleButton.startAnimation(rotateSettle);
+                settleButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
             }
 
             @Override
             public void onPreClose() {
-                finalButton2.startAnimation(rotate);
-                finalButton2.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+                settleButton.startAnimation(rotateSettle);
+                settleButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
             }
         });
     }
