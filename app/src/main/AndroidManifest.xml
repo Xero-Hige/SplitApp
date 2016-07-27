@@ -55,17 +55,27 @@
             android:name=".ManageTemplate"
             android:label="@string/title_manage_event"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".DebtActivity"
+            android:label="@string/title_payments"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".AttendesActivity"
+            android:label="@string/title_attendees"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".TemplateActivity"
             android:label="@string/title_template"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".NewEventDetailsActivity"
             android:label="@string/title_activity_new_event_details"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".EventDescriptionActivity"
             android:label="@string/title_activity_event_description"
@@ -73,7 +83,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FriendChooserActivity"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".ChatSessionActivity"
             android:screenOrientation="sensorPortrait"
@@ -81,25 +91,13 @@
         <activity
             android:name=".ChatRoomActivity"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".WhatToBuyActivity"
-            android:label="@string/title_activity_what_to_buy"
-            android:parentActivityName=".EventDescriptionActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="EventDescriptionActivity" />
-        </activity>
+            android:name=".PaymentListActivity"
+            android:screenOrientation="sensorPortrait"/>
         <activity
-            android:name=".WhereToBuyActivity"
-            android:label="@string/title_activity_where_to_buy"
-            android:parentActivityName=".EventDescriptionActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="EventDescriptionActivity" />
-        </activity>
+            android:name=".EventInvitationList"
+            android:screenOrientation="sensorPortrait"/>
     </application>
 
 </manifest>

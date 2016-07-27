@@ -15,17 +15,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.pkmmte.view.CircularImageView;
 
 /**
- * Created by colopreda on 24/07/16.
+ * Created by colopreda on 26/07/16.
  */
-public class ManageTemplate extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class DebtActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         FacebookManager.checkInit(this);
 
         super.onCreate(savedInstanceState);
@@ -43,37 +45,43 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
         navigationView.setNavigationItemSelectedListener(this);
         addNavHeader(navigationView);
 
-        LinearLayout templates = (LinearLayout) findViewById(R.id.eventTemplateList);
+        LinearLayout deudas = (LinearLayout) findViewById(R.id.eventTemplateList);
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        /*JSONArray cant_templates;
 
-        try {
-            JSONObject objeto = new JSONObject(server);
-            cant_templates = objeto.getJSONArray("eventTemplates");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-        */
+        for (int i = 1; i < 5; i++) {
 
-        int cantTemplatesInt = 21;
+            View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
-        for (int i = 1; i < cantTemplatesInt; i++) {
-            View templateItem = inflater.inflate(R.layout.event_template_item, null);
+            CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+            view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+            ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
+            Glide.with(this).load(R.drawable.debt_on).centerCrop().into(background);
+
+            Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+            deudas.addView(templateItem);
+
+
+            /*View templateItem = inflater.inflate(R.layout.event_template_item, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.template_name);
             //String nombreTemplate = cant_template.getJSONObject(i).getString("name");
-            text.setText("Template #" /*nombreTemplate*/);
+            text.setText("Template #" *//*nombreTemplate*//*);
 
             templateItem.setOnClickListener(v -> {
                 Intent eventDetail = new Intent(ManageTemplate.this, TemplateActivity.class);
                 startActivity(eventDetail);
             });
 
-            templates.addView(templateItem);
+            templates.addView(templateItem);*/
         }
+
+
     }
 
     private void addNavHeader(NavigationView navigationView) {
@@ -96,19 +104,20 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
         int id = item.getItemId();
 
         if (id == R.id.new_event) {
-            Intent newEventIntent = new Intent(ManageTemplate.this, NewEventActivity.class);
+            Intent newEventIntent = new Intent(DebtActivity.this, NewEventActivity.class);
             startActivity(newEventIntent);
         } else if (id == R.id.nav_gallery) {
-            Intent newMainMenuIntent = new Intent(ManageTemplate.this, NewEventActivity.class);
-            startActivity(newMainMenuIntent);
+            Intent newMainPageIntent = new Intent(DebtActivity.this, MainActivity.class);
+            startActivity(newMainPageIntent);
+            this.finish();
         } else if (id == R.id.nav_invitees) {
-            Intent invitees = new Intent(ManageTemplate.this, EventInvitationList.class);
+            Intent invitees = new Intent(DebtActivity.this, EventInvitationList.class);
             startActivity(invitees);
         } else if (id == R.id.nav_manage) {
-            //Misma opcion
+            Intent newManageIntent = new Intent(DebtActivity.this, ManageTemplate.class);
+            startActivity(newManageIntent);
         } else if (id == R.id.nav_debt) {
-            Intent newDebtIntent = new Intent(ManageTemplate.this, DebtActivity.class);
-            startActivity(newDebtIntent);
+            //Misma clase
         } else if (id == R.id.nav_settings) {
             Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_help) {
@@ -128,5 +137,4 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
         startActivity(mainActivityIntent);
         finish();
     }
-
 }

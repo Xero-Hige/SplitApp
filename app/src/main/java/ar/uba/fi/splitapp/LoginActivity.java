@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -43,34 +44,31 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if (accessToken != null && !accessToken.isExpired()) {
-            startMainActivity();
-        }
-
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken newAccessToken) {
-                if (newAccessToken == null) {
-                    return;
-                }
-                accessTokenTracker.stopTracking();
-                startMainActivity();
-            }
-        };
-
-
         profileTracker = new ProfileTracker() {
             @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                if (currentProfile == null) {
-                    return;
-                }
+            protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                // profile2 is the new profile
+                Log.v("Profile Changed", "LoginActivity::onResume " + profile2.getFirstName());
                 profileTracker.stopTracking();
-                startMainActivity();
+
+                String token = AccessToken.getCurrentAccessToken().getToken();
+                String userId = Profile.getCurrentProfile().getId();
+                ServerHandler.signIn(userId, token,
+                        v -> startMainActivity(),
+                        v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                Utility.getViewgroup(LoginActivity.this)));
             }
         };
 
+        if (Profile.getCurrentProfile() != null) {
+            profileTracker.stopTracking();
+            String token = AccessToken.getCurrentAccessToken().getToken();
+            String userId = Profile.getCurrentProfile().getId();
+            ServerHandler.signIn(userId, token,
+                    v -> startMainActivity(),
+                    v -> Utility.showMessage("Fallo al conectar con el servidor",
+                            Utility.getViewgroup(LoginActivity.this)));
+        }
 
         setContentView(R.layout.activity_login);
 
@@ -79,6 +77,13 @@ public class LoginActivity extends AppCompatActivity {
 
         addLogo();
     }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        if (Profile.getCurrentProfile() == null)
+            profileTracker.startTracking();
+    }*/
 
     private void addLogo() {
         ImageView logo = (ImageView) findViewById(R.id.logo);
@@ -95,14 +100,11 @@ public class LoginActivity extends AppCompatActivity {
                 "public_profile", "user_birthday"));
         loginButton.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
 
+            private ProfileTracker mProfileTracker;
+
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String token = AccessToken.getCurrentAccessToken().getToken();
-                String userId = Profile.getCurrentProfile().getId();
-                ServerHandler.signIn(userId, token,
-                        v -> Utility.showMessage("Fallo al conectar con el servidor",
-                                Utility.getViewgroup(LoginActivity.this)),
-                        v -> startMainActivity());
+
             }
 
             @Override
@@ -117,16 +119,40 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void startMainActivity() {
-        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(mainActivityIntent);
-        finish();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         fbCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (profileTracker == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                    // profile2 is the new profile
+                    Log.v("Profile Changed", "LoginActivity::onResume " + profile2.getFirstName());
+                    profileTracker.stopTracking();
+
+                    String token = AccessToken.getCurrentAccessToken().getToken();
+                    String userId = Profile.getCurrentProfile().getId();
+                    ServerHandler.signIn(userId, token,
+                            v -> startMainActivity(),
+                            v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                    Utility.getViewgroup(LoginActivity.this)));
+                }
+            };
+        } else {
+            profileTracker.startTracking();
+        }
+    }
+
+    private void startMainActivity() {
+        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
     }
 
     private class AnimationTask extends AsyncTask<Void, Void, Boolean> {

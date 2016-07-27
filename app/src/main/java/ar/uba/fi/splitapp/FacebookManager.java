@@ -131,12 +131,12 @@ public final class FacebookManager {
 
     public static void fillWithUserCover(String userId, ImageView view, Context context) {
         ImageFillerTask task = new ImageFillerTask(FacebookManager::getCoverUrl, userId, view, context);
-        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static void fillWithUserPic(String userId, ImageView view, Context context) {
         ImageFillerTask task = new ImageFillerTask(FacebookManager::getUserPicUrl, userId, view, context);
-        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static Bitmap getUserImage(Context context, String userId) {
@@ -255,7 +255,7 @@ public final class FacebookManager {
                 Glide.with(mContext).load(mUrl).centerCrop().into(mView);
             } catch (NullPointerException e) {
                 SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Null pointer: " + e.getMessage());
-                Glide.with(mContext).load(R.drawable.logo).centerCrop().into(mView);
+                Glide.with(mContext).load(R.drawable.silhouette).centerCrop().into(mView);
             }
         }
     }

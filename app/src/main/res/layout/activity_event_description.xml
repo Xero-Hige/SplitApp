@@ -52,21 +52,15 @@
                     />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/date_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageButton"
+                    android:layout_above="@+id/imageButton3"
+                    android:layout_alignEnd="@+id/location_details"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="12dp"
                     android:layout_toEndOf="@+id/imageButton"
-                    android:text="Algun dia"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/textView2"
-                    android:layout_toEndOf="@+id/imageButton2"
-                    android:text="Alguna hora"
+                    android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <ImageView
@@ -92,7 +86,7 @@
                     android:src="@drawable/location"/>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/location_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imageButton3"
@@ -112,11 +106,11 @@
                     android:src="@drawable/people"/>
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/participants_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imageButton4"
-                    android:layout_alignStart="@+id/textView4"
+                    android:layout_alignStart="@+id/location_details"
                     android:text="No va nadie"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -206,7 +200,7 @@
                         android:id="@+id/all_tasks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="100dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
                         android:background="@color/colorPrimary"
                         android:elevation="10dp">
@@ -269,8 +263,92 @@
                                     android:padding="10dp"/>
                             </android.support.v4.widget.NestedScrollView>
                         </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
                     </RelativeLayout>
+
+                    <RelativeLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/settle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/colorPrimary"
+                        android:elevation="10dp">
+
+                        <RelativeLayout
+                            android:id="@+id/expand_settle"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_above="@+id/expandable_settle"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/expand_settle_icon"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/expand"
+                                android:tint="@color/icons"
+                                android:tintMode="src_in"
+                                />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/settle_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_toStartOf="@+id/expand_settle"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Cuentas"
+                            android:textColor="@color/icons"
+                            android:textSize="16sp"/>
+
+                        <com.github.aakira.expandablelayout.ExpandableLinearLayout
+                            android:id="@+id/expandable_settle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/settle_label"
+                            android:background="@color/colorPrimaryLight"
+                            android:orientation="vertical"
+                            app:ael_duration="400"
+                            app:ael_expanded="false">
+
+                            <android.support.v4.widget.NestedScrollView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                                <LinearLayout
+                                    android:id="@+id/settle_list"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:divider="@color/colorPrimaryLight_T"
+                                    android:dividerPadding="5dp"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="10dp"/>
+                            </android.support.v4.widget.NestedScrollView>
+                        </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/time_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageButton2"
+                    android:layout_alignTop="@+id/date_details"
+                    android:layout_toEndOf="@+id/imageButton2"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
             </RelativeLayout>
 
         </android.support.v4.widget.NestedScrollView>
@@ -284,14 +362,5 @@
             android:scaleType="centerCrop"
             android:src="@drawable/addsense"/>
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/add"
-        android:tint="@color/icons"/>
 
 </android.support.design.widget.CoordinatorLayout>

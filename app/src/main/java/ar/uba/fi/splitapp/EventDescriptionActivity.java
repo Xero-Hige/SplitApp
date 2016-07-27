@@ -2,8 +2,6 @@ package ar.uba.fi.splitapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
@@ -27,6 +26,10 @@ import com.pkmmte.view.CircularImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 
@@ -59,8 +62,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        },\n" +
             "      ]\n" +
             "    }";
-    private ExpandableLinearLayout my_tasks;
-    private ExpandableLinearLayout all_tasks;
+
+
+    private ExpandableLinearLayout mMyTasks;
+    private ExpandableLinearLayout mAllTasks;
+    private ExpandableLinearLayout mSettle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,18 +77,66 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+        */
+
+        Bundle event_id_passed = getIntent().getExtras();
+        String id_event = "error";
+        if (event_id_passed != null) {
+            id_event = event_id_passed.getString("id");
+        }
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, "", "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONObject events = result.getJSONObject("data");
+
+                String date_str = events.getString("when");
+                Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
+                String dateWithoutTime = new SimpleDateFormat("dd-MM-yyyy").format(date_class);
+                String justTime = new SimpleDateFormat("hh:mm").format(date_class);
+
+                TextView date = (TextView) findViewById(R.id.date_details);
+                TextView time = (TextView) findViewById(R.id.time_details);
+
+                date.setText(dateWithoutTime);
+                time.setText(justTime);
+
+            } catch (JSONException e) {
+                //onError.execute(null);
+                return;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+
 
         addExpandables();
 
         addTaskStatus();
 
+        viewFriends();
+
         LinearLayout templates = (LinearLayout) findViewById(R.id.my_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
         setMyTasks(templates, inflater);
+
+        templates = (LinearLayout) findViewById(R.id.settle_list);
+
+        setSettle(templates, inflater);
+    }
+
+    private void viewFriends() {
+        ImageView imagenAmigos = (ImageView) findViewById(R.id.imageButton4);
+
+        imagenAmigos.setOnClickListener(v -> {
+            Intent friendListIntent = new Intent(this, AttendesActivity.class);
+            startActivityForResult(friendListIntent, 0);
+        });
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
@@ -124,6 +178,85 @@ public class EventDescriptionActivity extends AppCompatActivity {
             templates.addView(templateItem);
         }
     }
+
+    private void setSettle(LinearLayout templates, LayoutInflater inflater) {
+        View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+
+        CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+
+        final ImageView finalBackground = background;
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+            Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
+        });
+        templates.addView(templateItem);
+
+
+        templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(background);
+
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+        });
+        templates.addView(templateItem);
+
+
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.settle_on).centerCrop().into(background);
+
+        final ImageView finalBackground1 = background;
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+            Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(finalBackground1);
+        });
+        templates.addView(templateItem);
+
+
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
+
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+        });
+        templates.addView(templateItem);
+
+    }
+
 
     private void addTaskStatus() {
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
@@ -174,47 +307,66 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void addExpandables() {
-        my_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
+        mMyTasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
         RelativeLayout expand = (RelativeLayout) findViewById(R.id.expand_my_task);
-        expand.setOnClickListener(v -> my_tasks.toggle());
+        expand.setOnClickListener(v -> mMyTasks.toggle());
 
-        ImageView button = (ImageView) findViewById(R.id.expand_my_task_icon);
-        Animation rotate = AnimationUtils.loadAnimation(this, R.anim.rerotate);
+        ImageView myTasksButton = (ImageView) findViewById(R.id.expand_my_task_icon);
+        Animation rotateMyTasks = AnimationUtils.loadAnimation(this, R.anim.rerotate);
 
-        final ImageView finalButton1 = button;
-        my_tasks.setListener(new ExpandableLayoutListenerAdapter() {
+        mMyTasks.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
-                finalButton1.startAnimation(rotate);
-                finalButton1.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+                myTasksButton.startAnimation(rotateMyTasks);
+                myTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
             }
 
             @Override
             public void onPreClose() {
-                finalButton1.startAnimation(rotate);
-                finalButton1.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+                myTasksButton.startAnimation(rotateMyTasks);
+                myTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
             }
         });
 
-
-        all_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_all_tasks);
+        mAllTasks = (ExpandableLinearLayout) findViewById(R.id.expandable_all_tasks);
         expand = (RelativeLayout) findViewById(R.id.expand_all_tasks);
-        expand.setOnClickListener(v -> all_tasks.toggle());
+        expand.setOnClickListener(v -> mAllTasks.toggle());
 
-        button = (ImageView) findViewById(R.id.expand_all_task_icon);
+        ImageView allTasksButton = (ImageView) findViewById(R.id.expand_all_task_icon);
+        Animation rotateAllTasks = AnimationUtils.loadAnimation(this, R.anim.rerotate);
 
-        final ImageView finalButton = button;
-        all_tasks.setListener(new ExpandableLayoutListenerAdapter() {
+        mAllTasks.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
-                finalButton.startAnimation(rotate);
-                finalButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+                allTasksButton.startAnimation(rotateAllTasks);
+                allTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
             }
 
             @Override
             public void onPreClose() {
-                finalButton.startAnimation(rotate);
-                finalButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+                allTasksButton.startAnimation(rotateAllTasks);
+                allTasksButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+            }
+        });
+
+        mSettle = (ExpandableLinearLayout) findViewById(R.id.expandable_settle);
+        expand = (RelativeLayout) findViewById(R.id.expand_settle);
+        expand.setOnClickListener(v -> mSettle.toggle());
+
+        ImageView settleButton = (ImageView) findViewById(R.id.expand_settle_icon);
+        Animation rotateSettle = AnimationUtils.loadAnimation(this, R.anim.rerotate);
+
+        mSettle.setListener(new ExpandableLayoutListenerAdapter() {
+            @Override
+            public void onPreOpen() {
+                settleButton.startAnimation(rotateSettle);
+                settleButton.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+            }
+
+            @Override
+            public void onPreClose() {
+                settleButton.startAnimation(rotateSettle);
+                settleButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
             }
         });
     }
