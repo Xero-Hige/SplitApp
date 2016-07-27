@@ -109,8 +109,10 @@ public class DebtActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_gallery) {
             Intent newMainPageIntent = new Intent(DebtActivity.this, MainActivity.class);
             startActivity(newMainPageIntent);
-        } else if (id == R.id.nav_slideshow) {
-            Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
+            this.finish();
+        } else if (id == R.id.nav_invitees) {
+            Intent invitees = new Intent(DebtActivity.this, EventInvitationList.class);
+            startActivity(invitees);
         } else if (id == R.id.nav_manage) {
             Intent newManageIntent = new Intent(DebtActivity.this, ManageTemplate.class);
             startActivity(newManageIntent);
