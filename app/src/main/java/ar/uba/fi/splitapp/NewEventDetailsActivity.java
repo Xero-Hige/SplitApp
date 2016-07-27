@@ -11,15 +11,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.N)
@@ -35,6 +43,7 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         updateLabel();
     };
+    private Place selectedPlace;
     private TextView mLocationLabel;
 
     @Override
@@ -126,13 +135,68 @@ public class NewEventDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.new_event_taskbar, menu);
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_create) {
+            JSONObject obj = new JSONObject();
+            String nameEvent = ((EditText)findViewById(R.id.editText)).getText().toString();
+            String dateEvent =((TextView) findViewById(R.id.date_label)).getText().toString();
+            String dateString = "";
+
+            try {
+                Date date_class = new SimpleDateFormat("EEE dd MMM yyyy").parse(dateEvent);
+                dateString = new SimpleDateFormat("yyyy-MM-dd").format(date_class);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
+            String timeEvent = (((TextView) findViewById(R.id.time_label)).getText().toString()+":00");
+            String whenEvent = dateString + " " + timeEvent;
+            String latEvent  = Double.toString(selectedPlace.getLatLng().latitude);
+            String longEvent = Double.toString(selectedPlace.getLatLng().longitude);
+
+            try {
+                obj.put("name", nameEvent);
+                obj.put("when", whenEvent);
+                obj.put("lat", latEvent);
+                obj.put("long", longEvent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            System.out.println(obj);
+
+
+            ServerHandler.executePost(ServerHandler.EVENT_LIST, obj, result -> {
+                //onSucces.execute(result);
+                if (result == null) {
+                    //onError.execute(null);
+                } else try {
+                        JSONObject callback = result.getJSONObject("data");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Place selectedPlace = PlacePicker.getPlace(data, this);
+                selectedPlace = PlacePicker.getPlace(data, this);
                 Utility.showMessage(selectedPlace.getAddress().toString() + "\n" + selectedPlace.getLatLng().toString(), Utility.getViewgroup(this));
                 mLocationLabel.setText(selectedPlace.getAddress().toString());
             }
@@ -146,5 +210,6 @@ public class NewEventDetailsActivity extends AppCompatActivity {
 
         mDateTV.setText(sdf.format(mCalendar.getTime()));
     }
+
 
 }
