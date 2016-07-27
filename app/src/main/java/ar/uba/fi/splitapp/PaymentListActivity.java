@@ -25,6 +25,10 @@ public class PaymentListActivity extends AppCompatActivity {
         LinearLayout payments = (LinearLayout) findViewById(R.id.payments_container);
         LayoutInflater inflater = getLayoutInflater();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
         for (int i = 0; i < 6; i++) {
             View payment = inflater.inflate(R.layout.payment_layout, null);
 
@@ -42,9 +46,16 @@ public class PaymentListActivity extends AppCompatActivity {
                 if (event_id_passed != null) {
                     id_event = event_id_passed.getString("id");
                 }
-                Intent backMain = new Intent(this, EventDescriptionActivity.class);
-                backMain.putExtra("id",id_event);
-                startActivity(backMain);
+                if (id_event != "error"){
+                    Intent backMain = new Intent(this, EventDescriptionActivity.class);
+                    backMain.putExtra("id",id_event);
+                    startActivity(backMain);
+                } else {
+                    Intent backMain = new Intent(this, DebtActivity.class);
+                    startActivity(backMain);
+                }
+
+
             });
 
             payments.addView(payment);
