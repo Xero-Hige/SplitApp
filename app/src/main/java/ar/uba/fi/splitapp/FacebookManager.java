@@ -255,7 +255,7 @@ public final class FacebookManager {
                 Glide.with(mContext).load(mUrl).centerCrop().into(mView);
             } catch (NullPointerException e) {
                 SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Null pointer: " + e.getMessage());
-                Glide.with(mContext).load(R.drawable.logo).centerCrop().into(mView);
+                Glide.with(mContext).load(R.drawable.silhouette).centerCrop().into(mView);
             }
         }
     }
