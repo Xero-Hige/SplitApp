@@ -35,14 +35,14 @@ public class EventInvitationList extends AppCompatActivity {
 
             CircularImageView image = (CircularImageView) inviteeLayout.findViewById(R.id.invite_host_pic);
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), image, getApplicationContext());
-            Button accept = (Button) findViewById(R.id.invite_accept_button);
+            Button accept = (Button) inviteeLayout.findViewById(R.id.invite_accept_button);
             final int finalI = i;
             accept.setOnClickListener(v -> {
                 Utility.showMessage("Aceptaste unirte al evento: 'Fontefiesta Nº" + (finalI + 1) + "'", Utility.getViewgroup(this));
                 inviteeLayout.setVisibility(View.GONE);
             });
 
-            Button decline = (Button) findViewById(R.id.invite_reject_button);
+            Button decline = (Button) inviteeLayout.findViewById(R.id.invite_reject_button);
             decline.setOnClickListener(v -> {
                 Utility.showMessage("Rechazaste unirte al evento: 'Fontefiesta Nº" + (finalI + 1) + "'", Utility.getViewgroup(this));
                 inviteeLayout.setVisibility(View.GONE);
