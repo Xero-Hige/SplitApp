@@ -144,7 +144,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
 
         Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            startActivity(makePayment);
+        });
         templates.addView(templateItem);
+
 
         templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
@@ -157,7 +163,12 @@ public class EventDescriptionActivity extends AppCompatActivity {
         background = (ImageView) templateItem.findViewById(R.id.debt_background);
         Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(background);
 
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            startActivity(makePayment);
+        });
         templates.addView(templateItem);
+
 
         templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
 
@@ -170,7 +181,12 @@ public class EventDescriptionActivity extends AppCompatActivity {
         background = (ImageView) templateItem.findViewById(R.id.debt_background);
         Glide.with(this.getApplicationContext()).load(R.drawable.settle_on).centerCrop().into(background);
 
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            startActivity(makePayment);
+        });
         templates.addView(templateItem);
+
 
         templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
 
@@ -183,6 +199,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
         background = (ImageView) templateItem.findViewById(R.id.debt_background);
         Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
 
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            startActivity(makePayment);
+        });
         templates.addView(templateItem);
 
     }
