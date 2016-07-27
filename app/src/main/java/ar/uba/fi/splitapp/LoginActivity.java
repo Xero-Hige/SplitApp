@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                if(Profile.getCurrentProfile() == null) {
+                if (Profile.getCurrentProfile() == null) {
                     mProfileTracker = new ProfileTracker() {
                         @Override
                         protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
@@ -119,8 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                     };
                     // no need to call startTracking() on mProfileTracker
                     // because it is called by its constructor, internally.
-                }
-                else {
+                } else {
                     Profile profile = Profile.getCurrentProfile();
                     Log.v("facebook - profile", profile.getFirstName());
 
