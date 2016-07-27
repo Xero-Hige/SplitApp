@@ -52,30 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         addLogo();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (profileTracker == null) {
-            profileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                    // profile2 is the new profile
-                    Log.v("Profile Changed", "LoginActivity::onResume " + profile2.getFirstName());
-                    profileTracker.stopTracking();
-
-                    String token = AccessToken.getCurrentAccessToken().getToken();
-                    String userId = Profile.getCurrentProfile().getId();
-                    ServerHandler.signIn(userId, token,
-                            v -> startMainActivity(),
-                            v -> Utility.showMessage("Fallo al conectar con el servidor",
-                                    Utility.getViewgroup(LoginActivity.this)));
-                }
-            };
-        } else {
-            profileTracker.startTracking();
-        }
-    }
-
     private void addLogo() {
         ImageView logo = (ImageView) findViewById(R.id.logo);
         Animation rerotate = AnimationUtils.loadAnimation(this, R.anim.rerotate);
@@ -110,16 +86,40 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void startMainActivity() {
-        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(mainActivityIntent);
-        finish();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         fbCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (profileTracker == null) {
+            profileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                    // profile2 is the new profile
+                    Log.v("Profile Changed", "LoginActivity::onResume " + profile2.getFirstName());
+                    profileTracker.stopTracking();
+
+                    String token = AccessToken.getCurrentAccessToken().getToken();
+                    String userId = Profile.getCurrentProfile().getId();
+                    ServerHandler.signIn(userId, token,
+                            v -> startMainActivity(),
+                            v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                    Utility.getViewgroup(LoginActivity.this)));
+                }
+            };
+        } else {
+            profileTracker.startTracking();
+        }
+    }
+
+    private void startMainActivity() {
+        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
     }
 
     private class AnimationTask extends AsyncTask<Void, Void, Boolean> {
