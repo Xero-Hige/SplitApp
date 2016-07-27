@@ -10,14 +10,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-public class PaymetnListActivity extends AppCompatActivity {
+public class PaymentListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookManager.checkInit(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_paymetn_list);
+        setContentView(R.layout.activity_payment_list);
 
         LinearLayout payments = (LinearLayout) findViewById(R.id.payments_container);
         LayoutInflater inflater = getLayoutInflater();

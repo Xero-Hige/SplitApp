@@ -145,7 +145,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         final ImageView finalBackground = background;
         templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
             startActivity(makePayment);
             Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
         });
@@ -164,7 +164,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(background);
 
         templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
             startActivity(makePayment);
         });
         templates.addView(templateItem);
@@ -183,7 +183,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         final ImageView finalBackground1 = background;
         templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
             startActivity(makePayment);
             Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(finalBackground1);
         });
@@ -202,7 +202,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
 
         templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymetnListActivity.class);
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
             startActivity(makePayment);
         });
         templates.addView(templateItem);

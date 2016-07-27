@@ -16,7 +16,6 @@
         android:screenOrientation="sensorPortrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
@@ -90,8 +89,10 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".PaymetnListActivity"
+            android:name=".PaymentListActivity"
             android:screenOrientation="sensorPortrait"/>
+        <activity android:name=".EventInvitationList">
+        </activity>
     </application>
 
 </manifest>

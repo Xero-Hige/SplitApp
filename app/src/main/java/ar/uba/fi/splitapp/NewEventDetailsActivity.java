@@ -54,13 +54,6 @@ public class NewEventDetailsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.new_event_taskbar, menu);
-        return true;
-    }
-
     private void setLocationPicker() {
         mLocationLabel = (TextView) findViewById(R.id.location_label);
         RelativeLayout location = (RelativeLayout) findViewById(R.id.location_lay);
@@ -115,6 +108,13 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                     mCalendar.get(Calendar.MONTH),
                     mCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.new_event_taskbar, menu);
+        return true;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
