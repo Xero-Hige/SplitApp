@@ -143,11 +143,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
         ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
         Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
 
-        Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
-
+        final ImageView finalBackground = background;
         templateItem.setOnClickListener(v -> {
             Intent makePayment = new Intent(this, PaymetnListActivity.class);
             startActivity(makePayment);
+            Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
         });
         templates.addView(templateItem);
 
@@ -181,9 +181,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
         background = (ImageView) templateItem.findViewById(R.id.debt_background);
         Glide.with(this.getApplicationContext()).load(R.drawable.settle_on).centerCrop().into(background);
 
+        final ImageView finalBackground1 = background;
         templateItem.setOnClickListener(v -> {
             Intent makePayment = new Intent(this, PaymetnListActivity.class);
             startActivity(makePayment);
+            Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(finalBackground1);
         });
         templates.addView(templateItem);
 
