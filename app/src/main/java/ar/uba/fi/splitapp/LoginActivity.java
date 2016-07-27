@@ -44,6 +44,32 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                // profile2 is the new profile
+                Log.v("Profile Changed", "LoginActivity::onResume " + profile2.getFirstName());
+                profileTracker.stopTracking();
+
+                String token = AccessToken.getCurrentAccessToken().getToken();
+                String userId = Profile.getCurrentProfile().getId();
+                ServerHandler.signIn(userId, token,
+                        v -> startMainActivity(),
+                        v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                Utility.getViewgroup(LoginActivity.this)));
+            }
+        };
+
+        if (Profile.getCurrentProfile() != null) {
+            profileTracker.stopTracking();
+            String token = AccessToken.getCurrentAccessToken().getToken();
+            String userId = Profile.getCurrentProfile().getId();
+            ServerHandler.signIn(userId, token,
+                    v -> startMainActivity(),
+                    v -> Utility.showMessage("Fallo al conectar con el servidor",
+                            Utility.getViewgroup(LoginActivity.this)));
+        }
+
         setContentView(R.layout.activity_login);
 
         fbCallbackManager = CallbackManager.Factory.create();
@@ -55,25 +81,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (profileTracker == null) {
-            profileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                    // profile2 is the new profile
-                    Log.v("Profile Changed", "LoginActivity::onResume " + profile2.getFirstName());
-                    profileTracker.stopTracking();
-
-                    String token = AccessToken.getCurrentAccessToken().getToken();
-                    String userId = Profile.getCurrentProfile().getId();
-                    ServerHandler.signIn(userId, token,
-                            v -> startMainActivity(),
-                            v -> Utility.showMessage("Fallo al conectar con el servidor",
-                                    Utility.getViewgroup(LoginActivity.this)));
-                }
-            };
-        } else {
+        if (Profile.getCurrentProfile() == null)
             profileTracker.startTracking();
-        }
     }
 
     private void addLogo() {
