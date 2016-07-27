@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/icons_T"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp">
+
+    <TextView
+        android:id="@+id/task_name"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/task_status"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/task_profile_pic"
+        android:padding="10dp"
+        android:text="Coca-Cola"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/task_status"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/task_name"
+        android:layout_toEndOf="@+id/task_profile_pic"
+        android:padding="10dp"
+        android:text="Pendiente"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary_text"
+        android:textIsSelectable="false"
+        android:textSize="16sp"/>
+
+    <com.pkmmte.view.CircularImageView
+        android:id="@+id/task_profile_pic"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/task_status"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/people"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="Aceptar"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_alignEnd="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:layout_alignTop="@+id/task_status"
+        android:text="Rechazar"/>
+
+</RelativeLayout>
