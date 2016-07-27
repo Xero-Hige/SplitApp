@@ -13,7 +13,6 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,16 +35,15 @@ public class EndedEventsFragment extends Fragment {
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
 
 
-
         ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
             //onSucces.execute(result);
             if (result == null) {
                 //onError.execute(null);
             } else try {
                 JSONArray events = result.getJSONArray("data");
-                SplitAppLogger.writeLog(1,"Longitud: " + events.length());
+                SplitAppLogger.writeLog(1, "Longitud: " + events.length());
                 for (int i = 0; i < events.length(); i++) {
-                    SplitAppLogger.writeLog(1,"I vale: " + i);
+                    SplitAppLogger.writeLog(1, "I vale: " + i);
                     View templateItem = inflater.inflate(R.layout.event_active_item, null);
 
                     assert templateItem != null;
@@ -60,8 +58,11 @@ public class EndedEventsFragment extends Fragment {
                     TextView date = (TextView) templateItem.findViewById(R.id.event_date);
                     date.setText(date_finish_str);
 
+                    String event_id = events.getJSONObject(i).getString("id");
+
                     templateItem.setOnClickListener(v -> {
                         Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
+                        eventDetail.putExtra("id",event_id);
                         startActivity(eventDetail);
                     });
 
