@@ -89,7 +89,7 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".PaymetnListActivity"
+            android:name=".PaymentListActivity"
             android:screenOrientation="sensorPortrait"/>
         <activity android:name=".EventInvitationList">
         </activity>
