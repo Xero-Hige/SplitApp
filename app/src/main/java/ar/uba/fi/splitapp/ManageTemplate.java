@@ -19,14 +19,10 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.pkmmte.view.CircularImageView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by colopreda on 24/07/16.
  */
-public class ManageTemplate extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ManageTemplate extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
