@@ -55,19 +55,13 @@
                     android:id="@+id/date_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageButton"
-                    android:layout_toEndOf="@+id/imageButton"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                <TextView
-                    android:id="@+id/time_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/date_details"
-                    android:layout_toEndOf="@+id/imageButton2"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_above="@+id/imageButton3"
+                    android:layout_alignEnd="@+id/location_details"
+                    android:layout_toEndOf="@+id/imageButton" />
 
                 <ImageView
                     android:id="@+id/imageButton2"
@@ -345,6 +339,16 @@
                     </RelativeLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/time_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_toEndOf="@+id/imageButton2"
+                    android:layout_alignTop="@+id/date_details"
+                    android:layout_alignBottom="@+id/imageButton2" />
             </RelativeLayout>
 
         </android.support.v4.widget.NestedScrollView>
