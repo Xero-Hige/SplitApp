@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -95,14 +96,41 @@ public class LoginActivity extends AppCompatActivity {
                 "public_profile", "user_birthday"));
         loginButton.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
 
+            private ProfileTracker mProfileTracker;
+
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String token = AccessToken.getCurrentAccessToken().getToken();
-                String userId = Profile.getCurrentProfile().getId();
-                ServerHandler.signIn(userId, token,
-                        v -> Utility.showMessage("Fallo al conectar con el servidor",
-                                Utility.getViewgroup(LoginActivity.this)),
-                        v -> startMainActivity());
+
+                if(Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                            // profile2 is the new profile
+                            Log.v("facebook - profile", profile2.getFirstName());
+                            mProfileTracker.stopTracking();
+
+                            String token = AccessToken.getCurrentAccessToken().getToken();
+                            String userId = Profile.getCurrentProfile().getId();
+                            ServerHandler.signIn(userId, token,
+                                    v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                            Utility.getViewgroup(LoginActivity.this)),
+                                    v -> startMainActivity());
+                        }
+                    };
+                    // no need to call startTracking() on mProfileTracker
+                    // because it is called by its constructor, internally.
+                }
+                else {
+                    Profile profile = Profile.getCurrentProfile();
+                    Log.v("facebook - profile", profile.getFirstName());
+
+                    String token = AccessToken.getCurrentAccessToken().getToken();
+                    String userId = Profile.getCurrentProfile().getId();
+                    ServerHandler.signIn(userId, token,
+                            v -> Utility.showMessage("Fallo al conectar con el servidor",
+                                    Utility.getViewgroup(LoginActivity.this)),
+                            v -> startMainActivity());
+                }
             }
 
             @Override
