@@ -9,8 +9,20 @@
         android:title="Chat"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_edit"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="Editar"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_add_people"
+        android:orderInCategory="100"
+        android:title="Agregar participantes"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_cancel_event"
+        android:orderInCategory="100"
+        android:title="Cancelar evento"
+        app:showAsAction="never"/>
+
+
 </menu>
