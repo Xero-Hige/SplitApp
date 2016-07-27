@@ -62,7 +62,7 @@ public class EndedEventsFragment extends Fragment {
 
                     templateItem.setOnClickListener(v -> {
                         Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
-                        eventDetail.putExtra("id",event_id);
+                        eventDetail.putExtra("id", event_id);
                         startActivity(eventDetail);
                     });
 

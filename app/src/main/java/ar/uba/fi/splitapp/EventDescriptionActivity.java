@@ -2,8 +2,6 @@ package ar.uba.fi.splitapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -31,7 +29,6 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class EventDescriptionActivity extends AppCompatActivity {
@@ -87,7 +84,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         Bundle event_id_passed = getIntent().getExtras();
         String id_event = "error";
-        if (event_id_passed != null){
+        if (event_id_passed != null) {
             id_event = event_id_passed.getString("id");
         }
         ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, "", "", result -> {
