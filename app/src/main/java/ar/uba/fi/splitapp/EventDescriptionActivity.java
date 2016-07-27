@@ -77,6 +77,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
@@ -93,6 +94,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 //onError.execute(null);
             } else try {
                 JSONObject events = result.getJSONObject("data");
+
+                getSupportActionBar().setTitle(events.getString("name"));
+                //toolbar.setTitle(events.getString("name"));
 
                 String date_str = events.getString("when");
                 Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
@@ -127,7 +131,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         templates = (LinearLayout) findViewById(R.id.settle_list);
 
-        setSettle(templates, inflater);
+        setSettle(templates, inflater, id_event);
     }
 
     private void viewFriends() {
@@ -179,7 +183,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void setSettle(LinearLayout templates, LayoutInflater inflater) {
+    private void setSettle(LinearLayout templates, LayoutInflater inflater, String event_id) {
         View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
         CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
@@ -194,6 +198,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         final ImageView finalBackground = background;
         templateItem.setOnClickListener(v -> {
             Intent makePayment = new Intent(this, PaymentListActivity.class);
+            makePayment.putExtra("id", event_id);
             startActivity(makePayment);
             Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
         });
@@ -213,6 +218,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         templateItem.setOnClickListener(v -> {
             Intent makePayment = new Intent(this, PaymentListActivity.class);
+            makePayment.putExtra("id", event_id);
             startActivity(makePayment);
         });
         templates.addView(templateItem);
@@ -232,6 +238,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         final ImageView finalBackground1 = background;
         templateItem.setOnClickListener(v -> {
             Intent makePayment = new Intent(this, PaymentListActivity.class);
+            makePayment.putExtra("id", event_id);
             startActivity(makePayment);
             Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(finalBackground1);
         });
@@ -251,6 +258,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         templateItem.setOnClickListener(v -> {
             Intent makePayment = new Intent(this, PaymentListActivity.class);
+            makePayment.putExtra("id", event_id);
             startActivity(makePayment);
         });
         templates.addView(templateItem);
