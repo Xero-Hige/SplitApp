@@ -1,23 +1,36 @@
+package ar.uba.fi.splitapp;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ExpensesCalculator{
 	float media = 0;
 	Participant max = null;
 	Participant min = null;
 
+	public class Participant {
+		public float payed;
+	}		// TODO
+	public class SettlementPayment {
+		public SettlementPayment(Participant p1, Participant p2, float result) {}
+	} // TODO
+
 	public ExpensesCalculator(){}
 
-	public calculateExpenses(List<Participant> participants){
+	public List<SettlementPayment> calculateExpenses(List<Participant> participants){
 		float total = 0;
-		for(participant p : participants){
-			total += p.payed();
+		for(Participant p : participants){
+			total += p.payed;
 		}
 		List<SettlementPayment> payments = new ArrayList<SettlementPayment>();
-		self.media = total / participants.size();
-		while (True) {
+		this.media = total / participants.size();
+		while (true) {
 			if (participants.size() == 0)
 				break;
-			self.min = Collections.min(participants, Comparator.comparing(c -> c.payed));
-			self.max = Collections.max(participants, Comparator.comparing(c -> c.payed))
-			if (min.payed() == max.payed())
+			this.min = Collections.min(participants, (p1, p2) -> Float.compare(p1.payed, p2.payed));
+			this.max = Collections.max(participants, (p1, p2) -> Float.compare(p1.payed, p2.payed));
+			if (min.payed == max.payed)
 				break;
 			if (max_pay() > min_pay()) {
 				max.payed -= min_pay();
@@ -41,12 +54,12 @@ public class ExpensesCalculator{
 		return payments;
 	}
 
-	private max_pay() {
-		self.max.payed - self.media;
+	private float max_pay() {
+		return this.max.payed - this.media;
 	}
 
-	private min_pay() {
-		self.media - self.min.payed;
+	private float min_pay() {
+		return this.media - this.min.payed;
 	}
 }
 
