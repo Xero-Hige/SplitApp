@@ -29,6 +29,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class EventDescriptionActivity extends AppCompatActivity {
 
     String json_prop = "{\n" +
@@ -60,6 +65,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        },\n" +
             "      ]\n" +
             "    }";
+
+
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
@@ -73,9 +80,42 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+        */
+
+        Bundle event_id_passed = getIntent().getExtras();
+        String id_event = "error";
+        if (event_id_passed != null){
+            id_event = event_id_passed.getString("id");
+        }
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, "", "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONObject events = result.getJSONObject("data");
+
+                String date_str = events.getString("when");
+                Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
+                String dateWithoutTime = new SimpleDateFormat("dd-MM-yyyy").format(date_class);
+                String justTime = new SimpleDateFormat("hh:mm").format(date_class);
+
+                TextView date = (TextView) findViewById(R.id.date_details);
+                TextView time = (TextView) findViewById(R.id.time_details);
+
+                date.setText(dateWithoutTime);
+                time.setText(justTime);
+
+            } catch (JSONException e) {
+                //onError.execute(null);
+                return;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+
 
         addExpandables();
 

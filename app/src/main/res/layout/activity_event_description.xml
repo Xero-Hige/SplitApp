@@ -52,21 +52,21 @@
                     />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/date_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imageButton"
                     android:layout_toEndOf="@+id/imageButton"
-                    android:text="Algun dia"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/time_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/textView2"
+                    android:layout_alignTop="@+id/date_details"
                     android:layout_toEndOf="@+id/imageButton2"
-                    android:text="Alguna hora"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <ImageView
@@ -92,7 +92,7 @@
                     android:src="@drawable/location"/>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/location_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imageButton3"
@@ -112,11 +112,11 @@
                     android:src="@drawable/people"/>
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/participants_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imageButton4"
-                    android:layout_alignStart="@+id/textView4"
+                    android:layout_alignStart="@+id/location_details"
                     android:text="No va nadie"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -358,14 +358,5 @@
             android:scaleType="centerCrop"
             android:src="@drawable/addsense"/>
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/add"
-        android:tint="@color/icons"/>
 
 </android.support.design.widget.CoordinatorLayout>

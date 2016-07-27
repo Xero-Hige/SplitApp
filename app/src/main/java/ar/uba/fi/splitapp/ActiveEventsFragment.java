@@ -58,8 +58,11 @@ public class ActiveEventsFragment extends Fragment {
                     TextView date = (TextView) templateItem.findViewById(R.id.event_date);
                     date.setText(date_finish_str);
 
+                    String event_id = events.getJSONObject(i).getString("id");
+
                     templateItem.setOnClickListener(v -> {
                         Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
+                        eventDetail.putExtra("id",event_id);
                         startActivity(eventDetail);
                     });
 
