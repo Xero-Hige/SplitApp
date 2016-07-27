@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
@@ -59,8 +60,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        },\n" +
             "      ]\n" +
             "    }";
-    private ExpandableLinearLayout my_tasks;
-    private ExpandableLinearLayout all_tasks;
+    private ExpandableLinearLayout mMyTasks;
+    private ExpandableLinearLayout mAllTasks;
+    private ExpandableLinearLayout mSettle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
 
         setMyTasks(templates, inflater);
+
+        templates = (LinearLayout) findViewById(R.id.settle_list);
+
+        setSettle(templates, inflater);
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
@@ -124,6 +130,63 @@ public class EventDescriptionActivity extends AppCompatActivity {
             templates.addView(templateItem);
         }
     }
+
+    private void setSettle(LinearLayout templates, LayoutInflater inflater) {
+        View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+
+        CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+        templates.addView(templateItem);
+
+        templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(background);
+
+        templates.addView(templateItem);
+
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.settle_on).centerCrop().into(background);
+
+        templates.addView(templateItem);
+
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
+
+        templates.addView(templateItem);
+
+    }
+
 
     private void addTaskStatus() {
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
@@ -174,15 +237,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void addExpandables() {
-        my_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
+        mMyTasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
         RelativeLayout expand = (RelativeLayout) findViewById(R.id.expand_my_task);
-        expand.setOnClickListener(v -> my_tasks.toggle());
+        expand.setOnClickListener(v -> mMyTasks.toggle());
 
         ImageView button = (ImageView) findViewById(R.id.expand_my_task_icon);
         Animation rotate = AnimationUtils.loadAnimation(this, R.anim.rerotate);
 
         final ImageView finalButton1 = button;
-        my_tasks.setListener(new ExpandableLayoutListenerAdapter() {
+        mMyTasks.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
                 finalButton1.startAnimation(rotate);
@@ -196,15 +259,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
             }
         });
 
-
-        all_tasks = (ExpandableLinearLayout) findViewById(R.id.expandable_all_tasks);
+        mAllTasks = (ExpandableLinearLayout) findViewById(R.id.expandable_all_tasks);
         expand = (RelativeLayout) findViewById(R.id.expand_all_tasks);
-        expand.setOnClickListener(v -> all_tasks.toggle());
+        expand.setOnClickListener(v -> mAllTasks.toggle());
 
         button = (ImageView) findViewById(R.id.expand_all_task_icon);
 
         final ImageView finalButton = button;
-        all_tasks.setListener(new ExpandableLayoutListenerAdapter() {
+        mAllTasks.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
                 finalButton.startAnimation(rotate);
@@ -215,6 +277,27 @@ public class EventDescriptionActivity extends AppCompatActivity {
             public void onPreClose() {
                 finalButton.startAnimation(rotate);
                 finalButton.setImageDrawable(getResources().getDrawable(R.drawable.expand));
+            }
+        });
+
+        mSettle = (ExpandableLinearLayout) findViewById(R.id.expandable_settle);
+        expand = (RelativeLayout) findViewById(R.id.expand_settle);
+        expand.setOnClickListener(v -> mSettle.toggle());
+
+        button = (ImageView) findViewById(R.id.expand_settle_icon);
+
+        final ImageView finalButton2 = button;
+        mAllTasks.setListener(new ExpandableLayoutListenerAdapter() {
+            @Override
+            public void onPreOpen() {
+                finalButton2.startAnimation(rotate);
+                finalButton2.setImageDrawable(getResources().getDrawable(R.drawable.colapse));
+            }
+
+            @Override
+            public void onPreClose() {
+                finalButton2.startAnimation(rotate);
+                finalButton2.setImageDrawable(getResources().getDrawable(R.drawable.expand));
             }
         });
     }

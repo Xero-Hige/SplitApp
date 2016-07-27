@@ -269,6 +269,79 @@
                                     android:padding="10dp"/>
                             </android.support.v4.widget.NestedScrollView>
                         </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/settle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="100dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/colorPrimary"
+                        android:elevation="10dp">
+
+                        <RelativeLayout
+                            android:id="@+id/expand_settle"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_above="@+id/expandable_settle"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/expand_settle_icon"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/expand"
+                                android:tint="@color/icons"
+                                android:tintMode="src_in"
+                                />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/settle_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_toStartOf="@+id/expand_settle"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Cuentas"
+                            android:textColor="@color/icons"
+                            android:textSize="16sp"/>
+
+                        <com.github.aakira.expandablelayout.ExpandableLinearLayout
+                            android:id="@+id/expandable_settle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/settle_label"
+                            android:background="@color/colorPrimaryLight"
+                            android:orientation="vertical"
+                            app:ael_duration="400"
+                            app:ael_expanded="false">
+
+                            <android.support.v4.widget.NestedScrollView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                                <LinearLayout
+                                    android:id="@+id/settle_list"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:divider="@color/colorPrimaryLight_T"
+                                    android:dividerPadding="5dp"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="10dp"/>
+                            </android.support.v4.widget.NestedScrollView>
+                        </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
                     </RelativeLayout>
                 </LinearLayout>
             </RelativeLayout>
