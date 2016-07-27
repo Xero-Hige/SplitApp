@@ -97,6 +97,7 @@
             android:screenOrientation="sensorPortrait"/>
         <activity
             android:name=".EventInvitationList"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="sensorPortrait"/>
     </application>
 

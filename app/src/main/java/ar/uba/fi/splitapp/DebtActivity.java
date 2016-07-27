@@ -49,38 +49,86 @@ public class DebtActivity extends AppCompatActivity implements NavigationView.On
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-
-        for (int i = 1; i < 5; i++) {
-
-            View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
-
-            CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
-            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
-
-            view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
-            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
-
-            ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
-            Glide.with(this).load(R.drawable.debt_on).centerCrop().into(background);
-
-            Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
-            deudas.addView(templateItem);
+        setSettle(deudas, inflater);
 
 
-            /*View templateItem = inflater.inflate(R.layout.event_template_item, null);
+    }
 
-            TextView text = (TextView) templateItem.findViewById(R.id.template_name);
-            //String nombreTemplate = cant_template.getJSONObject(i).getString("name");
-            text.setText("Template #" *//*nombreTemplate*//*);
+    private void setSettle(LinearLayout templates, LayoutInflater inflater) {
+        View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
-            templateItem.setOnClickListener(v -> {
-                Intent eventDetail = new Intent(ManageTemplate.this, TemplateActivity.class);
-                startActivity(eventDetail);
-            });
+        CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
 
-            templates.addView(templateItem);*/
-        }
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
 
+        ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+
+        final ImageView finalBackground = background;
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+            Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
+        });
+        templates.addView(templateItem);
+
+
+        templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(background);
+
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+        });
+        templates.addView(templateItem);
+
+
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.settle_on).centerCrop().into(background);
+
+        final ImageView finalBackground1 = background;
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+            Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(finalBackground1);
+        });
+        templates.addView(templateItem);
+
+
+        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+
+        background = (ImageView) templateItem.findViewById(R.id.debt_background);
+        Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
+
+        templateItem.setOnClickListener(v -> {
+            Intent makePayment = new Intent(this, PaymentListActivity.class);
+            startActivity(makePayment);
+        });
+        templates.addView(templateItem);
 
     }
 

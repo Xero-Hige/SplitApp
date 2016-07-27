@@ -20,6 +20,17 @@ public class NewEventActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(eventMain, 0);
+            }
+        });
+
         LinearLayout templates = (LinearLayout) findViewById(R.id.eventTemplateList);
 
         LayoutInflater inflater = LayoutInflater.from(this);
