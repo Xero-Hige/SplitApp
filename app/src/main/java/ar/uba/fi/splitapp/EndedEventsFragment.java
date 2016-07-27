@@ -10,7 +10,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EndedEventsFragment extends Fragment {
@@ -22,24 +28,62 @@ public class EndedEventsFragment extends Fragment {
 
         LinearLayout templates = (LinearLayout) fragment.findViewById(R.id.ended_events_list);
 
-        for (int i = 1; i < 21; i++) {
-            View templateItem = inflater.inflate(R.layout.event_ended_item, null);
-
-            TextView text = (TextView) templateItem.findViewById(R.id.event_name);
-            text.setText("Evento #" + i);
-
-            TextView date = (TextView) templateItem.findViewById(R.id.event_date);
-            date.setText("Realizado: " + DateFormat.getDateInstance().format(new Date()));
-
-            templateItem.setOnClickListener(v -> {
-                Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
-                startActivity(eventDetail);
-            });
-
-            templates.addView(templateItem);
-        }
+        getEvents(inflater, templates);
 
         return fragment;
+    }
+
+    private void getEvents(LayoutInflater inflater, LinearLayout templates) {
+
+
+
+        ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONArray events = result.getJSONArray("data");
+                SplitAppLogger.writeLog(1,"Longitud: " + events.length());
+                for (int i = 0; i < events.length(); i++) {
+                    SplitAppLogger.writeLog(1,"I vale: " + i);
+                    View templateItem = inflater.inflate(R.layout.event_active_item, null);
+
+                    assert templateItem != null;
+                    TextView text = (TextView) templateItem.findViewById(R.id.event_name);
+
+                    assert text != null;
+                    String name_event = events.getJSONObject(i).getString("name");
+                    text.setText(name_event);
+
+                    String date_finish_str = events.getJSONObject(i).getString("when");
+
+                    TextView date = (TextView) templateItem.findViewById(R.id.event_date);
+                    date.setText(date_finish_str);
+
+                    templateItem.setOnClickListener(v -> {
+                        Intent eventDetail = new Intent(getContext(), EventDescriptionActivity.class);
+                        startActivity(eventDetail);
+                    });
+
+                    Date date_past = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_finish_str);
+
+                    Calendar cal = Calendar.getInstance(); // creates calendar
+                    cal.setTime(date_past); // sets calendar time/date
+                    cal.add(Calendar.HOUR, 12);
+                    date_past = cal.getTime();
+
+                    boolean esActivo = date_past.before(new Date());
+
+                    if (esActivo) templates.addView(templateItem);
+                }
+                // PARSE
+            } catch (JSONException e) {
+                //onError.execute(null);
+                return;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }
