@@ -138,8 +138,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(newEventIntent);
         } else if (id == R.id.nav_gallery) {
             //Misma clase
-        } else if (id == R.id.nav_slideshow) {
-            Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
+        } else if (id == R.id.nav_invitees) {
+            Intent invitees = new Intent(MainActivity.this, EventInvitationList.class);
+            startActivity(invitees);
         } else if (id == R.id.nav_manage) {
             Intent newManageIntent = new Intent(MainActivity.this, ManageTemplate.class);
             startActivity(newManageIntent);

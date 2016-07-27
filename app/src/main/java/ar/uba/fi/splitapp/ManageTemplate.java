@@ -101,8 +101,9 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
         } else if (id == R.id.nav_gallery) {
             Intent newMainMenuIntent = new Intent(ManageTemplate.this, NewEventActivity.class);
             startActivity(newMainMenuIntent);
-        } else if (id == R.id.nav_slideshow) {
-            Utility.showMessage("Basta!", Utility.getViewgroup(this), "Ok");
+        } else if (id == R.id.nav_invitees) {
+            Intent invitees = new Intent(ManageTemplate.this, EventInvitationList.class);
+            startActivity(invitees);
         } else if (id == R.id.nav_manage) {
             //Misma opcion
         } else if (id == R.id.nav_debt) {

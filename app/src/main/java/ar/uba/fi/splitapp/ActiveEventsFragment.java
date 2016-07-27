@@ -7,20 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.facebook.AccessToken;
-import com.facebook.Profile;
-import com.pkmmte.view.CircularImageView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,7 +35,6 @@ public class ActiveEventsFragment extends Fragment {
     }
 
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
-
 
 
         ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
