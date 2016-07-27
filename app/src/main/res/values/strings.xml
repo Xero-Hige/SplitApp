@@ -22,6 +22,7 @@
     <string name="title_activity_new_event">Nuevo Evento</string>
     <string name="title_manage_event">Plantillas</string>
     <string name="title_payments">Deudas</string>
+    <string name="title_attendees">Participantes</string>
     <string name="title_template">Plantilla</string>
     <string name="title_activity_new_event_details">Nuevo Evento</string>
     <string name="title_activity_main2">Main2Activity</string>

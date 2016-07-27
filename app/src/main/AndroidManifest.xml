@@ -62,6 +62,11 @@
             android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".AttendesActivity"
+            android:label="@string/title_attendees"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".TemplateActivity"
             android:label="@string/title_template"
             android:screenOrientation="sensorPortrait"

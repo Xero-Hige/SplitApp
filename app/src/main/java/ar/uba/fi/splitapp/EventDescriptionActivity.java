@@ -121,6 +121,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         addTaskStatus();
 
+        viewFriends();
+
         LinearLayout templates = (LinearLayout) findViewById(R.id.my_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -129,6 +131,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
         templates = (LinearLayout) findViewById(R.id.settle_list);
 
         setSettle(templates, inflater);
+    }
+
+    private void viewFriends() {
+        ImageView imagenAmigos = (ImageView) findViewById(R.id.imageButton4);
+
+        imagenAmigos.setOnClickListener(v -> {
+            Intent friendListIntent = new Intent(this, AttendesActivity.class);
+            startActivityForResult(friendListIntent, 0);
+        });
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
