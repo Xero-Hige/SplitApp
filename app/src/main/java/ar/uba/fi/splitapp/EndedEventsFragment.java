@@ -41,9 +41,9 @@ public class EndedEventsFragment extends Fragment {
                 //onError.execute(null);
             } else try {
                 JSONArray events = result.getJSONArray("data");
-                SplitAppLogger.writeLog(1, "Longitud: " + events.length());
+
                 for (int i = 0; i < events.length(); i++) {
-                    SplitAppLogger.writeLog(1, "I vale: " + i);
+
                     View templateItem = inflater.inflate(R.layout.event_active_item, null);
 
                     assert templateItem != null;

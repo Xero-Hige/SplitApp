@@ -18,9 +18,12 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AttendesActivity extends AppCompatActivity {
+
+    LinkedList<String> lista = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +35,22 @@ public class AttendesActivity extends AppCompatActivity {
         LinearLayout friends = (LinearLayout) findViewById(R.id.friends_container);
         LayoutInflater inflater = getLayoutInflater();
 
-        List<String> lista = new ArrayList<>();
-
-        ServerHandler.executeGet("2", ServerHandler.EVENT_DETAIL, "", "", result -> {
+        ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
             //onSucces.execute(result);
             if (result == null) {
+                SplitAppLogger.writeLog(1,"ERROR EN LECUTRA");
                 //onError.execute(null);
             } else try {
-                JSONObject events = result.getJSONObject("data");
+                JSONArray events = result.getJSONArray("data");
+                JSONObject event1 = events.getJSONObject(0);
+                JSONArray attendees = event1.getJSONArray("invitees");
 
-                JSONArray attendees = events.getJSONArray("invitees");
+                SplitAppLogger.writeLog(1,"Tengo cantidad: " + attendees.length());
 
                 for (int i = 0; i < attendees.length(); i++) {
                     String fb_id = attendees.getJSONObject(i).getString("facebook_id");
-                    lista.add(fb_id);
+//                    SplitAppLogger.writeLog(1,"Mi FB id es: " + fb_id);
+                    lista.push(fb_id);
                 }
 
             } catch (JSONException e) {
@@ -78,11 +83,29 @@ public class AttendesActivity extends AppCompatActivity {
                             //finish();
                         });
 
+//                        SplitAppLogger.writeLog(1,"A Comparar 1: " + Profile.getCurrentProfile().getId());
+//                        SplitAppLogger.writeLog(1,"A Comparar 2: " + ids.get(i));
+
+                        SplitAppLogger.writeLog(1,"Cantidad de elementos: " + lista.size());
+
+                        for (int j = 0; j < lista.size(); j++) {
+                            SplitAppLogger.writeLog(1,"Elemento de la lista comparando: " + lista.get(j));
+                            if (lista.get(j) == Profile.getCurrentProfile().getId()){
+                                friends.addView(friendLayout);
+                                SplitAppLogger.writeLog(1,"Contengo pero no agregue");
+                            } else if (lista.get(j) == ids.get(i)) {
+                                friends.addView(friendLayout);
+                                SplitAppLogger.writeLog(1,"Contengo pero no agregue 2");
+                            }
+                        }
+                        /*
                         if (lista.contains(Profile.getCurrentProfile().getId())) {
                             friends.addView(friendLayout);
+                            SplitAppLogger.writeLog(1,"Contengo pero no agregue");
                         } else if (lista.contains(ids.get(i))){
                             friends.addView(friendLayout);
-                        }
+                            SplitAppLogger.writeLog(1,"Contengo pero no agregue");
+                        }*/
 
                     }
                 }

@@ -78,12 +78,12 @@ public class LoginActivity extends AppCompatActivity {
         addLogo();
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
         if (Profile.getCurrentProfile() == null)
             profileTracker.startTracking();
-    }
+    }*/
 
     private void addLogo() {
         ImageView logo = (ImageView) findViewById(R.id.logo);
