@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.facebook.Profile;
+import com.shehabic.droppy.DroppyMenuItem;
+import com.shehabic.droppy.DroppyMenuPopup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ActiveEventsFragment extends Fragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -39,11 +43,13 @@ public class ActiveEventsFragment extends Fragment {
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
 
 
-        ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
+        ServerHandler.executeGet(ServerHandler.EVENT_LIST,  Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
             if (result == null) {
                 //onError.execute(null);
-            } else try {
+                return;
+            }
+            try {
                 JSONArray events = result.getJSONArray("data");
                 for (int i = 0; i < events.length(); i++) {
                     View templateItem = inflater.inflate(R.layout.event_active_item, null);
@@ -68,6 +74,8 @@ public class ActiveEventsFragment extends Fragment {
                         startActivity(eventDetail);
                     });
 
+                    addDropdown(templateItem);
+
                     Date date_past = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_finish_str);
 
                     Calendar cal = Calendar.getInstance(); // creates calendar
@@ -89,6 +97,29 @@ public class ActiveEventsFragment extends Fragment {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void addDropdown(View templateItem) {
+        ImageView button = (ImageView) templateItem.findViewById(R.id.active_event_settings);
+
+        DroppyMenuPopup.Builder dropdown = new DroppyMenuPopup.Builder(this.getContext(), button);
+
+        dropdown.addMenuItem(new DroppyMenuItem("Asado").setClickable(false).setId(0)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("Creado el: 10 jul.").setClickable(false).setId(0));
+        dropdown.addMenuItem(new DroppyMenuItem("Creado por: Tincho").setClickable(false).setId(0));
+        dropdown.addMenuItem(new DroppyMenuItem("Cancelar evento").setClickable(true).setId(1));
+
+        dropdown.setOnClick((v, id) -> {
+            if (id != 1) {
+                return;
+            }
+            Utility.showMessage("Cancelaste el evento", Utility.getViewgroup(ActiveEventsFragment.this.getActivity()));
+            templateItem.setVisibility(View.GONE);
+        });
+
+        DroppyMenuPopup droppyMenuPopup = dropdown.build();
+
+        button.setOnClickListener(v -> droppyMenuPopup.show());
     }
 
 }

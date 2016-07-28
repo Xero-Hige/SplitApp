@@ -28,6 +28,8 @@ import com.facebook.Profile;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.pkmmte.view.CircularImageView;
+import com.shehabic.droppy.DroppyMenuItem;
+import com.shehabic.droppy.DroppyMenuPopup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EventDescriptionActivity extends AppCompatActivity {
@@ -73,7 +76,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
-    private String id_event;
+    private Date when;
+    private String id_event = "error";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +111,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         if (event_id_passed != null) {
             id_event = event_id_passed.getString("id");
         }
-        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, "", "", result -> {
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
             if (result == null) {
                 //onError.execute(null);
@@ -119,8 +123,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 String date_str = events.getString("when");
                 Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
+                this.when = date_class;
+                SplitAppLogger.writeLog(1, "WHEN seteado");
                 String dateWithoutTime = new SimpleDateFormat("dd-MM-yyyy").format(date_class);
-                String justTime = new SimpleDateFormat("hh:mm").format(date_class);
+                String justTime = new SimpleDateFormat("HH:mm").format(date_class);
 
 
                 TextView date = (TextView) findViewById(R.id.date_details);
@@ -141,7 +147,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
         addExpandables();
 
@@ -197,15 +207,66 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     price_in.setVisibility(View.GONE);
                     price.setVisibility(View.VISIBLE);
                     done.setChecked(true);
+                    if (isFinalized()) {
+                        done.setEnabled(false);
+                        done.setOnClickListener(u -> {
+                        });
+                    }
                 }
             });
 
+            addPopUpMyTask(i, templateItem);
 
             CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
 
             templates.addView(templateItem);
         }
+    }
+
+    private void addPopUpMyTask(int i, View templateItem) {
+        ImageView button = (ImageView) templateItem.findViewById(R.id.my_task_setting);
+
+        DroppyMenuPopup.Builder dropdown = new DroppyMenuPopup.Builder(this, button);
+
+        dropdown.addMenuItem(new DroppyMenuItem("Tarea #" + i).setClickable(false).setId(0)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("Creada el: 25 jul.").setClickable(false).setId(0));
+        dropdown.addMenuItem(new DroppyMenuItem("Asignada a: Vos, duh").setClickable(false).setId(0));
+        dropdown.addMenuItem(new DroppyMenuItem("Creada el: 25 jul.").setClickable(false).setId(0)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("Editar", R.drawable.pencil).setClickable(true).setId(1)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("VER SUGERENCIA DE COMPRA", R.drawable.location).setClickable(true).setId(2));
+
+        dropdown.setOnClick((v, id) -> {
+            switch (id) {
+                case 0:
+                    return;
+                case 1:
+                    Utility.showMessage("Editar", Utility.getViewgroup(EventDescriptionActivity.this));
+                    return;
+                case 2:
+                    Utility.showMessage("Sugerencia", Utility.getViewgroup(EventDescriptionActivity.this));
+                    return;
+                default:
+                    SplitAppLogger.writeLog(SplitAppLogger.ERRO, "The imposible has happend: Invalid menu ID");
+            }
+        });
+
+        DroppyMenuPopup menu = dropdown.build();
+
+        button.setOnClickListener(v -> menu.show());
+    }
+
+    private boolean isFinalized() {
+        if (this.when == null) {
+            SplitAppLogger.writeLog(1, "WHEN sin setear");
+            return false;
+        }
+        Calendar cal = Calendar.getInstance();
+        Date now = new Date();
+        cal.setTime(this.when);
+        cal.add(Calendar.HOUR_OF_DAY, 12);
+        Date finalizeDate = cal.getTime();
+        return now.after(finalizeDate);
     }
 
     private void setSettle(LinearLayout templates, LayoutInflater inflater, String event_id) {

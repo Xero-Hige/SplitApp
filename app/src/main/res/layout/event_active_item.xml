@@ -11,7 +11,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="75dp"
         android:background="@color/icons"
         android:elevation="4dp"
         android:gravity="bottom"
@@ -26,25 +26,28 @@
             android:id="@+id/event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/active_event_settings"
             android:text="Something"
             android:textColor="@color/primary_text"
             android:textSize="20sp"/>
 
         <ImageView
-            android:id="@+id/view_event"
+            android:id="@+id/active_event_settings"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:background="@color/icons"
+            android:scaleType="fitCenter"
             android:src="@drawable/more"/>
 
         <TextView
             android:id="@+id/event_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/event_name"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/event_name"
             android:text="Date"

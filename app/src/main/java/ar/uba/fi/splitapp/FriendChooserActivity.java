@@ -1,10 +1,13 @@
 package ar.uba.fi.splitapp;
 
+import android.app.Activity;
 import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,8 +16,18 @@ import android.widget.TextView;
 import com.facebook.Profile;
 import com.pkmmte.view.CircularImageView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public class FriendChooserActivity extends AppCompatActivity
         implements SendInviteConfirmationFragment.ConfirmationDialogListener{
+
+    public static final String INVITEES = "invitees";
+    ArrayList<String> inviteesID = new ArrayList<>();
+    Map<String, View> idView = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +43,7 @@ public class FriendChooserActivity extends AppCompatActivity
             {
                 for (int i = 0; i < names.size(); i++) {
                     View friendLayout = inflater.inflate(R.layout.friend_choose_layout, null);
+                    idView.put(ids.get(i), friendLayout);
 
                     TextView name = (TextView) friendLayout.findViewById(R.id.friend_name);
                     name.setText(names.get(i));
@@ -42,6 +56,8 @@ public class FriendChooserActivity extends AppCompatActivity
 
                     final int finalI = i;
                     friendLayout.setOnClickListener(v -> {
+                        if (inviteesID.contains(ids.get(finalI))) // No puedo seleccionar dos veces al mismo
+                            return;
                         DialogFragment newFragment = new SendInviteConfirmationFragment();
                         Bundle args = new Bundle();
                         args.putString("name", names.get(finalI));
@@ -58,13 +74,35 @@ public class FriendChooserActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.friend_chooser_taskbar, menu);
+        return true;
+    }
+
+    @Override
     public void onDialogConfirm(SendInviteConfirmationFragment dialog) {
         SplitAppLogger.writeLog(1, "Invitar a " + dialog.getInviteeName() + " " + dialog.getFacebookId());
+        final String fbId = dialog.getFacebookId();
+        inviteesID.add(fbId);
+        idView.get(fbId).setAlpha(0.5f);
         // TODO: Marcar que ese usuario fue invitado y luego hacer el POST al server cuando se crea el evento
     }
 
     @Override
     public void onDialogCancel(SendInviteConfirmationFragment dialog) {
         SplitAppLogger.writeLog(1, "No invitar a " + dialog.getInviteeName() + " " + dialog.getFacebookId());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_create) {
+            Intent resultIntent = new Intent();
+            resultIntent.putStringArrayListExtra(INVITEES, inviteesID);
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

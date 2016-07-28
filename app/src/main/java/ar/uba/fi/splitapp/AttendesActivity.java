@@ -48,7 +48,7 @@ public class AttendesActivity extends AppCompatActivity {
             return;
         }
 
-        ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
+        ServerHandler.executeGet(ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", result -> {
             SplitAppLogger.writeLog(1, "Agus Respondio");
             //onSucces.execute(result);
             if (result == null) {

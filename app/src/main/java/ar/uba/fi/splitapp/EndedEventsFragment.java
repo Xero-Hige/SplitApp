@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -33,9 +35,7 @@ public class EndedEventsFragment extends Fragment {
     }
 
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
-
-
-        ServerHandler.executeGet(ServerHandler.EVENT_LIST, "", "", result -> {
+        ServerHandler.executeGet(ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
             if (result == null) {
                 //onError.execute(null);
