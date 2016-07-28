@@ -31,19 +31,25 @@ public class NewTaskDialogFragment extends DialogFragment {
 
     public int event_id;
     public static final String FACEBOOK_ID = "facebook_id";
+    public static final String NAME_FRIEND = "name_friend";
+    public static int NEW_TASK_REQUEST = 1;
 
-    private String facebook_id;
     private CircularImageView image;
+    private TextView nameView;
 
+    public static String facebook_id;
+    public static String name_friend;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (0) : {
+
+        switch (requestCode) {
+            case 1: {
                 if (resultCode == Activity.RESULT_OK) {
                     facebook_id = data.getStringExtra(FACEBOOK_ID);
-                    FacebookManager.fillWithUserPic(facebook_id, image, getContext());
+                    FacebookManager.fillWithUserPic(facebook_id, image, this.getActivity().getApplicationContext());
+                    nameView.setText(data.getStringExtra(NAME_FRIEND));
                 }
                 break;
             }
@@ -62,12 +68,14 @@ public class NewTaskDialogFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setTitle("Nueva Tarea");
-        ImageView imagenAmigos = (ImageView)promptView.findViewById(R.id.image_button_asignee);
+        //ImageView imagenAmigos = (ImageView)promptView.findViewById(R.id.image_button_asignee);
         image = (CircularImageView) promptView.findViewById(R.id.asignee_pic);
-        imagenAmigos.setOnClickListener(v -> {
+        nameView = (TextView) promptView.findViewById(R.id.friend_name);
+
+        image.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(getActivity(), AttendesActivity.class);
             friendListIntent.putExtra(AttendesActivity.COMING_FROM_TASK, true);
-            startActivityForResult(friendListIntent, 0);
+            startActivityForResult(friendListIntent, NEW_TASK_REQUEST);
         });
 
         builder.setView(promptView)
@@ -97,7 +105,8 @@ public class NewTaskDialogFragment extends DialogFragment {
                             if (result == null) {
                                 //onError.execute(null);
                             } else try {
-                                JSONObject callback = result.getJSONObject("id");
+                                JSONObject callback = result.getJSONObject("data");
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -111,6 +120,11 @@ public class NewTaskDialogFragment extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    public void setPersonToTask(String facebook_id, String name) {
+        FacebookManager.fillWithUserPic(facebook_id, image, getContext());
+        nameView.setText(name);
     }
 
 }

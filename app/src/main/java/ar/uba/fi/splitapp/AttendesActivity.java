@@ -91,10 +91,15 @@ public class AttendesActivity extends AppCompatActivity {
                         final int finalI = i;
                         friendLayout.setOnClickListener(v -> {
                             if (coming_from_task) {
+                                System.out.println("COMING FROM TASK");
 
                                 Intent resultIntent = new Intent();
                                 resultIntent.putExtra(NewTaskDialogFragment.FACEBOOK_ID, ids.get(finalI));
+                                resultIntent.putExtra(NewTaskDialogFragment.NAME_FRIEND , names.get(finalI));
                                 setResult(Activity.RESULT_OK, resultIntent);
+                                System.out.println("FACEBOOKID: "+ ids.get(finalI));
+                                NewTaskDialogFragment.facebook_id = ids.get(finalI);
+                                NewTaskDialogFragment.name_friend = names.get(finalI);
                                 finish();
 
                             } else {
