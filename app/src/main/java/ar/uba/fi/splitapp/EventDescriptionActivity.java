@@ -115,11 +115,17 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 String dateWithoutTime = new SimpleDateFormat("dd-MM-yyyy").format(date_class);
                 String justTime = new SimpleDateFormat("hh:mm").format(date_class);
 
+
                 TextView date = (TextView) findViewById(R.id.date_details);
                 TextView time = (TextView) findViewById(R.id.time_details);
+                TextView invitees = (TextView) findViewById(R.id.participants_details);
 
                 date.setText(dateWithoutTime);
                 time.setText(justTime);
+
+                JSONArray attendees = events.getJSONArray("invitees");
+                String cant_part = attendees.length() + " personas invitadas";
+                invitees.setText(cant_part);
 
             } catch (JSONException e) {
                 //onError.execute(null);
