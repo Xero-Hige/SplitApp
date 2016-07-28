@@ -28,14 +28,10 @@
     <com.pkmmte.view.CircularImageView
         android:id="@+id/asignee_pic"
         android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/friend_chooser_pic"
-        android:layout_alignParentTop="true"
-        android:layout_margin="5dp"
-        android:elevation="3dp"
-        android:paddingBottom="@dimen/nav_header_vertical_spacing"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:border="true"
         app:border_color="@color/accent_T"
         app:border_width="4dp"/>

@@ -26,8 +26,14 @@ public class FriendChooserActivity extends AppCompatActivity
         implements SendInviteConfirmationFragment.ConfirmationDialogListener{
 
     public static final String INVITEES = "invitees";
+    public static final String ALREADY_INVITED = "attendees";
+    public static final String FROM_CURRENT_EVENT = "current_event";
+
     ArrayList<String> inviteesID = new ArrayList<>();
     Map<String, View> idView = new HashMap<>();
+    boolean from_current_event;
+    ArrayList<String> attendeesID = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +45,23 @@ public class FriendChooserActivity extends AppCompatActivity
         LinearLayout friends = (LinearLayout) findViewById(R.id.friends_container);
         LayoutInflater inflater = getLayoutInflater();
 
+        Intent intent = getIntent();
+        from_current_event = intent.getBooleanExtra(FROM_CURRENT_EVENT,false);
+
+        if (from_current_event) {
+            attendeesID = intent.getStringArrayListExtra(ALREADY_INVITED);
+        }
+
         FacebookManager.executeWithFriendlist(Profile.getCurrentProfile().getId(), (names, ids) ->
             {
                 for (int i = 0; i < names.size(); i++) {
                     View friendLayout = inflater.inflate(R.layout.friend_choose_layout, null);
                     idView.put(ids.get(i), friendLayout);
+                    if (from_current_event) {
+                        if (attendeesID.contains(ids.get(i))) {
+                            friendLayout.setAlpha(0.5f);
+                        }
+                    }
 
                     TextView name = (TextView) friendLayout.findViewById(R.id.friend_name);
                     name.setText(names.get(i));
@@ -56,7 +74,7 @@ public class FriendChooserActivity extends AppCompatActivity
 
                     final int finalI = i;
                     friendLayout.setOnClickListener(v -> {
-                        if (inviteesID.contains(ids.get(finalI))) // No puedo seleccionar dos veces al mismo
+                        if (attendeesID.contains(ids.get(finalI)) || inviteesID.contains(ids.get(finalI))) // No puedo seleccionar dos veces al mismo
                             return;
                         DialogFragment newFragment = new SendInviteConfirmationFragment();
                         Bundle args = new Bundle();

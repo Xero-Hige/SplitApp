@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -73,6 +74,12 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ExpandableLinearLayout mSettle;
     private Date when;
     private String id_event = "error";
+    private ArrayList<String> inviteesID;
+    private ArrayList<String> newInviteesID;
+
+
+    int FRIEND_CHOOSER_REQUEST = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +90,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
+        inviteesID = new ArrayList<>();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -131,9 +139,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 date.setText(dateWithoutTime);
                 time.setText(justTime);
 
-                JSONArray attendees = events.getJSONArray("invitees");
+                JSONArray attendees = null;
+                    attendees = events.getJSONArray("invitees");
                 String cant_part = attendees.length() + " personas invitadas";
                 invitees.setText(cant_part);
+                for (int i = 0; i < attendees.length(); i++) {
+                        String fb_id = attendees.getJSONObject(i).getString("facebook_id");
+                        inviteesID.add(fb_id);
+                }
 
             } catch (JSONException e) {
                 //onError.execute(null);
@@ -485,7 +498,49 @@ public class EventDescriptionActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_add_people) {
+            Intent friendChooser = new Intent(this, FriendChooserActivity.class);
+            friendChooser.putExtra(FriendChooserActivity.FROM_CURRENT_EVENT,true);
+            friendChooser.putStringArrayListExtra(FriendChooserActivity.ALREADY_INVITED, inviteesID);
+            startActivityForResult(friendChooser, FRIEND_CHOOSER_REQUEST);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FRIEND_CHOOSER_REQUEST && resultCode == RESULT_OK) {
+            newInviteesID = data.getStringArrayListExtra(FriendChooserActivity.INVITEES);
+        }
+
+        for (int i = 0; i < newInviteesID.size(); i++) {
+            String facebook_id = newInviteesID.get(i);
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("event_id",Integer.parseInt(id_event));
+                obj.put("invitee", facebook_id);
+
+                ServerHandler.executePost(String.valueOf(id_event),ServerHandler.EVENT_INVITEE, Profile.getCurrentProfile().getId(),"", obj, result -> {
+                    //onSucces.execute(result);
+                    if (result == null) {
+                        //onError.execute(null);
+                    } else try {
+                        JSONObject callback = result.getJSONObject("data");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+
+
     }
 
 
