@@ -149,7 +149,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         ArrayList<String> attendes = new ArrayList<>();
         for (int i = 0; i < attendees.length(); i++) {
             String id = attendees.getJSONObject(i).getString("facebook_id");
-            if (!id.equals(Profile.getCurrentProfile().getId()) {
+            if (!id.equals(Profile.getCurrentProfile().getId())) {
                 attendes.add(id);
             }
         }
