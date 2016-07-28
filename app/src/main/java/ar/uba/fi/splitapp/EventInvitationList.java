@@ -48,27 +48,27 @@ public class EventInvitationList extends AppCompatActivity implements Navigation
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             View inviteeLayout = inflater.inflate(R.layout.event_invite_layout, null);
 
             TextView hostName = (TextView) inviteeLayout.findViewById(R.id.invite_host_name);
-            hostName.setText("Te invito: Persona Nº" + (i + 1));
+            hostName.setText("Te invito: Gaston Martinez");
 
             TextView eventName = (TextView) inviteeLayout.findViewById(R.id.invite_event_name);
-            eventName.setText("Fontefiesta Nº" + (i + 1));
+            eventName.setText("Asado fiubenese");
 
             CircularImageView image = (CircularImageView) inviteeLayout.findViewById(R.id.invite_host_pic);
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), image, getApplicationContext());
             Button accept = (Button) inviteeLayout.findViewById(R.id.invite_accept_button);
             final int finalI = i;
             accept.setOnClickListener(v -> {
-                Utility.showMessage("Aceptaste unirte al evento: 'Fontefiesta Nº" + (finalI + 1) + "'", Utility.getViewgroup(this));
+                Utility.showMessage("Aceptaste unirte al evento: Asado fiubenese", Utility.getViewgroup(this));
                 inviteeLayout.setVisibility(View.GONE);
             });
 
             Button decline = (Button) inviteeLayout.findViewById(R.id.invite_reject_button);
             decline.setOnClickListener(v -> {
-                Utility.showMessage("Rechazaste unirte al evento: 'Fontefiesta Nº" + (finalI + 1) + "'", Utility.getViewgroup(this));
+                Utility.showMessage("Rechazaste unirte al evento: Asado fiubenese", Utility.getViewgroup(this));
                 inviteeLayout.setVisibility(View.GONE);
             });
 
@@ -110,9 +110,9 @@ public class EventInvitationList extends AppCompatActivity implements Navigation
             Intent newDebtIntent = new Intent(EventInvitationList.this, DebtActivity.class);
             startActivity(newDebtIntent);
         } else if (id == R.id.nav_settings) {
-            Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
+            //Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_help) {
-            Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
+           //Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_logout) {
             logOut();
         }

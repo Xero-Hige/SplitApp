@@ -358,10 +358,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 case 0:
                     return;
                 case 1:
-                    Utility.showMessage("Editar", Utility.getViewgroup(EventDescriptionActivity.this));
+                    //Utility.showMessage("Editar", Utility.getViewgroup(EventDescriptionActivity.this));
                     return;
                 case 2:
-                    Utility.showMessage("Sugerencia", Utility.getViewgroup(EventDescriptionActivity.this));
+                    //Utility.showMessage("Sugerencia", Utility.getViewgroup(EventDescriptionActivity.this));
                     return;
                 default:
                     SplitAppLogger.writeLog(SplitAppLogger.ERRO, "The imposible has happend: Invalid menu ID");

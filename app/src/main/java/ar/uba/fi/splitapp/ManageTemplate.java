@@ -113,9 +113,9 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
             Intent newDebtIntent = new Intent(ManageTemplate.this, DebtActivity.class);
             startActivity(newDebtIntent);
         } else if (id == R.id.nav_settings) {
-            Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
+            //Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_help) {
-            Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
+            //Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_logout) {
             logOut();
         }

@@ -167,9 +167,9 @@ public class DebtActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_debt) {
             //Misma clase
         } else if (id == R.id.nav_settings) {
-            Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
+            //Utility.showMessage("Deja de tocar cosas!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_help) {
-            Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
+            //Utility.showMessage("Deja de joder!!!!!!!!", Utility.getViewgroup(this), "Ok");
         } else if (id == R.id.nav_logout) {
             logOut();
         }
