@@ -75,7 +75,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Date when;
     private String id_event = "error";
     private ArrayList<String> inviteesID;
-    private ArrayList<String> newInviteesID;
+    private ArrayList<String> newInviteesID = new ArrayList<>();
 
     int FRIEND_CHOOSER_REQUEST = 0;
     private String[] mAttendees;
@@ -526,35 +526,29 @@ public class EventDescriptionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == FRIEND_CHOOSER_REQUEST && resultCode == RESULT_OK) {
             newInviteesID = data.getStringArrayListExtra(FriendChooserActivity.INVITEES);
-        }
 
-        for (int i = 0; i < newInviteesID.size(); i++) {
-            String facebook_id = newInviteesID.get(i);
-            JSONObject obj = new JSONObject();
-            try {
-                obj.put("event_id",Integer.parseInt(id_event));
-                obj.put("invitee", facebook_id);
+            for (int i = 0; i < newInviteesID.size(); i++) {
+                String facebook_id = newInviteesID.get(i);
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("event_id", Integer.parseInt(id_event));
+                    obj.put("invitee", facebook_id);
 
-                ServerHandler.executePost(String.valueOf(id_event),ServerHandler.EVENT_INVITEE, Profile.getCurrentProfile().getId(),"", obj, result -> {
-                    //onSucces.execute(result);
-                    if (result == null) {
-                        //onError.execute(null);
-                    } else try {
-                        JSONObject callback = result.getJSONObject("data");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    ServerHandler.executePost(String.valueOf(id_event), ServerHandler.EVENT_INVITEE, Profile.getCurrentProfile().getId(), "", obj, result -> {
+                        //onSucces.execute(result);
+                        if (result == null) {
+                            //onError.execute(null);
+                        } else try {
+                            JSONObject callback = result.getJSONObject("data");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
-
-
         }
-
-
     }
 
 

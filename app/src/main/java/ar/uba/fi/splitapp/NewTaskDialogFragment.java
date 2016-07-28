@@ -69,9 +69,6 @@ public class NewTaskDialogFragment extends DialogFragment {
             friendListIntent.putExtra(AttendesActivity.COMING_FROM_TASK, true);
             startActivityForResult(friendListIntent, 0);
         });
-        //FacebookManager.fillWithUserPic(facebook_id, image, getContext());
-
-
 
         builder.setView(promptView)
                 // Add action buttons
