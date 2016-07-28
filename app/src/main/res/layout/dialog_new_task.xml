@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/name_new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:hint="Nombre" />
+
+    <ImageView
+        android:id="@+id/image_button_asignee"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/people"/>
+
+    <com.pkmmte.view.CircularImageView
+        android:id="@+id/asignee_pic"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:elevation="3dp"
+        android:paddingBottom="@dimen/nav_header_vertical_spacing"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        app:border="true"
+        app:border_color="@color/accent_T"
+        app:border_width="4dp"/>
+</LinearLayout>

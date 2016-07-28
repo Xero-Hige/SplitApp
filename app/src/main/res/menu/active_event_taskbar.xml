@@ -19,6 +19,11 @@
         android:title="Agregar participantes"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/action_add_task"
+        android:orderInCategory="100"
+        android:title="Agregar Nueva Tarea"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/action_cancel_event"
         android:orderInCategory="100"
         android:title="Cancelar evento"

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/edit_event"
+        android:orderInCategory="100"
+        android:title="Nombre task"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/add_people"
+        android:orderInCategory="100"
+        android:title="Creada el"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/cancel_event"
+        android:orderInCategory="100"
+        android:title="Asignada a"
+        app:showAsAction="always"/>
+
+</menu>
