@@ -180,12 +180,12 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         viewFriends();
 
-        LinearLayout templates = (LinearLayout) findViewById(R.id.my_tasks_list);
+        ExpandableLinearLayout expandTemplate = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
         LayoutInflater inflater = getLayoutInflater();
 
-        setMyTasks(templates, inflater);
+        setMyTasks(expandTemplate, inflater);
 
-        templates = (LinearLayout) findViewById(R.id.settle_list);
+        LinearLayout templates = (LinearLayout) findViewById(R.id.settle_list);
 
         setSettle(templates, inflater, id_event);
     }
@@ -374,7 +374,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
     private void addTaskStatus() {
-        LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
+        LinearLayout templates = (LinearLayout) findViewById(R.id.expandable_all_tasks);
         LayoutInflater inflater = getLayoutInflater();
 
         JSONArray cant_tareas;

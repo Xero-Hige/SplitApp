@@ -175,24 +175,9 @@
                             android:layout_below="@id/my_task_label"
                             android:background="@color/colorPrimaryLight"
                             android:orientation="vertical"
+                            android:padding="5dp"
                             app:ael_duration="400"
                             app:ael_expanded="false">
-
-                            <android.support.v4.widget.NestedScrollView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                                <LinearLayout
-                                    android:id="@+id/my_tasks_list"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:divider="@color/colorPrimaryLight_T"
-                                    android:dividerPadding="5dp"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    android:padding="10dp"/>
-                            </android.support.v4.widget.NestedScrollView>
                         </com.github.aakira.expandablelayout.ExpandableLinearLayout>
                     </RelativeLayout>
 
@@ -244,24 +229,9 @@
                             android:layout_below="@id/all_task_label"
                             android:background="@color/colorPrimaryLight"
                             android:orientation="vertical"
+                            android:padding="5dp"
                             app:ael_duration="400"
                             app:ael_expanded="false">
-
-                            <android.support.v4.widget.NestedScrollView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                                <LinearLayout
-                                    android:id="@+id/all_tasks_list"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:divider="@color/colorPrimaryLight_T"
-                                    android:dividerPadding="5dp"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    android:padding="10dp"/>
-                            </android.support.v4.widget.NestedScrollView>
                         </com.github.aakira.expandablelayout.ExpandableLinearLayout>
 
                     </RelativeLayout>
