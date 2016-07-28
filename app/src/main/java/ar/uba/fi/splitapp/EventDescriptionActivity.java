@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 
@@ -383,86 +384,65 @@ public class EventDescriptionActivity extends AppCompatActivity {
         return now.after(finalizeDate);
     }
 
+
+    /*
+        Genera la lista de participants a partir del JSON del event
+     */
+    private List<Participant> generateParticipants(String JSON) {
+        List<Participant> participants = new ArrayList<>();
+        //TODO: parse JSON para obtener los participants
+        return participants;
+    }
+
+    /*
+        Obtiene el JSON del event
+     */
+    private String getJSON() {
+        //TODO: obtener el JSON con la informacion del evento
+        return new String();
+    }
+
     private void setSettle(LinearLayout templates, LayoutInflater inflater, String event_id) {
-        View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
-        CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+        /* El siguiente codigo debe incluirse al momento de cerrarse un evento, no se donde es asi que yo lo pongo aca. */
 
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+        List<Participant> participants;
+        participants = generateParticipants(getJSON());
 
-        ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
-        Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
+        ExpensesCalculator calculator = new ExpensesCalculator();
 
-        final ImageView finalBackground = background;
-        templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymentListActivity.class);
-            makePayment.putExtra("id", event_id);
-            startActivity(makePayment);
-            Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
-        });
-        templates.addView(templateItem);
+        List<SettlementPayment> paymentList = calculator.calculateExpenses(participants);
 
+        // postSettlementPayments(paymentList);
 
-        templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
+        /* El siguiente codigo debe incluirse en el activity para mostrar los setlementPayments, no se donde es asi que yo lo pongo aca.
+            TODO: fijarse donde incluir el costo del settlement
+         */
 
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+        // List<SettlementPayment> paymentList = getSettlementPayments();
 
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
+        for(SettlementPayment p : paymentList ) {
 
-        background = (ImageView) templateItem.findViewById(R.id.debt_background);
-        Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(background);
+            View templateItem = inflater.inflate(R.layout.settlement_debt_layout, null);
 
-        templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymentListActivity.class);
-            makePayment.putExtra("id", event_id);
-            startActivity(makePayment);
-        });
-        templates.addView(templateItem);
+            CircularImageView view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
+            FacebookManager.fillWithUserPic(p.p1.id, view, this.getApplicationContext());
 
+            view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
+            FacebookManager.fillWithUserPic(p.p2.id, view, this.getApplicationContext());
 
-        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
+            ImageView background = (ImageView) templateItem.findViewById(R.id.debt_background);
+            Glide.with(this.getApplicationContext()).load(R.drawable.debt_on).centerCrop().into(background);
 
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
-
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
-
-        background = (ImageView) templateItem.findViewById(R.id.debt_background);
-        Glide.with(this.getApplicationContext()).load(R.drawable.settle_on).centerCrop().into(background);
-
-        final ImageView finalBackground1 = background;
-        templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymentListActivity.class);
-            makePayment.putExtra("id", event_id);
-            startActivity(makePayment);
-            Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(finalBackground1);
-        });
-        templates.addView(templateItem);
-
-
-        templateItem = inflater.inflate(R.layout.settlement_acred_layout, null);
-
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_friend_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
-
-        view = (CircularImageView) templateItem.findViewById(R.id.debt_user_img);
-        FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), view, this.getApplicationContext());
-
-        background = (ImageView) templateItem.findViewById(R.id.debt_background);
-        Glide.with(this.getApplicationContext()).load(R.drawable.settle_off).centerCrop().into(background);
-
-        templateItem.setOnClickListener(v -> {
-            Intent makePayment = new Intent(this, PaymentListActivity.class);
-            makePayment.putExtra("id", event_id);
-            startActivity(makePayment);
-        });
-        templates.addView(templateItem);
-
+            final ImageView finalBackground = background;
+            templateItem.setOnClickListener(v -> {
+                Intent makePayment = new Intent(this, PaymentListActivity.class);
+                makePayment.putExtra("id", event_id);
+                startActivity(makePayment);
+                Glide.with(this.getApplicationContext()).load(R.drawable.debt_off).centerCrop().into(finalBackground);
+            });
+            templates.addView(templateItem);
+        }
     }
 
 

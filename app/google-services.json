@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "632822459005",
+    "firebase_url": "https://splitapp-51b02.firebaseio.com",
+    "project_id": "splitapp-51b02",
+    "storage_bucket": "splitapp-51b02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632822459005:android:5897b9d0d48441cf",
+        "android_client_info": {
+          "package_name": "ar.uba.fi.splitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "632822459005-6ej2ocakisqqhb77ef0sdh94k4pc085h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT-7PiCsZzI3Ru6Vfvg2dhmBMpH-30RnE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

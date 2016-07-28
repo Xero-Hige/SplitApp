@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-
+        Log.v("Profile Changed", "HERE");
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Utility.getViewgroup(LoginActivity.this)));
             }
         };
-
+        Log.v("Profile Changed", "HERE2");
         if (Profile.getCurrentProfile() != null) {
             profileTracker.stopTracking();
             String token = AccessToken.getCurrentAccessToken().getToken();
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         fbCallbackManager = CallbackManager.Factory.create();
         addLoginButton();
 
-        addLogo();
+        addLogo();Log.v("Profile Changed", "HERE3");
     }
 
     /*@Override

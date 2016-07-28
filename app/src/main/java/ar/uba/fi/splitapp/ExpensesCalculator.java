@@ -9,13 +9,6 @@ public class ExpensesCalculator{
 	Participant max = null;
 	Participant min = null;
 
-	public class Participant {
-		public float payed;
-	}		// TODO
-	public class SettlementPayment {
-		public SettlementPayment(Participant p1, Participant p2, float result) {}
-	} // TODO
-
 	public ExpensesCalculator(){}
 
 	public List<SettlementPayment> calculateExpenses(List<Participant> participants){
