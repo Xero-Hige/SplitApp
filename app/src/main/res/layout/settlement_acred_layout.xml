@@ -49,14 +49,14 @@
             app:border_color="@color/red_debt_T"
             app:border_width="4dp"/>
 
-        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/debt_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="70dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="bottom"
-                        android:layout_margin="5dp">
+        <RelativeLayout
+            android:id="@+id/debt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp">
 
             <TextView
                 android:id="@+id/textView"
