@@ -157,7 +157,6 @@ public class NewEventDetailsActivity extends AppCompatActivity {
             }
 
 
-
             String timeEvent = (((TextView) findViewById(R.id.time_label)).getText().toString()+":00");
             String whenEvent = dateString + " " + timeEvent;
             String latEvent  = Double.toString(selectedPlace.getLatLng().latitude);
