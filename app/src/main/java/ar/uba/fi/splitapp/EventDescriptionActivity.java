@@ -1,13 +1,8 @@
 package ar.uba.fi.splitapp;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -486,7 +481,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             NewTaskDialogFragment newTaskFragment = new NewTaskDialogFragment();
             newTaskFragment.event_id = Integer.parseInt(id_event);
             FragmentManager fragmentManager = getSupportFragmentManager();
-            newTaskFragment.show(fragmentManager,"newTask");
+            newTaskFragment.show(fragmentManager, "newTask");
             return true;
         }
 

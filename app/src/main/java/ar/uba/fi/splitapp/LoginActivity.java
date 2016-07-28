@@ -119,6 +119,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void startMainActivity() {
+        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -147,12 +153,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             profileTracker.startTracking();
         }
-    }
-
-    private void startMainActivity() {
-        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(mainActivityIntent);
-        finish();
     }
 
     private class AnimationTask extends AsyncTask<Void, Void, Boolean> {

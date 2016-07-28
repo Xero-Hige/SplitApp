@@ -2,26 +2,23 @@ package ar.uba.fi.splitapp;
 
 
 import android.app.Activity;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 public class SendInviteConfirmationFragment extends DialogFragment {
-
-    /* The activity that creates an instance of this dialog fragment must
-     * implement this interface in order to receive event callbacks.
-     * Each method passes the DialogFragment in case the host needs to query it. */
-    public interface ConfirmationDialogListener {
-        void onDialogConfirm(SendInviteConfirmationFragment dialog);
-        void onDialogCancel(SendInviteConfirmationFragment dialog);
-    }
 
     ConfirmationDialogListener mListener;
     private String inviteeName = "";
     private String facebookId = "";
 
-    String getInviteeName() { return inviteeName; }
-    String getFacebookId() { return facebookId; }
+    String getInviteeName() {
+        return inviteeName;
+    }
+
+    String getFacebookId() {
+        return facebookId;
+    }
 
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
@@ -55,6 +52,15 @@ public class SendInviteConfirmationFragment extends DialogFragment {
             throw new ClassCastException(activity.toString()
                     + " must implement NoticeDialogListener");
         }
+    }
+
+    /* The activity that creates an instance of this dialog fragment must
+     * implement this interface in order to receive event callbacks.
+     * Each method passes the DialogFragment in case the host needs to query it. */
+    public interface ConfirmationDialogListener {
+        void onDialogConfirm(SendInviteConfirmationFragment dialog);
+
+        void onDialogCancel(SendInviteConfirmationFragment dialog);
     }
 
 }

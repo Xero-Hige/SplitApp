@@ -127,8 +127,6 @@
                     android:orientation="vertical">
 
                     <RelativeLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/my_tasks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -199,8 +197,6 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/all_tasks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

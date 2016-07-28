@@ -63,23 +63,22 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                SplitAppLogger.writeLog(1, "ENTRA EN ESTE FORRO");
-//                Intent eventNew = new Intent(getApplicationContext(), NewEventActivity.class);
-//                startActivityForResult(eventNew, 0);
-//            }
-//        });
-
         long dates = System.currentTimeMillis();
 
         setDatePicker(dates);
         setTimePicker(dates);
         setFriendChooser();
         setLocationPicker();
-
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView participantsText = (TextView) findViewById(R.id.participants);
+        int cant = invitees.size();
+        participantsText.setText(cant + (cant == 1 ? " invitado" : " invitados"));
+    }
+
 
     private void setLocationPicker() {
         mLocationLabel = (TextView) findViewById(R.id.location_label);
@@ -141,7 +140,6 @@ public class NewEventDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.new_event_taskbar, menu);
-
         return true;
     }
 
