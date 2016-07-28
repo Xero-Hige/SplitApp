@@ -159,8 +159,9 @@ public class NewEventDetailsActivity extends AppCompatActivity {
             String dateString = "";
 
             try {
-                Date date_class = new SimpleDateFormat("EEE dd MMM yyyy").parse(dateEvent);
-                dateString = new SimpleDateFormat("yyyy-MM-dd").format(date_class);
+                Date date_class = new SimpleDateFormat("dd/MM/yy").parse(dateEvent);
+                dateString = new SimpleDateFormat("yy-MM-dd").format(date_class);
+                dateString = "20" + dateString; // fix que pasa de 2 digitos del anio a 4
             } catch (ParseException e) {
                 e.printStackTrace();
             }
