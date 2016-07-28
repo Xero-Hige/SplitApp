@@ -63,12 +63,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        {\n" +
             "          \"assignee\": 231231231,\n" +
             "          \"name\": \"COMPRAR PAN\",\n" +
-            "          \"cost\": null,\n" +
+            "          \"cost\": 0,\n" +
             "          \"done\": false\n" +
-            "        },\n" +
+            "        }\n" +
             "      ]\n" +
             "    }";
-    int FRIEND_CHOOSER_REQUEST = 0;
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
@@ -76,8 +75,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private String id_event = "error";
     private ArrayList<String> inviteesID;
     private ArrayList<String> newInviteesID = new ArrayList<>();
+    private NewTaskDialogFragment newTaskFragment;
+
+    int FRIEND_CHOOSER_REQUEST = 0;
+    int NEW_TASK_REQUEST = 1;
+
     private String[] mAttendees;
     private String mEventName;
+    public static final String FACEBOOK_ID = "facebook_id";
+    public static final String NAME_FRIEND = "name_friend";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -531,6 +537,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 SplitAppLogger.writeLog(1, "Agarre excepcion aca");
             }
 
+        int tareas = cant_tareas.length();
+        SplitAppLogger.writeLog(1, cant_tareas.toString());
+        SplitAppLogger.writeLog(1, Integer.toString(tareas));
+        for (int i = 0; i < tareas; i++) {
+            View templateItem = inflater.inflate(R.layout.task_status_layout, null);
         });
 
 
@@ -649,7 +660,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             startActivity(intent);
         }
         if (id == R.id.action_add_task) {
-            NewTaskDialogFragment newTaskFragment = new NewTaskDialogFragment();
+            newTaskFragment = new NewTaskDialogFragment();
             newTaskFragment.event_id = Integer.parseInt(id_event);
             FragmentManager fragmentManager = getSupportFragmentManager();
             newTaskFragment.show(fragmentManager, "newTask");
@@ -667,7 +678,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == FRIEND_CHOOSER_REQUEST && resultCode == RESULT_OK) {
             newInviteesID = data.getStringArrayListExtra(FriendChooserActivity.INVITEES);
 
@@ -692,6 +705,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        } else if (requestCode == NEW_TASK_REQUEST && resultCode == RESULT_OK){
+            System.out.println("HERE");
+            String facebook_id = data.getStringExtra(FACEBOOK_ID);
+            String name  = data.getStringExtra(NAME_FRIEND);
+            newTaskFragment.setPersonToTask(facebook_id,name);
         }
     }
 

@@ -79,7 +79,7 @@ public class AttendesActivity extends AppCompatActivity {
 
 
             FacebookManager.executeWithFriendlist(Profile.getCurrentProfile().getId(), (names, ids) ->
-                    {
+                {
                         addFriendLayout(friends, inflater, Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
                         for (int i = 0; i < names.size(); i++) {
                             String text = names.get(i);
@@ -87,7 +87,7 @@ public class AttendesActivity extends AppCompatActivity {
 
                             addFriendLayout(friends, inflater, text, userId);
                         }
-                    }
+                }
             );
         });
     }
@@ -112,6 +112,10 @@ public class AttendesActivity extends AppCompatActivity {
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(NewTaskDialogFragment.FACEBOOK_ID, userId);
+                resultIntent.putExtra(NewTaskDialogFragment.NAME_FRIEND , text);
+                setResult(Activity.RESULT_OK, resultIntent);
+                NewTaskDialogFragment.facebook_id = userId;
+                NewTaskDialogFragment.name_friend = text;;
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
 
