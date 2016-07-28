@@ -68,8 +68,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        }\n" +
             "      ]\n" +
             "    }";
-
-
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
@@ -81,6 +79,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     int FRIEND_CHOOSER_REQUEST = 0;
     int NEW_TASK_REQUEST = 1;
+
     private String[] mAttendees;
     private String mEventName;
     public static final String FACEBOOK_ID = "facebook_id";
@@ -185,7 +184,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         viewFriends();
 
-        ExpandableLinearLayout expandTemplate = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
+        LinearLayout expandTemplate = (LinearLayout) findViewById(R.id.my_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
         setMyTasks(expandTemplate, inflater);
@@ -200,55 +199,133 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         imagenAmigos.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(this, AttendesActivity.class);
+            friendListIntent.putExtra("id",id_event);
             startActivityForResult(friendListIntent, 0);
         });
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
         addAdTask(templates, inflater);
-        for (int i = 1; i < 4; i++) {
-            View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
-            TextView text = (TextView) templateItem.findViewById(R.id.task_name);
-            text.setText("Tarea #" + i);
+//        for (int i = 1; i < 4; i++) {
+//            View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
+//
+//            TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+//            text.setText("Tarea #" + i);
+//
+//            EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
+//            TextView price = (TextView) templateItem.findViewById(R.id.price);
+//
+//            CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
+//
+//            price_in.setVisibility(View.VISIBLE);
+//            price.setVisibility(View.GONE);
+//            done.setChecked(false);
+//
+//            done.setOnClickListener(v -> {
+//                if (!done.isChecked()) {
+//                    price_in.setText("");
+//                    price.setText("");
+//                    price_in.setVisibility(View.VISIBLE);
+//                    price.setVisibility(View.GONE);
+//                    done.setChecked(false);
+//                } else {
+//                    String settled_price = price_in.getText().toString();
+//                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+//                    price_in.setVisibility(View.GONE);
+//                    price.setVisibility(View.VISIBLE);
+//                    done.setChecked(true);
+//                    if (isFinalized()) {
+//                        done.setEnabled(false);
+//                        done.setOnClickListener(u -> {
+//                        });
+//                    }
+//                }
+//            });
+//
+//            addPopUpMyTask(i, templateItem);
+//
+//            CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+//            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
+//
+//            templates.addView(templateItem);
+//        }
 
-            EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
-            TextView price = (TextView) templateItem.findViewById(R.id.price);
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONObject eventJson = result.getJSONObject("data");
 
-            CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
+                JSONArray tasks = eventJson.getJSONArray("tasks");
 
-            price_in.setVisibility(View.VISIBLE);
-            price.setVisibility(View.GONE);
-            done.setChecked(false);
+                SplitAppLogger.writeLog(1,tasks.toString());
 
-            done.setOnClickListener(v -> {
-                if (!done.isChecked()) {
-                    price_in.setText("");
-                    price.setText("");
+                SplitAppLogger.writeLog(1,"Cant de elementos: " + tasks.length());
+                for (int i = 0; i < tasks.length(); i++) {
+                    View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
+
+                    JSONObject task = tasks.getJSONObject(i);
+                    String name, fb_id;
+                    boolean done_bool;
+                    Double cost;
+
+                    name = task.getString("name");
+                    fb_id = task.getString("assignee");
+                    done_bool = task.getBoolean("done");
+                    cost = task.getDouble("cost");
+
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Nombre: " + name);
+                    TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+                    text.setText(name);
+
+                    EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
+                    TextView price = (TextView) templateItem.findViewById(R.id.price);
+
+                    CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
+
                     price_in.setVisibility(View.VISIBLE);
                     price.setVisibility(View.GONE);
                     done.setChecked(false);
-                } else {
-                    String settled_price = price_in.getText().toString();
-                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
-                    price_in.setVisibility(View.GONE);
-                    price.setVisibility(View.VISIBLE);
-                    done.setChecked(true);
-                    if (isFinalized()) {
-                        done.setEnabled(false);
-                        done.setOnClickListener(u -> {
-                        });
-                    }
+
+                    done.setOnClickListener(v -> {
+                        if (!done.isChecked()) {
+                            price_in.setText("");
+                            price.setText("");
+                            price_in.setVisibility(View.VISIBLE);
+                            price.setVisibility(View.GONE);
+                            done.setChecked(false);
+                        } else {
+                            String settled_price = price_in.getText().toString();
+                            price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                            price_in.setVisibility(View.GONE);
+                            price.setVisibility(View.VISIBLE);
+                            done.setChecked(true);
+                            if (isFinalized()) {
+                                done.setEnabled(false);
+                                done.setOnClickListener(u -> {
+                                });
+                            }
+                        }
+                    });
+
+                    addPopUpMyTask(i, templateItem);
+
+                    CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+                    FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
+
+                    templates.addView(templateItem);
                 }
-            });
 
-            addPopUpMyTask(i, templateItem);
 
-            CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
-            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
+            } catch (JSONException e) {
+                e.printStackTrace();
+                SplitAppLogger.writeLog(1,"Agarre excepcion aca");
+            }
 
-            templates.addView(templateItem);
-        }
+        });
+
     }
 
     private void addAdTask(LinearLayout templates, LayoutInflater inflater) {
@@ -393,7 +470,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
     private void addTaskStatus() {
-        LinearLayout templates = (LinearLayout) findViewById(R.id.expandable_all_tasks);
+        LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
         JSONArray cant_tareas;

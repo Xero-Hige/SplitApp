@@ -51,6 +51,9 @@ public class NewEventDetailsActivity extends AppCompatActivity {
     private TextView mLocationLabel;
     private List<String> invitees = new ArrayList<>();
 
+    private int fromTemplateNumber = -1;
+    private int newEventId = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookManager.checkInit(this);
@@ -69,6 +72,8 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         setTimePicker(dates);
         setFriendChooser();
         setLocationPicker();
+
+        fromTemplateNumber = getIntent().getExtras().getInt("fromTemplateNumber");
     }
 
     @Override
@@ -154,8 +159,9 @@ public class NewEventDetailsActivity extends AppCompatActivity {
             String dateString = "";
 
             try {
-                Date date_class = new SimpleDateFormat("EEE dd MMM yyyy").parse(dateEvent);
-                dateString = new SimpleDateFormat("yyyy-MM-dd").format(date_class);
+                Date date_class = new SimpleDateFormat("dd/MM/yy").parse(dateEvent);
+                dateString = new SimpleDateFormat("yy-MM-dd").format(date_class);
+                dateString = "20" + dateString; // fix que pasa de 2 digitos del anio a 4
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -184,10 +190,14 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                     //onError.execute(null);
                 } else try {
                     JSONObject callback = result.getJSONObject("data");
+                    newEventId = callback.getInt("id");
+                    SplitAppLogger.writeLog(1, "new event (response): " + callback.toString());
+                    addTemplateTasks();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             });
+
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -195,6 +205,24 @@ public class NewEventDetailsActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addTemplateTasks() {
+        for (String task : NewEventActivity.TEMPLATE_TASKS[fromTemplateNumber]) {
+            JSONObject json = new JSONObject();
+            String eventId = String.valueOf(newEventId);
+            try {
+                json.put("name", task);
+                json.put("cost", 0);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            ServerHandler.executePost(eventId, ServerHandler.EVENT_TASKS, Profile.getCurrentProfile().getId(), "", json, j -> {
+                if (j != null)
+                    SplitAppLogger.writeLog(1, "Post new Task on event Creation (RESULT): " + j.toString());
+            });
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

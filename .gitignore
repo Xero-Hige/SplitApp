@@ -16,6 +16,8 @@ out/
 # Gradle files
 .gradle/
 build/
+.idea/
+app/google-services.json
 
 # Local configuration file (sdk path, etc)
 local.properties

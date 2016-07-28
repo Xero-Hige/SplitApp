@@ -74,7 +74,9 @@ public class NewTaskDialogFragment extends DialogFragment {
 
         image.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(getActivity(), AttendesActivity.class);
+            String event_string = String.valueOf(event_id);
             friendListIntent.putExtra(AttendesActivity.COMING_FROM_TASK, true);
+            friendListIntent.putExtra("id", event_string);
             startActivityForResult(friendListIntent, NEW_TASK_REQUEST);
         });
 

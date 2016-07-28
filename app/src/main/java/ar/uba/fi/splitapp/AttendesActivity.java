@@ -23,17 +23,16 @@ import java.util.concurrent.CountDownLatch;
 public class AttendesActivity extends AppCompatActivity {
 
     public static final String COMING_FROM_TASK = "task";
-
-    private boolean coming_from_task;
-
     LinkedList<String> lista = new LinkedList<>();
+    String id_event = "error";
+    private boolean coming_from_task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookManager.checkInit(this);
 
         Intent intent = getIntent();
-        coming_from_task = intent.getBooleanExtra(COMING_FROM_TASK,false);
+        coming_from_task = intent.getBooleanExtra(COMING_FROM_TASK, false);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_chooser);
@@ -48,24 +47,29 @@ public class AttendesActivity extends AppCompatActivity {
             return;
         }
 
-        ServerHandler.executeGet(ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", result -> {
-            SplitAppLogger.writeLog(1, "Agus Respondio");
+        Bundle id = getIntent().getExtras();
+        if (id != null) {
+            id_event = id.getString("id");
+        }
+        SplitAppLogger.writeLog(1, "ID ES: " + id_event);
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", result -> {
+
             //onSucces.execute(result);
             if (result == null) {
                 SplitAppLogger.writeLog(1, "ERROR EN LECUTRA");
                 //onError.execute(null);
             } else try {
-                JSONArray events = result.getJSONArray("data");
-                JSONObject event1 = events.getJSONObject(0);
-                JSONArray attendees = event1.getJSONArray("invitees");
 
-                SplitAppLogger.writeLog(1, "Tengo cantidad: " + attendees.length());
+                JSONObject event = result.getJSONObject("data");
+                JSONArray attendees = event.getJSONArray("invitees");
 
                 for (int i = 0; i < attendees.length(); i++) {
                     String fb_id = attendees.getJSONObject(i).getString("facebook_id");
 //                    SplitAppLogger.writeLog(1,"Mi FB id es: " + fb_id);
                     lista.push(fb_id);
                 }
+
+                SplitAppLogger.writeLog(1, "Tengo cantidad: " + lista.size());
             } catch (JSONException e) {
                 //onError.execute(null);
                 e.printStackTrace();
@@ -76,68 +80,60 @@ public class AttendesActivity extends AppCompatActivity {
 
             FacebookManager.executeWithFriendlist(Profile.getCurrentProfile().getId(), (names, ids) ->
                 {
-                    for (int i = 0; i < names.size(); i++) {
-                        View friendLayout = inflater.inflate(R.layout.friend_see_layout, null);
+                        addFriendLayout(friends, inflater, Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
+                        for (int i = 0; i < names.size(); i++) {
+                            String text = names.get(i);
+                            String userId = ids.get(i);
 
-                        TextView name = (TextView) friendLayout.findViewById(R.id.friend_name);
-                        name.setText(names.get(i));
-
-                        CircularImageView image = (CircularImageView) friendLayout.findViewById(R.id.friend_chooser_pic);
-                        FacebookManager.fillWithUserPic(ids.get(i), image, getApplicationContext());
-
-                        ImageView background = (ImageView) friendLayout.findViewById(R.id.friend_background);
-                        FacebookManager.fillWithUserCover(ids.get(i), background, getApplicationContext());
-
-                        final int finalI = i;
-                        friendLayout.setOnClickListener(v -> {
-                            if (coming_from_task) {
-                                System.out.println("COMING FROM TASK");
-
-                                Intent resultIntent = new Intent();
-                                resultIntent.putExtra(NewTaskDialogFragment.FACEBOOK_ID, ids.get(finalI));
-                                resultIntent.putExtra(NewTaskDialogFragment.NAME_FRIEND , names.get(finalI));
-                                setResult(Activity.RESULT_OK, resultIntent);
-                                System.out.println("FACEBOOKID: "+ ids.get(finalI));
-                                NewTaskDialogFragment.facebook_id = ids.get(finalI);
-                                NewTaskDialogFragment.name_friend = names.get(finalI);
-                                finish();
-
-                            } else {
-                                Utility.showMessage(names.get(finalI), Utility.getViewgroup(this));
-                                Intent chat = new Intent(this, ChatSessionActivity.class);
-                                chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_ID, ids.get(finalI));
-                                chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_NAME, names.get(finalI));
-                                startActivity(chat);
-                            }
-                            //finish();
-                        });
-
-//                        SplitAppLogger.writeLog(1,"A Comparar 1: " + Profile.getCurrentProfile().getId());
-//                        SplitAppLogger.writeLog(1,"A Comparar 2: " + ids.get(i));
-
-                        SplitAppLogger.writeLog(1, "Cantidad de elementos: " + lista.size());
-
-//                            for (int j = 0; j < lista.size(); j++) {
-//                                SplitAppLogger.writeLog(1, "Elemento de la lista comparando: " + lista.get(j));
-//                                if (lista.get(j) == Profile.getCurrentProfile().getId()) {
-//                                    friends.addView(friendLayout);
-//                                    SplitAppLogger.writeLog(1, "Contengo pero no agregue");
-//                                } else if (lista.get(j) == ids.get(i)) {
-//                                    friends.addView(friendLayout);
-//                                    SplitAppLogger.writeLog(1, "Contengo pero no agregue 2");
-//                                }
-//                            }
-
-                        SplitAppLogger.writeLog(1, "En la lista hay " + lista.size());
-                        if (lista.contains(Profile.getCurrentProfile().getId())
-                                || lista.contains(ids.get(i))) {
-                            friends.addView(friendLayout);
-                            SplitAppLogger.writeLog(1, "Contengo pero no agregue");
+                            addFriendLayout(friends, inflater, text, userId);
                         }
-                    }
                 }
             );
         });
+    }
+
+    private void addFriendLayout(LinearLayout friends, LayoutInflater inflater, String text, String userId) {
+
+        View friendLayout = inflater.inflate(R.layout.friend_see_layout, null);
+
+        TextView name = (TextView) friendLayout.findViewById(R.id.friend_name);
+
+        name.setText(text);
+
+
+        CircularImageView image = (CircularImageView) friendLayout.findViewById(R.id.friend_chooser_pic);
+        FacebookManager.fillWithUserPic(userId, image, getApplicationContext());
+
+        ImageView background = (ImageView) friendLayout.findViewById(R.id.friend_background);
+        FacebookManager.fillWithUserCover(userId, background, getApplicationContext());
+
+        friendLayout.setOnClickListener(v -> {
+            if (coming_from_task) {
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(NewTaskDialogFragment.FACEBOOK_ID, userId);
+                resultIntent.putExtra(NewTaskDialogFragment.NAME_FRIEND , text);
+                setResult(Activity.RESULT_OK, resultIntent);
+                NewTaskDialogFragment.facebook_id = userId;
+                NewTaskDialogFragment.name_friend = text;;
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+
+            } else {
+                Utility.showMessage(text, Utility.getViewgroup(this));
+                Intent chat = new Intent(this, ChatSessionActivity.class);
+                chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_ID, userId);
+                chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_NAME, text);
+                startActivity(chat);
+            }
+            //finish();
+        });
+
+        SplitAppLogger.writeLog(1, "En la lista hay " + lista.size());
+        if (lista.contains(userId)) {
+            friends.addView(friendLayout);
+            SplitAppLogger.writeLog(1, "Contengo pero no agregue");
+        }
     }
 
 }
