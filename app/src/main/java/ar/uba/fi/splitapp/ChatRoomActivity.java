@@ -197,7 +197,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         FacebookManager.fillWithUserPic(userId, imageView, getApplicationContext());
 
         TextView nameTextView = (TextView) layout.findViewById(R.id.chat_user_name);
-        nameTextView.setText(username + ":");
+        nameTextView.setText(username + "");
 
         TextView msgTextView = (TextView) layout.findViewById(R.id.chat_user_msg);
         msgTextView.setText(message);
