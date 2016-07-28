@@ -215,13 +215,13 @@ public final class ServerHandler {
             SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
             return null;
         } catch (HttpClientErrorException e) {
-            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage());
+            SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Client error: " + e.getMessage() + " Result: " + e.getResponseBodyAsString());
             return null;
         } catch (ResourceAccessException e) {
             SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Failed to connect: " + e.getMessage());
             return null;
         }
-        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End POST " + queryUrl);
+        SplitAppLogger.writeLog(SplitAppLogger.NET_INFO, "End POST " + queryUrl + result);
 
         SplitAppLogger.writeLog(SplitAppLogger.DEBG, "POST result: \n" + result);
 
