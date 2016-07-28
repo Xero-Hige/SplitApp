@@ -186,27 +186,25 @@ public class EventDescriptionActivity extends AppCompatActivity {
             price.setVisibility(View.GONE);
             done.setChecked(false);
 
-            if (isFinalized()) {
-                done.setEnabled(false);
-                price_in.setEnabled(false);
-                price.setEnabled(false);
-            } else {
-                done.setOnClickListener(v -> {
-                    if (!done.isChecked()) {
-                        price_in.setText("");
-                        price.setText("");
-                        price_in.setVisibility(View.VISIBLE);
-                        price.setVisibility(View.GONE);
-                        done.setChecked(false);
-                    } else {
-                        String settled_price = price_in.getText().toString();
-                        price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
-                        price_in.setVisibility(View.GONE);
-                        price.setVisibility(View.VISIBLE);
-                        done.setChecked(true);
+            done.setOnClickListener(v -> {
+                if (!done.isChecked()) {
+                    price_in.setText("");
+                    price.setText("");
+                    price_in.setVisibility(View.VISIBLE);
+                    price.setVisibility(View.GONE);
+                    done.setChecked(false);
+                } else {
+                    String settled_price = price_in.getText().toString();
+                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                    price_in.setVisibility(View.GONE);
+                    price.setVisibility(View.VISIBLE);
+                    done.setChecked(true);
+                    if (isFinalized()) {
+                        done.setEnabled(false);
+                        done.setOnClickListener(u -> {});
                     }
-                });
-            }
+                }
+            });
 
 
             CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
