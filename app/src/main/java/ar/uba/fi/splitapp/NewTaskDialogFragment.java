@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.pkmmte.view.CircularImageView;
 
 import org.json.JSONException;
@@ -32,6 +33,7 @@ public class NewTaskDialogFragment extends DialogFragment {
     public static final String FACEBOOK_ID = "facebook_id";
 
     private String facebook_id;
+    private CircularImageView image;
 
 
     @Override
@@ -41,6 +43,7 @@ public class NewTaskDialogFragment extends DialogFragment {
             case (0) : {
                 if (resultCode == Activity.RESULT_OK) {
                     facebook_id = data.getStringExtra(FACEBOOK_ID);
+                    FacebookManager.fillWithUserPic(facebook_id, image, getContext());
                 }
                 break;
             }
@@ -60,13 +63,13 @@ public class NewTaskDialogFragment extends DialogFragment {
         // Pass null as the parent view because its going in the dialog layout
         builder.setTitle("Nueva Tarea");
         ImageView imagenAmigos = (ImageView)promptView.findViewById(R.id.image_button_asignee);
-        CircularImageView image = (CircularImageView) promptView.findViewById(R.id.asignee_pic);
+        image = (CircularImageView) promptView.findViewById(R.id.asignee_pic);
         imagenAmigos.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(getActivity(), AttendesActivity.class);
             friendListIntent.putExtra(AttendesActivity.COMING_FROM_TASK, true);
             startActivityForResult(friendListIntent, 0);
         });
-        FacebookManager.fillWithUserPic(facebook_id, image, getContext());
+        //FacebookManager.fillWithUserPic(facebook_id, image, getContext());
 
 
 
@@ -83,7 +86,7 @@ public class NewTaskDialogFragment extends DialogFragment {
                         String nameTask = ((EditText)((Dialog)dialog).findViewById(R.id.name_new_task)).getText().toString();
 
                         try {
-                            obj.put("asignee", facebook_id);
+                            obj.put("assignee", facebook_id);
                             obj.put("name", nameTask);
                             obj.put("cost", 0);
                         } catch (JSONException e) {
@@ -92,7 +95,7 @@ public class NewTaskDialogFragment extends DialogFragment {
                         System.out.println(obj);
 
 
-                        ServerHandler.executePost(String.valueOf(event_id),ServerHandler.EVENT_TASKS, obj, result -> {
+                        ServerHandler.executePost(String.valueOf(event_id),ServerHandler.EVENT_TASKS, Profile.getCurrentProfile().getId(), "", obj, result -> {
                             //onSucces.execute(result);
                             if (result == null) {
                                 //onError.execute(null);
