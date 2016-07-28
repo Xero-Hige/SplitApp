@@ -77,9 +77,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ArrayList<String> inviteesID;
     private ArrayList<String> newInviteesID;
 
-
     int FRIEND_CHOOSER_REQUEST = 0;
-
+    private String[] mAttendees;
+    private String mEventName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +95,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(eventMain, 0);
-            }
+        toolbar.setNavigationOnClickListener(view -> {
+            Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(eventMain, 0);
         });
 
 
@@ -119,12 +116,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
             if (result == null) {
                 //onError.execute(null);
             } else try {
-                JSONObject events = result.getJSONObject("data");
+                JSONObject eventJson = result.getJSONObject("data");
 
-                getSupportActionBar().setTitle(events.getString("name"));
-                //toolbar.setTitle(events.getString("name"));
+                mEventName = eventJson.getString("name");
+                getSupportActionBar().setTitle(mEventName);
 
-                String date_str = events.getString("when");
+                //toolbar.setTitle(mEventJson.getString("name"));
+
+                String date_str = eventJson.getString("when");
                 Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
                 this.when = date_class;
                 SplitAppLogger.writeLog(1, "WHEN seteado");
@@ -138,15 +137,16 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 date.setText(dateWithoutTime);
                 time.setText(justTime);
-
-                JSONArray attendees = null;
-                    attendees = events.getJSONArray("invitees");
+                
+                JSONArray attendees = eventJson.getJSONArray("invitees");
                 String cant_part = attendees.length() + " personas invitadas";
                 invitees.setText(cant_part);
                 for (int i = 0; i < attendees.length(); i++) {
                         String fb_id = attendees.getJSONObject(i).getString("facebook_id");
                         inviteesID.add(fb_id);
                 }
+
+                setAttendeesList(attendees);
 
             } catch (JSONException e) {
                 //onError.execute(null);
@@ -155,6 +155,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void setAttendeesList(JSONArray attendees) throws JSONException {
+        SplitAppLogger.writeLog(SplitAppLogger.DEBG, attendees.toString());
+        ArrayList<String> attendes = new ArrayList<>();
+        for (int i = 0; i < attendees.length(); i++) {
+            String id = attendees.getJSONObject(i).getString("facebook_id");
+            SplitAppLogger.writeLog(SplitAppLogger.DEBG, id);
+            if (!id.equals(Profile.getCurrentProfile().getId())) {
+                attendes.add(id);
+            }
+        }
+        mAttendees = attendes.toArray(new String[attendes.size()]);
     }
 
     @Override
@@ -486,8 +499,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_chat) {
             Intent intent = new Intent(this, ChatRoomActivity.class);
-            intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_IDS, Profile.getCurrentProfile().getId());
+            intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_IDS, mAttendees);
             intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_NAMES, Profile.getCurrentProfile().getFirstName());
+            intent.putExtra(ChatRoomActivity.EXTRA_GROUP_NAME, mEventName);
             startActivity(intent);
         }
         if (id == R.id.action_add_task) {
