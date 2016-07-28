@@ -206,21 +206,7 @@ public final class MockServer {
                     break;
                 case 2:
                     try {
-                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 3:
-                    try {
-                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 4:
-                    try {
-                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
+                        addGResponse1(mFriendList[(2 % mFriendList.length)], "");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
