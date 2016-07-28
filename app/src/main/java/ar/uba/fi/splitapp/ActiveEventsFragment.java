@@ -43,7 +43,7 @@ public class ActiveEventsFragment extends Fragment {
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
 
 
-        ServerHandler.executeGet(ServerHandler.EVENT_LIST,  Profile.getCurrentProfile().getId(), "", result -> {
+        ServerHandler.executeGet(ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
             if (result == null) {
                 //onError.execute(null);

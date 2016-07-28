@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -20,7 +19,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.pkmmte.view.CircularImageView;
 
-public class EventInvitationList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class EventInvitationList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
