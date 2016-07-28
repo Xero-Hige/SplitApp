@@ -38,36 +38,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EventDescriptionActivity extends AppCompatActivity {
-
-    String json_prop = "{\n" +
-            "      \"name\": \"asd\",\n" +
-            "      \"when\": \"2016-07-25 19:30:00\",\n" +
-            "      \"when_iso\": \"2016-07-25T19:30:00-03:00\",\n" +
-            "      \"lat\": -53.04,\n" +
-            "      \"long\": -53.04,\n" +
-            "      \"invitees\": [\n" +
-            "        {\n" +
-            "          \"facebook_id\": 231231231\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"facebook_id\": 244\n" +
-            "        }\n" +
-            "      ],\n" +
-            "      \"tasks\": [\n" +
-            "        {\n" +
-            "          \"assignee\": 231231231,\n" +
-            "          \"name\": \"COMPRAR PAN\",\n" +
-            "          \"cost\": 4.50,\n" +
-            "          \"done\": true\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"assignee\": 231231231,\n" +
-            "          \"name\": \"COMPRAR PAN\",\n" +
-            "          \"cost\": 0,\n" +
-            "          \"done\": false\n" +
-            "        }\n" +
-            "      ]\n" +
-            "    }";
+    public static final String FACEBOOK_ID = "facebook_id";
+    public static final String NAME_FRIEND = "name_friend";
+    int FRIEND_CHOOSER_REQUEST = 0;
+    int NEW_TASK_REQUEST = 1;
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
@@ -76,14 +50,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ArrayList<String> inviteesID;
     private ArrayList<String> newInviteesID = new ArrayList<>();
     private NewTaskDialogFragment newTaskFragment;
-
-    int FRIEND_CHOOSER_REQUEST = 0;
-    int NEW_TASK_REQUEST = 1;
-
     private String[] mAttendees;
     private String mEventName;
-    public static final String FACEBOOK_ID = "facebook_id";
-    public static final String NAME_FRIEND = "name_friend";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -536,13 +504,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 e.printStackTrace();
                 SplitAppLogger.writeLog(1, "Agarre excepcion aca");
             }
-
-        int tareas = cant_tareas.length();
-        SplitAppLogger.writeLog(1, cant_tareas.toString());
-        SplitAppLogger.writeLog(1, Integer.toString(tareas));
-        for (int i = 0; i < tareas; i++) {
-            View templateItem = inflater.inflate(R.layout.task_status_layout, null);
         });
+    }
 
 
             /*View templateItem = inflater.inflate(R.layout.task_status_layout, null);
@@ -574,7 +537,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
             templates.addView(templateItem);
         }*/
-    }
+
 
     private void addExpandables() {
         mMyTasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
