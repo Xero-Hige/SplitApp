@@ -75,6 +75,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Date when;
     private String id_event = "error";
     private String[] mAttendees;
+    private String mEventName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,12 +111,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
             if (result == null) {
                 //onError.execute(null);
             } else try {
-                JSONObject events = result.getJSONObject("data");
+                JSONObject eventJson = result.getJSONObject("data");
 
-                getSupportActionBar().setTitle(events.getString("name"));
-                //toolbar.setTitle(events.getString("name"));
+                mEventName = eventJson.getString("name");
+                getSupportActionBar().setTitle(mEventName);
 
-                String date_str = events.getString("when");
+                //toolbar.setTitle(mEventJson.getString("name"));
+
+                String date_str = eventJson.getString("when");
                 Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
                 this.when = date_class;
                 SplitAppLogger.writeLog(1, "WHEN seteado");
@@ -130,7 +133,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 date.setText(dateWithoutTime);
                 time.setText(justTime);
 
-                JSONArray attendees = events.getJSONArray("invitees");
+                JSONArray attendees = eventJson.getJSONArray("invitees");
                 String cant_part = attendees.length() + " personas invitadas";
                 invitees.setText(cant_part);
 
@@ -489,6 +492,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ChatRoomActivity.class);
             intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_IDS, mAttendees);
             intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_NAMES, Profile.getCurrentProfile().getFirstName());
+            intent.putExtra(ChatRoomActivity.EXTRA_GROUP_NAME, mEventName);
             startActivity(intent);
         }
         if (id == R.id.action_add_task) {
