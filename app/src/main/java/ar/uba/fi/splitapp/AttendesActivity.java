@@ -1,5 +1,6 @@
 package ar.uba.fi.splitapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +22,18 @@ import java.util.concurrent.CountDownLatch;
 
 public class AttendesActivity extends AppCompatActivity {
 
+    public static final String COMING_FROM_TASK = "task";
+
+    private boolean coming_from_task;
+
     LinkedList<String> lista = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookManager.checkInit(this);
+
+        Intent intent = getIntent();
+        coming_from_task = intent.getBooleanExtra(COMING_FROM_TASK,false);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_chooser);
@@ -82,11 +90,20 @@ public class AttendesActivity extends AppCompatActivity {
 
                         final int finalI = i;
                         friendLayout.setOnClickListener(v -> {
-                            Utility.showMessage(names.get(finalI), Utility.getViewgroup(this));
-                            Intent chat = new Intent(this, ChatSessionActivity.class);
-                            chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_ID, ids.get(finalI));
-                            chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_NAME, names.get(finalI));
-                            startActivity(chat);
+                            if (coming_from_task) {
+
+                                Intent resultIntent = new Intent();
+                                resultIntent.putExtra(NewTaskDialogFragment.FACEBOOK_ID, ids.get(finalI));
+                                setResult(Activity.RESULT_OK, resultIntent);
+                                finish();
+
+                            } else {
+                                Utility.showMessage(names.get(finalI), Utility.getViewgroup(this));
+                                Intent chat = new Intent(this, ChatSessionActivity.class);
+                                chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_ID, ids.get(finalI));
+                                chat.putExtra(ChatSessionActivity.EXTRA_FRIEND_NAME, names.get(finalI));
+                                startActivity(chat);
+                            }
                             //finish();
                         });
 

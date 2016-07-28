@@ -60,7 +60,7 @@ public final class ServerHandler {
     private static final String EVENT_DETAIL_BASE_URL = "events";
     private static final String EVENT_DETAIL_MOD_URL = "";
     private static final String EVENT_TASKS_BASE_URL = "events";
-    private static final String EVENT_TASKS_MOD_URL = "/eventTask";
+    private static final String EVENT_TASKS_MOD_URL = "/tasks";
     private static final String EVENT_INVITEE_BASE_URL = "events";
     private static final String EVENT_INVITEE_MOD_URL = "/eventInvitee";
     private static final String EVENT_TRANSACTION_BASE_URL = "events";

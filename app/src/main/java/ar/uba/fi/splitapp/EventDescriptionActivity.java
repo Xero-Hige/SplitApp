@@ -1,7 +1,13 @@
 package ar.uba.fi.splitapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -67,6 +73,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
+    private String id_event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +103,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         */
 
         Bundle event_id_passed = getIntent().getExtras();
-        String id_event = "error";
+        id_event = "error";
         if (event_id_passed != null) {
             id_event = event_id_passed.getString("id");
         }
@@ -414,13 +421,16 @@ public class EventDescriptionActivity extends AppCompatActivity {
             intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_NAMES, Profile.getCurrentProfile().getFirstName());
             startActivity(intent);
         }
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, WhereToBuyActivity.class); // TODO: Mover al menu de la tarea
-            startActivity(intent);
-//            return true;
+        if (id == R.id.action_add_task) {
+            NewTaskDialogFragment newTaskFragment = new NewTaskDialogFragment();
+            newTaskFragment.event_id = Integer.parseInt(id_event);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            newTaskFragment.show(fragmentManager,"newTask");
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }
