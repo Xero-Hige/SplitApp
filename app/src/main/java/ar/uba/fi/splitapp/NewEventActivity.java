@@ -11,6 +11,14 @@ import android.widget.TextView;
 
 public class NewEventActivity extends AppCompatActivity {
 
+    static final String[] TEMPLATE_NAMES = {"Evento vacío", "Asado con amigos", "Reunión laboral", "Cumpleaños"};
+    static final String[][] TEMPLATE_TASKS = {
+            {},
+            {"Carne", "Coca", "Birra", "Helado"},
+            {"Medialunas", "Coffee", "Leche", "Mate", "Galletitas"},
+            {"Torta", "Bebidas", "Velitas", "Snacks"}
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookManager.checkInit(this);
@@ -23,25 +31,30 @@ public class NewEventActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(eventMain, 0);
-            }
+        toolbar.setNavigationOnClickListener(view -> {
+            Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(eventMain, 0);
         });
 
-        LinearLayout templates = (LinearLayout) findViewById(R.id.eventTemplateList);
+        displayTemplates();
+    }
 
+
+    private void displayTemplates() {
+        LinearLayout templates = (LinearLayout) findViewById(R.id.eventTemplateList);
         LayoutInflater inflater = LayoutInflater.from(this);
-        for (int i = 1; i < 21; i++) {
+
+        for (int i = 0; i < TEMPLATE_NAMES.length; i++) {
+            String templateName = TEMPLATE_NAMES[i];
             View templateItem = inflater.inflate(R.layout.event_template_item, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.template_name);
-            text.setText("Template #" + String.valueOf(i));
+            text.setText(templateName);
 
+            final int finalI = i;
             templateItem.setOnClickListener(v -> {
                 Intent eventDetail = new Intent(NewEventActivity.this, NewEventDetailsActivity.class);
+                eventDetail.putExtra("fromTemplateNumber", finalI);
                 startActivity(eventDetail);
             });
 
