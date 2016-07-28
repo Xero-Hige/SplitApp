@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@color/icons_T"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:paddingBottom="3dp"
+    android:paddingTop="3dp">
+
+    <TextView
+        android:id="@+id/task_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="Coca-Cola en JUMBO \n ¡Super Promo!"
+        android:textAlignment="center"
+        android:clickable="true"
+        android:onClick="adTaskClick"
+        android:textColor="@color/colorPrimary_text"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

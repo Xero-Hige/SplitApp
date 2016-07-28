@@ -1,6 +1,7 @@
 package ar.uba.fi.splitapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -200,6 +201,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
+        addAdTask(templates, inflater);
         for (int i = 1; i < 4; i++) {
             View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
@@ -243,6 +245,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
             templates.addView(templateItem);
         }
+    }
+
+    private void addAdTask(LinearLayout templates, LayoutInflater inflater) {
+        View templateItem = inflater.inflate(R.layout.ad_task_layout, null);
+        templates.addView(templateItem);
+    }
+
+    public void adTaskClick(View v) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        intent.setData(Uri.parse("https://www.jumbo.com.ar/Comprar/Home.aspx?#_atCategory=false&_atGrilla=true&_query=coca"));
+        startActivity(intent);
     }
 
     private void addPopUpMyTask(int i, View templateItem) {
