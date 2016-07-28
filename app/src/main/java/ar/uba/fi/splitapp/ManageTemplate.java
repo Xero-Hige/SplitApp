@@ -102,8 +102,9 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
             Intent newEventIntent = new Intent(ManageTemplate.this, NewEventActivity.class);
             startActivity(newEventIntent);
         } else if (id == R.id.nav_gallery) {
-            Intent newMainMenuIntent = new Intent(ManageTemplate.this, NewEventActivity.class);
+            Intent newMainMenuIntent = new Intent(ManageTemplate.this, MainActivity.class);
             startActivity(newMainMenuIntent);
+            finish();
         } else if (id == R.id.nav_invitees) {
             Intent invitees = new Intent(ManageTemplate.this, EventInvitationList.class);
             startActivity(invitees);
