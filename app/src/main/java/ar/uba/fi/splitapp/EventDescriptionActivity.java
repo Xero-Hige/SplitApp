@@ -68,8 +68,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             "        },\n" +
             "      ]\n" +
             "    }";
-
-
+    int FRIEND_CHOOSER_REQUEST = 0;
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
@@ -77,8 +76,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private String id_event = "error";
     private ArrayList<String> inviteesID;
     private ArrayList<String> newInviteesID = new ArrayList<>();
-
-    int FRIEND_CHOOSER_REQUEST = 0;
     private String[] mAttendees;
     private String mEventName;
 
@@ -181,7 +178,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         viewFriends();
 
-        ExpandableLinearLayout expandTemplate = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
+        LinearLayout expandTemplate = (LinearLayout) findViewById(R.id.my_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
         setMyTasks(expandTemplate, inflater);
@@ -467,7 +464,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
     private void addTaskStatus() {
-        LinearLayout templates = (LinearLayout) findViewById(R.id.expandable_all_tasks);
+        LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
         JSONArray cant_tareas;
