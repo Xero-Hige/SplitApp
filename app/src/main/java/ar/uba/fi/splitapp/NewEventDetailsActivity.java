@@ -23,16 +23,20 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class NewEventDetailsActivity extends AppCompatActivity {
 
+    int FRIEND_CHOOSER_REQUEST = 0;
     int PLACE_PICKER_REQUEST = 1;
     private TextView mDateTV;
     private TextView mTimeTV;
@@ -45,6 +49,7 @@ public class NewEventDetailsActivity extends AppCompatActivity {
     };
     private Place selectedPlace;
     private TextView mLocationLabel;
+    private List<String> invitees = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +63,14 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent eventNew = new Intent(getApplicationContext(), NewEventActivity.class);
-                startActivityForResult(eventNew, 0);
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                SplitAppLogger.writeLog(1, "ENTRA EN ESTE FORRO");
+//                Intent eventNew = new Intent(getApplicationContext(), NewEventActivity.class);
+//                startActivityForResult(eventNew, 0);
+//            }
+//        });
 
         long dates = System.currentTimeMillis();
 
@@ -92,7 +98,7 @@ public class NewEventDetailsActivity extends AppCompatActivity {
         RelativeLayout addFriend = (RelativeLayout) findViewById(R.id.add_friend);
         addFriend.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(this, FriendChooserActivity.class);
-            startActivityForResult(friendListIntent, 0);
+            startActivityForResult(friendListIntent, FRIEND_CHOOSER_REQUEST);
         });
     }
 
@@ -145,8 +151,8 @@ public class NewEventDetailsActivity extends AppCompatActivity {
 
         if (id == R.id.action_create) {
             JSONObject obj = new JSONObject();
-            String nameEvent = ((EditText)findViewById(R.id.editText)).getText().toString();
-            String dateEvent =((TextView) findViewById(R.id.date_label)).getText().toString();
+            String nameEvent = ((EditText) findViewById(R.id.editText)).getText().toString();
+            String dateEvent = ((TextView) findViewById(R.id.date_label)).getText().toString();
             String dateString = "";
 
             try {
@@ -157,9 +163,9 @@ public class NewEventDetailsActivity extends AppCompatActivity {
             }
 
 
-            String timeEvent = (((TextView) findViewById(R.id.time_label)).getText().toString()+":00");
+            String timeEvent = (((TextView) findViewById(R.id.time_label)).getText().toString() + ":00");
             String whenEvent = dateString + " " + timeEvent;
-            String latEvent  = Double.toString(selectedPlace.getLatLng().latitude);
+            String latEvent = Double.toString(selectedPlace.getLatLng().latitude);
             String longEvent = Double.toString(selectedPlace.getLatLng().longitude);
 
             try {
@@ -167,6 +173,8 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                 obj.put("when", whenEvent);
                 obj.put("lat", latEvent);
                 obj.put("long", longEvent);
+                obj.put("invitees", new JSONArray(invitees));
+                SplitAppLogger.writeLog(1, "POST Event (JSON): " + obj.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -177,11 +185,11 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                 if (result == null) {
                     //onError.execute(null);
                 } else try {
-                        JSONObject callback = result.getJSONObject("data");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
+                    JSONObject callback = result.getJSONObject("data");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -198,6 +206,8 @@ public class NewEventDetailsActivity extends AppCompatActivity {
                 Utility.showMessage(selectedPlace.getAddress().toString() + "\n" + selectedPlace.getLatLng().toString(), Utility.getViewgroup(this));
                 mLocationLabel.setText(selectedPlace.getAddress().toString());
             }
+        } else if (requestCode == FRIEND_CHOOSER_REQUEST && resultCode == RESULT_OK) {
+            this.invitees = data.getStringArrayListExtra(FriendChooserActivity.INVITEES);
         }
     }
 
