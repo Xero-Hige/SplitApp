@@ -172,8 +172,7 @@ public class NewEventDetailsActivity extends AppCompatActivity {
             }
             System.out.println(obj);
 
-
-            ServerHandler.executePost(ServerHandler.EVENT_LIST, obj, result -> {
+            ServerHandler.executePost("", ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", obj, result -> {
                 //onSucces.execute(result);
                 if (result == null) {
                     //onError.execute(null);

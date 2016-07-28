@@ -118,7 +118,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 this.when = date_class;
                 SplitAppLogger.writeLog(1, "WHEN seteado");
                 String dateWithoutTime = new SimpleDateFormat("dd-MM-yyyy").format(date_class);
-                String justTime = new SimpleDateFormat("hh:mm").format(date_class);
+                String justTime = new SimpleDateFormat("HH:mm").format(date_class);
 
 
                 TextView date = (TextView) findViewById(R.id.date_details);

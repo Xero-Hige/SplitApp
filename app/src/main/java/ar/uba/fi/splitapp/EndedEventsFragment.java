@@ -35,9 +35,6 @@ public class EndedEventsFragment extends Fragment {
     }
 
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
-
-        SplitAppLogger.writeLog(1, "EndedEventsFragment.getEvents con fbId: " +  Profile.getCurrentProfile().getId());
-
         ServerHandler.executeGet(ServerHandler.EVENT_LIST, Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
             if (result == null) {
