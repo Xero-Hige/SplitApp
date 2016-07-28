@@ -206,7 +206,9 @@ public final class ServerHandler {
         HttpEntity<String> result;
 
         try {
-            HttpEntity<String> entity = new HttpEntity<>(body.toString(), getAuthHeader(fbId, fbToken));
+            HttpHeaders headers = getAuthHeader(fbId, fbToken);
+            headers.add("Content-Type", "application/json");
+            HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
             result = restTemplate.postForEntity(queryUrl, entity, String.class);
         } catch (HttpServerErrorException e) {
             SplitAppLogger.writeLog(SplitAppLogger.NET_ERRO, "Server error: " + e.getMessage());
