@@ -22,6 +22,8 @@ import com.facebook.Profile;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.pkmmte.view.CircularImageView;
+import com.shehabic.droppy.DroppyMenuItem;
+import com.shehabic.droppy.DroppyMenuPopup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -201,17 +203,51 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     done.setChecked(true);
                     if (isFinalized()) {
                         done.setEnabled(false);
-                        done.setOnClickListener(u -> {});
+                        done.setOnClickListener(u -> {
+                        });
                     }
                 }
             });
 
+            addPopUpMyTask(i, templateItem);
 
             CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
 
             templates.addView(templateItem);
         }
+    }
+
+    private void addPopUpMyTask(int i, View templateItem) {
+        ImageView button = (ImageView) templateItem.findViewById(R.id.my_task_setting);
+
+        DroppyMenuPopup.Builder dropdown = new DroppyMenuPopup.Builder(this, button);
+
+        dropdown.addMenuItem(new DroppyMenuItem("Tarea #" + i).setClickable(false).setId(0)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("Creada el: 25 jul.").setClickable(false).setId(0));
+        dropdown.addMenuItem(new DroppyMenuItem("Asignada a: Vos, duh").setClickable(false).setId(0));
+        dropdown.addMenuItem(new DroppyMenuItem("Creada el: 25 jul.").setClickable(false).setId(0)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("Editar", R.drawable.pencil).setClickable(false).setId(1)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("VER SUGERENCIA DE COMPRA", R.drawable.location).setClickable(true).setId(2));
+
+        dropdown.setOnClick((v, id) -> {
+            switch (id) {
+                case 0:
+                    return;
+                case 1:
+                    Utility.showMessage("Editar", Utility.getViewgroup(EventDescriptionActivity.this));
+                    return;
+                case 2:
+                    Utility.showMessage("Sugerencia", Utility.getViewgroup(EventDescriptionActivity.this));
+                    return;
+                default:
+                    SplitAppLogger.writeLog(SplitAppLogger.ERRO, "The imposible has happend: Invalid menu ID");
+            }
+        });
+
+        DroppyMenuPopup menu = dropdown.build();
+
+        button.setOnClickListener(v -> menu.show());
     }
 
     private boolean isFinalized() {

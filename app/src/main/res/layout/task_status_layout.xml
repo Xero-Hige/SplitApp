@@ -41,11 +41,11 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/settings"
+        android:layout_toStartOf="@+id/task_setting"
         android:src="@drawable/people"/>
 
     <ImageView
-        android:id="@+id/settings"
+        android:id="@+id/task_setting"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"

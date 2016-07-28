@@ -55,11 +55,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/settings"
+        android:layout_toStartOf="@+id/my_task_setting"
         android:src="@drawable/people"/>
 
     <ImageView
-        android:id="@+id/settings"
+        android:id="@+id/my_task_setting"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignBottom="@+id/task_completed"
