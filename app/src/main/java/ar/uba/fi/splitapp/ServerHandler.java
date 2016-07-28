@@ -167,8 +167,9 @@ public final class ServerHandler {
 
     private static HttpHeaders getAuthHeader(String fbId, String fbToken) {
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("X-Auth-Token", "qTp3HAouA7lei074xCMC");
-        requestHeaders.add("x-Auth-Facebook-ID", "10207483104971247");
+        requestHeaders.add("X-Auth-Token", mToken);
+        SplitAppLogger.writeLog(1, "getAuthHeader - fbId: " + fbId);
+        requestHeaders.add("x-Auth-Facebook-ID", fbId);
         requestHeaders.add("x-Auth-Facebook-Token", fbToken);
         return requestHeaders;
     }
@@ -390,13 +391,10 @@ public final class ServerHandler {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            SplitAppLogger.writeLog(SplitAppLogger.INFO, "ON POST EXECUTE");
             if (!success) {
                 SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Failed to GET data from server");
             }
-            SplitAppLogger.writeLog(SplitAppLogger.INFO, "ON POST EXECUTE 2");
             mCallbackOp.execute(mData);
-            SplitAppLogger.writeLog(SplitAppLogger.INFO, "ON POST EXECUTE 3");
         }
 
     }

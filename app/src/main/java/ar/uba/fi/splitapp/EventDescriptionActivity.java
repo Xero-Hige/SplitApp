@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EventDescriptionActivity extends AppCompatActivity {
@@ -67,6 +68,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
+    private Date when;
+    private String id_event = "error";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +99,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
         */
 
         Bundle event_id_passed = getIntent().getExtras();
-        String id_event = "error";
+        id_event = "error";
         if (event_id_passed != null) {
             id_event = event_id_passed.getString("id");
         }
-        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, "", "", result -> {
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
             if (result == null) {
                 //onError.execute(null);
@@ -112,6 +115,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 String date_str = events.getString("when");
                 Date date_class = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(date_str);
+                this.when = date_class;
+                SplitAppLogger.writeLog(1, "WHEN seteado");
                 String dateWithoutTime = new SimpleDateFormat("dd-MM-yyyy").format(date_class);
                 String justTime = new SimpleDateFormat("hh:mm").format(date_class);
 
@@ -134,7 +139,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
         addExpandables();
 
@@ -177,21 +186,27 @@ public class EventDescriptionActivity extends AppCompatActivity {
             price.setVisibility(View.GONE);
             done.setChecked(false);
 
-            done.setOnClickListener(v -> {
-                if (!done.isChecked()) {
-                    price_in.setText("");
-                    price.setText("");
-                    price_in.setVisibility(View.VISIBLE);
-                    price.setVisibility(View.GONE);
-                    done.setChecked(false);
-                } else {
-                    String settled_price = price_in.getText().toString();
-                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
-                    price_in.setVisibility(View.GONE);
-                    price.setVisibility(View.VISIBLE);
-                    done.setChecked(true);
-                }
-            });
+            if (isFinalized()) {
+                done.setEnabled(false);
+                price_in.setEnabled(false);
+                price.setEnabled(false);
+            } else {
+                done.setOnClickListener(v -> {
+                    if (!done.isChecked()) {
+                        price_in.setText("");
+                        price.setText("");
+                        price_in.setVisibility(View.VISIBLE);
+                        price.setVisibility(View.GONE);
+                        done.setChecked(false);
+                    } else {
+                        String settled_price = price_in.getText().toString();
+                        price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                        price_in.setVisibility(View.GONE);
+                        price.setVisibility(View.VISIBLE);
+                        done.setChecked(true);
+                    }
+                });
+            }
 
 
             CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
@@ -199,6 +214,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
             templates.addView(templateItem);
         }
+    }
+
+    private boolean isFinalized() {
+        if (this.when == null) {
+            SplitAppLogger.writeLog(1, "WHEN sin setear");
+            return false;
+        }
+        Calendar cal = Calendar.getInstance();
+        Date now = new Date();
+        cal.setTime(this.when);
+        cal.add(Calendar.HOUR_OF_DAY, 12);
+        Date finalizeDate = cal.getTime();
+        return now.after(finalizeDate);
     }
 
     private void setSettle(LinearLayout templates, LayoutInflater inflater, String event_id) {
