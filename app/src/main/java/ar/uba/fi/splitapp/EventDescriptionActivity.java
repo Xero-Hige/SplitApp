@@ -109,13 +109,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 date.setText(dateWithoutTime);
                 time.setText(justTime);
-                
+
                 JSONArray attendees = eventJson.getJSONArray("invitees");
                 String cant_part = attendees.length() + " personas invitadas";
                 invitees.setText(cant_part);
                 for (int i = 0; i < attendees.length(); i++) {
-                        String fb_id = attendees.getJSONObject(i).getString("facebook_id");
-                        inviteesID.add(fb_id);
+                    String fb_id = attendees.getJSONObject(i).getString("facebook_id");
+                    inviteesID.add(fb_id);
                 }
 
                 setAttendeesList(attendees);
@@ -167,7 +167,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         imagenAmigos.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(this, AttendesActivity.class);
-            friendListIntent.putExtra("id",id_event);
+            friendListIntent.putExtra("id", id_event);
             startActivityForResult(friendListIntent, 0);
         });
     }
@@ -228,9 +228,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 JSONArray tasks = eventJson.getJSONArray("tasks");
 
-                SplitAppLogger.writeLog(1,tasks.toString());
+                SplitAppLogger.writeLog(1, tasks.toString());
 
-                SplitAppLogger.writeLog(1,"Cant de elementos: " + tasks.length());
+                SplitAppLogger.writeLog(1, "Cant de elementos: " + tasks.length());
                 for (int i = 0; i < tasks.length(); i++) {
                     View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
@@ -295,14 +295,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                     CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
                     FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
-
-                    templates.addView(templateItem);
+                    if (fb_id.equals(Profile.getCurrentProfile().getId())) {
+                        templates.addView(templateItem);
+                    }
                 }
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                SplitAppLogger.writeLog(1,"Agarre excepcion aca");
+                SplitAppLogger.writeLog(1, "Agarre excepcion aca");
             }
 
         });
@@ -508,6 +509,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
 
+
             /*View templateItem = inflater.inflate(R.layout.task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);
@@ -632,7 +634,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_add_people) {
             Intent friendChooser = new Intent(this, FriendChooserActivity.class);
-            friendChooser.putExtra(FriendChooserActivity.FROM_CURRENT_EVENT,true);
+            friendChooser.putExtra(FriendChooserActivity.FROM_CURRENT_EVENT, true);
             friendChooser.putStringArrayListExtra(FriendChooserActivity.ALREADY_INVITED, inviteesID);
             startActivityForResult(friendChooser, FRIEND_CHOOSER_REQUEST);
             return true;
@@ -643,7 +645,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FRIEND_CHOOSER_REQUEST && resultCode == RESULT_OK) {
             newInviteesID = data.getStringArrayListExtra(FriendChooserActivity.INVITEES);
 
@@ -668,11 +670,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        } else if (requestCode == NEW_TASK_REQUEST && resultCode == RESULT_OK){
+        } else if (requestCode == NEW_TASK_REQUEST && resultCode == RESULT_OK) {
             System.out.println("HERE");
             String facebook_id = data.getStringExtra(FACEBOOK_ID);
-            String name  = data.getStringExtra(NAME_FRIEND);
-            newTaskFragment.setPersonToTask(facebook_id,name);
+            String name = data.getStringExtra(NAME_FRIEND);
+            newTaskFragment.setPersonToTask(facebook_id, name);
         }
     }
 
