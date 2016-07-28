@@ -196,12 +196,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         imagenAmigos.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(this, AttendesActivity.class);
+            friendListIntent.putExtra("id",id_event);
             startActivityForResult(friendListIntent, 0);
         });
     }
 
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
         addAdTask(templates, inflater);
+
         for (int i = 1; i < 4; i++) {
             View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
@@ -245,6 +247,82 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
             templates.addView(templateItem);
         }
+
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONObject eventJson = result.getJSONObject("data");
+
+                JSONArray tasks = eventJson.getJSONArray("tasks");
+
+                SplitAppLogger.writeLog(1,tasks.toString());
+
+                SplitAppLogger.writeLog(1,"Cant de elementos: " + tasks.length());
+                for (int i = 0; i < tasks.length(); i++) {
+                    View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
+
+                    JSONObject task = tasks.getJSONObject(i);
+                    String name, fb_id;
+                    boolean done_bool;
+                    Double cost;
+
+                    name = task.getString("name");
+                    fb_id = task.getString("assignee");
+                    done_bool = task.getBoolean("done");
+                    cost = task.getDouble("cost");
+
+                    SplitAppLogger.writeLog(1,"Nombre: " + name);
+                    TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+                    text.setText(name);
+
+                    EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
+                    TextView price = (TextView) templateItem.findViewById(R.id.price);
+
+                    CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
+
+                    price_in.setVisibility(View.VISIBLE);
+                    price.setVisibility(View.GONE);
+                    done.setChecked(false);
+
+                    done.setOnClickListener(v -> {
+                        if (!done.isChecked()) {
+                            price_in.setText("");
+                            price.setText("");
+                            price_in.setVisibility(View.VISIBLE);
+                            price.setVisibility(View.GONE);
+                            done.setChecked(false);
+                        } else {
+                            String settled_price = price_in.getText().toString();
+                            price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                            price_in.setVisibility(View.GONE);
+                            price.setVisibility(View.VISIBLE);
+                            done.setChecked(true);
+                            if (isFinalized()) {
+                                done.setEnabled(false);
+                                done.setOnClickListener(u -> {
+                                });
+                            }
+                        }
+                    });
+
+                    addPopUpMyTask(i, templateItem);
+
+                    CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+                    FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
+
+                    templates.addView(templateItem);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                SplitAppLogger.writeLog(1,"Agarre excepcion aca");
+            }
+
+        });
+
     }
 
     private void addAdTask(LinearLayout templates, LayoutInflater inflater) {

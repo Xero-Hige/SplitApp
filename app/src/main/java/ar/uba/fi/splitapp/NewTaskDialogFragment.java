@@ -67,6 +67,8 @@ public class NewTaskDialogFragment extends DialogFragment {
         imagenAmigos.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(getActivity(), AttendesActivity.class);
             friendListIntent.putExtra(AttendesActivity.COMING_FROM_TASK, true);
+            String event_string = String.valueOf(event_id);
+            friendListIntent.putExtra("id", event_string);
             startActivityForResult(friendListIntent, 0);
         });
 
