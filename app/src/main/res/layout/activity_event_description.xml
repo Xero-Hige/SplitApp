@@ -186,6 +186,7 @@
                                     android:divider="@color/colorPrimaryLight_T"
                                     android:dividerPadding="5dp"
                                     android:gravity="center"
+                                    android:minHeight="280dp"
                                     android:orientation="vertical"
                                     android:padding="10dp" />
                             </android.support.v4.widget.NestedScrollView>
@@ -254,6 +255,7 @@
                                     android:divider="@color/colorPrimaryLight_T"
                                     android:dividerPadding="5dp"
                                     android:gravity="center"
+                                    android:minHeight="280dp"
                                     android:orientation="vertical"
                                     android:padding="10dp" />
                             </android.support.v4.widget.NestedScrollView>
@@ -324,6 +326,7 @@
                                     android:divider="@color/colorPrimaryLight_T"
                                     android:dividerPadding="5dp"
                                     android:gravity="center"
+                                    android:minHeight="280dp"
                                     android:orientation="vertical"
                                     android:padding="10dp" />
                             </android.support.v4.widget.NestedScrollView>

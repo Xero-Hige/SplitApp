@@ -201,49 +201,49 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private void setMyTasks(LinearLayout templates, LayoutInflater inflater) {
         addAdTask(templates, inflater);
 
-        for (int i = 1; i < 4; i++) {
-            View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
-
-            TextView text = (TextView) templateItem.findViewById(R.id.task_name);
-            text.setText("Tarea #" + i);
-
-            EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
-            TextView price = (TextView) templateItem.findViewById(R.id.price);
-
-            CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
-
-            price_in.setVisibility(View.VISIBLE);
-            price.setVisibility(View.GONE);
-            done.setChecked(false);
-
-            done.setOnClickListener(v -> {
-                if (!done.isChecked()) {
-                    price_in.setText("");
-                    price.setText("");
-                    price_in.setVisibility(View.VISIBLE);
-                    price.setVisibility(View.GONE);
-                    done.setChecked(false);
-                } else {
-                    String settled_price = price_in.getText().toString();
-                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
-                    price_in.setVisibility(View.GONE);
-                    price.setVisibility(View.VISIBLE);
-                    done.setChecked(true);
-                    if (isFinalized()) {
-                        done.setEnabled(false);
-                        done.setOnClickListener(u -> {
-                        });
-                    }
-                }
-            });
-
-            addPopUpMyTask(i, templateItem);
-
-            CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
-            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
-
-            templates.addView(templateItem);
-        }
+//        for (int i = 1; i < 4; i++) {
+//            View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
+//
+//            TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+//            text.setText("Tarea #" + i);
+//
+//            EditText price_in = (EditText) templateItem.findViewById(R.id.price_input);
+//            TextView price = (TextView) templateItem.findViewById(R.id.price);
+//
+//            CheckBox done = (CheckBox) templateItem.findViewById(R.id.task_completed);
+//
+//            price_in.setVisibility(View.VISIBLE);
+//            price.setVisibility(View.GONE);
+//            done.setChecked(false);
+//
+//            done.setOnClickListener(v -> {
+//                if (!done.isChecked()) {
+//                    price_in.setText("");
+//                    price.setText("");
+//                    price_in.setVisibility(View.VISIBLE);
+//                    price.setVisibility(View.GONE);
+//                    done.setChecked(false);
+//                } else {
+//                    String settled_price = price_in.getText().toString();
+//                    price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+//                    price_in.setVisibility(View.GONE);
+//                    price.setVisibility(View.VISIBLE);
+//                    done.setChecked(true);
+//                    if (isFinalized()) {
+//                        done.setEnabled(false);
+//                        done.setOnClickListener(u -> {
+//                        });
+//                    }
+//                }
+//            });
+//
+//            addPopUpMyTask(i, templateItem);
+//
+//            CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+//            FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
+//
+//            templates.addView(templateItem);
+//        }
 
         ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
             //onSucces.execute(result);
@@ -270,7 +270,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     done_bool = task.getBoolean("done");
                     cost = task.getDouble("cost");
 
-                    SplitAppLogger.writeLog(1,"Nombre: " + name);
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Nombre: " + name);
                     TextView text = (TextView) templateItem.findViewById(R.id.task_name);
                     text.setText(name);
 
