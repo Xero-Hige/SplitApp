@@ -125,7 +125,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String message) {
-        MockServer.sendGroupMessage(message, mTitle);
+        MockServer.sendGroupMessage(message, mTitle, mFriendId);
     }
 
 //    private void loadOldMessages() {
@@ -175,25 +175,18 @@ public class ChatRoomActivity extends AppCompatActivity {
      * @param userId  Sender id
      */
     public void addResponse(String message, String userId) {
-        if (userId.equals(Profile.getCurrentProfile().getId())) {
-            addFriendResponse(message, Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
-            return;
-        }
+
         if (userId.equals(Profile.getCurrentProfile().getId())) {
             addPersonalResponse(message);
             return;
         }
-        SplitAppLogger.writeLog(SplitAppLogger.WARN, "Response from unknown id:"
-                + userId + " - " + message);
+        addFriendResponse(message, Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
+
     }
 
 
     private void addPersonalResponse(String message) {
         addResponse(R.layout.chat_session_you, "Tu", Profile.getCurrentProfile().getId(), message);
-    }
-
-    private void addFriendResponse(String message, String friendName, String friendId) {
-        addResponse(R.layout.chat_session_friend, friendName, friendId, message);
     }
 
     private void addResponse(int layoutId, String username, String userId, String message) {
@@ -211,6 +204,10 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         runOnUiThread(() -> mMessagesLayout.addView(layout));
         runOnUiThread(this::scrollToLast);
+    }
+
+    private void addFriendResponse(String message, String friendName, String friendId) {
+        addResponse(R.layout.chat_session_friend, friendName, friendId, message);
     }
 
     /**

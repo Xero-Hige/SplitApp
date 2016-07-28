@@ -61,13 +61,13 @@ public final class MockServer {
         }
     }
 
-    public static void sendGroupMessage(String message, String groupName) {
+    public static void sendGroupMessage(String message, String groupName, String[] friendList) {
         if (mRoom == null) {
             return;
         }
         mRoom.addResponse(message, Profile.getCurrentProfile().getId());
 
-        AddGroupResponseTask task = new AddGroupResponseTask(groupName);
+        AddGroupResponseTask task = new AddGroupResponseTask(groupName, friendList);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -187,9 +187,11 @@ public final class MockServer {
     private static class AddGroupResponseTask extends AsyncTask<Void, Void, Boolean> {
 
         String mGroupName;
+        String[] mFriendList;
 
-        AddGroupResponseTask(String groupName) {
+        AddGroupResponseTask(String groupName, String[] friendList) {
             mGroupName = groupName;
+            mFriendList = friendList;
         }
 
         @Override
@@ -197,28 +199,28 @@ public final class MockServer {
             switch (mGMessageNumber) {
                 case 1:
                     try {
-                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
+                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 2:
                     try {
-                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
+                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 3:
                     try {
-                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
+                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     break;
                 case 4:
                     try {
-                        addGResponse1(Profile.getCurrentProfile().getId(), Profile.getCurrentProfile().getName());
+                        addGResponse1(mFriendList[(1 % mFriendList.length)], "");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

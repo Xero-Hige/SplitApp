@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -73,6 +74,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ExpandableLinearLayout mSettle;
     private Date when;
     private String id_event = "error";
+    private String[] mAttendees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +89,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(eventMain, 0);
-            }
+        toolbar.setNavigationOnClickListener(view -> {
+            Intent eventMain = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(eventMain, 0);
         });
 
 
@@ -135,6 +134,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 String cant_part = attendees.length() + " personas invitadas";
                 invitees.setText(cant_part);
 
+                setAttendeesList(attendees);
+
             } catch (JSONException e) {
                 //onError.execute(null);
                 return;
@@ -142,6 +143,17 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void setAttendeesList(JSONArray attendees) throws JSONException {
+        ArrayList<String> attendes = new ArrayList<>();
+        for (int i = 0; i < attendees.length(); i++) {
+            String id = attendees.getJSONObject(i).getString("facebook_id");
+            if (!id.equals(Profile.getCurrentProfile().getId()) {
+                attendes.add(id);
+            }
+        }
+        mAttendees = attendes.toArray(new String[attendes.size()]);
     }
 
     @Override
@@ -473,7 +485,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_chat) {
             Intent intent = new Intent(this, ChatRoomActivity.class);
-            intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_IDS, Profile.getCurrentProfile().getId());
+            intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_IDS, mAttendees);
             intent.putExtra(ChatRoomActivity.EXTRA_FRIENDS_NAMES, Profile.getCurrentProfile().getFirstName());
             startActivity(intent);
         }
