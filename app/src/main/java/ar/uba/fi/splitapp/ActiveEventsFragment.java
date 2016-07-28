@@ -25,19 +25,32 @@ import java.util.Date;
 
 public class ActiveEventsFragment extends Fragment {
 
+    private View mFragmentView;
+    private LayoutInflater mInflater;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         FacebookManager.checkInit(this.getActivity());
 
-        View fragment = inflater.inflate(R.layout.fragment_active_events, container, false);
+        mInflater = inflater;
+        mFragmentView = inflater.inflate(R.layout.fragment_active_events, container, false);
 
-        LinearLayout templates = (LinearLayout) fragment.findViewById(R.id.active_events_list);
+        LinearLayout templates = (LinearLayout) mFragmentView.findViewById(R.id.active_events_list);
 
         getEvents(inflater, templates);
 
 
-        return fragment;
+        return mFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LinearLayout templates = (LinearLayout) mFragmentView.findViewById(R.id.active_events_list);
+
+        getEvents(mInflater, templates);
+        getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 
     private void getEvents(LayoutInflater inflater, LinearLayout templates) {
