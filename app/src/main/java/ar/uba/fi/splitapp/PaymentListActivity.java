@@ -40,16 +40,16 @@ public class PaymentListActivity extends AppCompatActivity {
 
         payment.setOnClickListener(v -> {
             Toast toast = Toast.makeText(this, "Pagado", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             Bundle event_id_passed = getIntent().getExtras();
             String id_event = "error";
             if (event_id_passed != null) {
                 id_event = event_id_passed.getString("id");
             }
-            if (id_event != "error"){
+            if (id_event != "error") {
                 Intent backMain = new Intent(this, EventDescriptionActivity.class);
-                backMain.putExtra("id",id_event);
+                backMain.putExtra("id", id_event);
                 startActivity(backMain);
             } else {
                 Intent backMain = new Intent(this, DebtActivity.class);
@@ -62,8 +62,6 @@ public class PaymentListActivity extends AppCompatActivity {
         payments.addView(payment);
 
 
-
-
         View payment2 = inflater.inflate(R.layout.payment_layout, null);
 
         TextView name2 = (TextView) payment2.findViewById(R.id.payment_name);
@@ -74,16 +72,16 @@ public class PaymentListActivity extends AppCompatActivity {
 
         payment2.setOnClickListener(v -> {
             Toast toast = Toast.makeText(this, "Pagado", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             Bundle event_id_passed = getIntent().getExtras();
             String id_event = "error";
             if (event_id_passed != null) {
                 id_event = event_id_passed.getString("id");
             }
-            if (id_event != "error"){
+            if (id_event != "error") {
                 Intent backMain = new Intent(this, EventDescriptionActivity.class);
-                backMain.putExtra("id",id_event);
+                backMain.putExtra("id", id_event);
                 startActivity(backMain);
             } else {
                 Intent backMain = new Intent(this, DebtActivity.class);
@@ -96,7 +94,6 @@ public class PaymentListActivity extends AppCompatActivity {
         payments.addView(payment2);
 
 
-
         View payment3 = inflater.inflate(R.layout.payment_layout, null);
 
         TextView name3 = (TextView) payment3.findViewById(R.id.payment_name);
@@ -107,16 +104,16 @@ public class PaymentListActivity extends AppCompatActivity {
 
         payment3.setOnClickListener(v -> {
             Toast toast = Toast.makeText(this, "Pagado", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             Bundle event_id_passed = getIntent().getExtras();
             String id_event = "error";
             if (event_id_passed != null) {
                 id_event = event_id_passed.getString("id");
             }
-            if (id_event != "error"){
+            if (id_event != "error") {
                 Intent backMain = new Intent(this, EventDescriptionActivity.class);
-                backMain.putExtra("id",id_event);
+                backMain.putExtra("id", id_event);
                 startActivity(backMain);
             } else {
                 Intent backMain = new Intent(this, DebtActivity.class);
@@ -129,9 +126,6 @@ public class PaymentListActivity extends AppCompatActivity {
         payments.addView(payment3);
 
 
-
-
-
         View payment4 = inflater.inflate(R.layout.payment_layout, null);
 
         TextView name4 = (TextView) payment4.findViewById(R.id.payment_name);
@@ -142,16 +136,16 @@ public class PaymentListActivity extends AppCompatActivity {
 
         payment4.setOnClickListener(v -> {
             Toast toast = Toast.makeText(this, "Pagado", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER,0,0);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             Bundle event_id_passed = getIntent().getExtras();
             String id_event = "error";
             if (event_id_passed != null) {
                 id_event = event_id_passed.getString("id");
             }
-            if (id_event != "error"){
+            if (id_event != "error") {
                 Intent backMain = new Intent(this, EventDescriptionActivity.class);
-                backMain.putExtra("id",id_event);
+                backMain.putExtra("id", id_event);
                 startActivity(backMain);
             } else {
                 Intent backMain = new Intent(this, DebtActivity.class);
