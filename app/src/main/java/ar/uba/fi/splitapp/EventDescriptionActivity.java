@@ -227,7 +227,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         dropdown.addMenuItem(new DroppyMenuItem("Creada el: 25 jul.").setClickable(false).setId(0));
         dropdown.addMenuItem(new DroppyMenuItem("Asignada a: Vos, duh").setClickable(false).setId(0));
         dropdown.addMenuItem(new DroppyMenuItem("Creada el: 25 jul.").setClickable(false).setId(0)).addSeparator();
-        dropdown.addMenuItem(new DroppyMenuItem("Editar", R.drawable.pencil).setClickable(false).setId(1)).addSeparator();
+        dropdown.addMenuItem(new DroppyMenuItem("Editar", R.drawable.pencil).setClickable(true).setId(1)).addSeparator();
         dropdown.addMenuItem(new DroppyMenuItem("VER SUGERENCIA DE COMPRA", R.drawable.location).setClickable(true).setId(2));
 
         dropdown.setOnClick((v, id) -> {
