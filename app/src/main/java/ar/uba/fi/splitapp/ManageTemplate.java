@@ -60,17 +60,18 @@ public class ManageTemplate extends AppCompatActivity implements NavigationView.
         }
         */
 
-        int cantTemplatesInt = 21;
 
-        for (int i = 1; i < cantTemplatesInt; i++) {
+        for (int i = 0; i < NewEventActivity.TEMPLATE_NAMES.length; i++) {
             View templateItem = inflater.inflate(R.layout.event_template_item, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.template_name);
             //String nombreTemplate = cant_template.getJSONObject(i).getString("name");
-            text.setText("Template #" /*nombreTemplate*/);
+            text.setText(NewEventActivity.TEMPLATE_NAMES[i]);
 
+            final int finalI = i;
             templateItem.setOnClickListener(v -> {
                 Intent eventDetail = new Intent(ManageTemplate.this, TemplateActivity.class);
+                eventDetail.putExtra("fromTemplateNumber", finalI);
                 startActivity(eventDetail);
             });
 
