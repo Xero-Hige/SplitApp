@@ -38,36 +38,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EventDescriptionActivity extends AppCompatActivity {
-
-    String json_prop = "{\n" +
-            "      \"name\": \"asd\",\n" +
-            "      \"when\": \"2016-07-25 19:30:00\",\n" +
-            "      \"when_iso\": \"2016-07-25T19:30:00-03:00\",\n" +
-            "      \"lat\": -53.04,\n" +
-            "      \"long\": -53.04,\n" +
-            "      \"invitees\": [\n" +
-            "        {\n" +
-            "          \"facebook_id\": 231231231\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"facebook_id\": 244\n" +
-            "        }\n" +
-            "      ],\n" +
-            "      \"tasks\": [\n" +
-            "        {\n" +
-            "          \"assignee\": 231231231,\n" +
-            "          \"name\": \"COMPRAR PAN\",\n" +
-            "          \"cost\": 4.50,\n" +
-            "          \"done\": true\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"assignee\": 231231231,\n" +
-            "          \"name\": \"COMPRAR PAN\",\n" +
-            "          \"cost\": 0,\n" +
-            "          \"done\": false\n" +
-            "        }\n" +
-            "      ]\n" +
-            "    }";
+    public static final String FACEBOOK_ID = "facebook_id";
+    public static final String NAME_FRIEND = "name_friend";
+    int FRIEND_CHOOSER_REQUEST = 0;
+    int NEW_TASK_REQUEST = 1;
     private ExpandableLinearLayout mMyTasks;
     private ExpandableLinearLayout mAllTasks;
     private ExpandableLinearLayout mSettle;
@@ -76,14 +50,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private ArrayList<String> inviteesID;
     private ArrayList<String> newInviteesID = new ArrayList<>();
     private NewTaskDialogFragment newTaskFragment;
-
-    int FRIEND_CHOOSER_REQUEST = 0;
-    int NEW_TASK_REQUEST = 1;
-
     private String[] mAttendees;
     private String mEventName;
-    public static final String FACEBOOK_ID = "facebook_id";
-    public static final String NAME_FRIEND = "name_friend";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,13 +109,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 date.setText(dateWithoutTime);
                 time.setText(justTime);
-                
+
                 JSONArray attendees = eventJson.getJSONArray("invitees");
                 String cant_part = attendees.length() + " personas invitadas";
                 invitees.setText(cant_part);
                 for (int i = 0; i < attendees.length(); i++) {
-                        String fb_id = attendees.getJSONObject(i).getString("facebook_id");
-                        inviteesID.add(fb_id);
+                    String fb_id = attendees.getJSONObject(i).getString("facebook_id");
+                    inviteesID.add(fb_id);
                 }
 
                 setAttendeesList(attendees);
@@ -199,7 +167,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         imagenAmigos.setOnClickListener(v -> {
             Intent friendListIntent = new Intent(this, AttendesActivity.class);
-            friendListIntent.putExtra("id",id_event);
+            friendListIntent.putExtra("id", id_event);
             startActivityForResult(friendListIntent, 0);
         });
     }
@@ -260,9 +228,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 JSONArray tasks = eventJson.getJSONArray("tasks");
 
-                SplitAppLogger.writeLog(1,tasks.toString());
+                SplitAppLogger.writeLog(1, tasks.toString());
 
-                SplitAppLogger.writeLog(1,"Cant de elementos: " + tasks.length());
+                SplitAppLogger.writeLog(1, "Cant de elementos: " + tasks.length());
                 for (int i = 0; i < tasks.length(); i++) {
                     View templateItem = inflater.inflate(R.layout.my_task_status_layout, null);
 
@@ -287,7 +255,20 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                     price_in.setVisibility(View.VISIBLE);
                     price.setVisibility(View.GONE);
-                    done.setChecked(false);
+                    done.setChecked(done_bool);
+
+                    if (done_bool) {
+                        String settled_price = cost.toString();
+                        price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                        price_in.setVisibility(View.GONE);
+                        price.setVisibility(View.VISIBLE);
+                        done.setChecked(true);
+                        if (isFinalized()) {
+                            done.setEnabled(false);
+                            done.setOnClickListener(u -> {
+                            });
+                        }
+                    }
 
                     done.setOnClickListener(v -> {
                         if (!done.isChecked()) {
@@ -314,14 +295,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                     CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
                     FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
-
-                    templates.addView(templateItem);
+                    if (fb_id.equals(Profile.getCurrentProfile().getId())) {
+                        templates.addView(templateItem);
+                    }
                 }
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                SplitAppLogger.writeLog(1,"Agarre excepcion aca");
+                SplitAppLogger.writeLog(1, "Agarre excepcion aca");
             }
 
         });
@@ -470,24 +452,65 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
     private void addTaskStatus() {
+
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
-        JSONArray cant_tareas;
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONObject eventJson = result.getJSONObject("data");
 
-        try {
-            JSONObject objeto = new JSONObject(json_prop);
-            cant_tareas = objeto.getJSONArray("tasks");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
+                JSONArray tasks = eventJson.getJSONArray("tasks");
 
-        int tareas = cant_tareas.length();
-        SplitAppLogger.writeLog(1, cant_tareas.toString());
-        SplitAppLogger.writeLog(1, Integer.toString(tareas));
-        for (int i = 0; i < tareas; i++) {
-            View templateItem = inflater.inflate(R.layout.task_status_layout, null);
+                SplitAppLogger.writeLog(1, tasks.toString());
+
+                SplitAppLogger.writeLog(1, "Cant de elementos: " + tasks.length());
+                for (int i = 0; i < tasks.length(); i++) {
+                    View templateItem = inflater.inflate(R.layout.task_status_layout, null);
+
+                    JSONObject task = tasks.getJSONObject(i);
+                    String name, fb_id;
+                    boolean done_bool;
+                    Double cost;
+
+                    name = task.getString("name");
+                    fb_id = task.getString("assignee");
+                    done_bool = task.getBoolean("done");
+                    cost = task.getDouble("cost");
+
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Nombre: " + name);
+                    TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+                    text.setText(name);
+
+                    TextView date = (TextView) templateItem.findViewById(R.id.task_status);
+                    if (done_bool) {
+                        date.setText("Hecho");
+                    } else {
+                        date.setText("Pendiente");
+                    }
+
+                    CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+                    if (fb_id != null) {
+                        FacebookManager.fillWithUserPic(fb_id, profile, getApplicationContext());
+                    }
+                    templates.addView(templateItem);
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                SplitAppLogger.writeLog(1, "Agarre excepcion aca");
+            }
+        });
+    }
+
+
+
+            /*View templateItem = inflater.inflate(R.layout.task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);
             String tarea;
@@ -515,8 +538,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
 
             templates.addView(templateItem);
-        }
-    }
+        }*/
+
 
     private void addExpandables() {
         mMyTasks = (ExpandableLinearLayout) findViewById(R.id.expandable_my_tasks);
@@ -611,7 +634,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_add_people) {
             Intent friendChooser = new Intent(this, FriendChooserActivity.class);
-            friendChooser.putExtra(FriendChooserActivity.FROM_CURRENT_EVENT,true);
+            friendChooser.putExtra(FriendChooserActivity.FROM_CURRENT_EVENT, true);
             friendChooser.putStringArrayListExtra(FriendChooserActivity.ALREADY_INVITED, inviteesID);
             startActivityForResult(friendChooser, FRIEND_CHOOSER_REQUEST);
             return true;
@@ -622,7 +645,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FRIEND_CHOOSER_REQUEST && resultCode == RESULT_OK) {
             newInviteesID = data.getStringArrayListExtra(FriendChooserActivity.INVITEES);
 
@@ -647,11 +670,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        } else if (requestCode == NEW_TASK_REQUEST && resultCode == RESULT_OK){
+        } else if (requestCode == NEW_TASK_REQUEST && resultCode == RESULT_OK) {
             System.out.println("HERE");
             String facebook_id = data.getStringExtra(FACEBOOK_ID);
-            String name  = data.getStringExtra(NAME_FRIEND);
-            newTaskFragment.setPersonToTask(facebook_id,name);
+            String name = data.getStringExtra(NAME_FRIEND);
+            newTaskFragment.setPersonToTask(facebook_id, name);
         }
     }
 

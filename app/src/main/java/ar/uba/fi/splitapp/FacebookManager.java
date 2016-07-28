@@ -155,6 +155,10 @@ public final class FacebookManager {
     }
 
     private static String getUserPicUrl(String userId) {
+        if (userId == null) {
+            return "";
+        }
+
         final String[] result = {null};
         Bundle params = new Bundle();
         params.putBoolean("redirect", false);
@@ -177,7 +181,8 @@ public final class FacebookManager {
                         result[0] = response.getJSONObject().getJSONObject("data").getString("url");
                         SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Picture response: " + result[0]);
 
-                    } catch (JSONException e) {
+                    } catch (JSONException | NullPointerException e) {
+                        result[0] = "";
                     }
                 }
         ).executeAndWait();
@@ -248,8 +253,12 @@ public final class FacebookManager {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            if (!success || mView == null) {
+            if (mView == null) {
                 return;
+            }
+            if (!success) {
+                SplitAppLogger.writeLog(SplitAppLogger.ERRO, "Fetch Error");
+                Glide.with(mContext).load(R.drawable.silhouette).centerCrop().into(mView);
             }
             try {
                 Glide.with(mContext).load(mUrl).centerCrop().into(mView);
