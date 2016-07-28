@@ -180,13 +180,13 @@ public class ChatRoomActivity extends AppCompatActivity {
             addPersonalResponse(message);
             return;
         }
-        addFriendResponse(message, Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
+        addFriendResponse(message, "", userId);
 
     }
 
 
     private void addPersonalResponse(String message) {
-        addResponse(R.layout.chat_session_you, "Tu", Profile.getCurrentProfile().getId(), message);
+        addResponse(R.layout.chat_session_you, "", Profile.getCurrentProfile().getId(), message);
     }
 
     private void addResponse(int layoutId, String username, String userId, String message) {

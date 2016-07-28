@@ -146,9 +146,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void setAttendeesList(JSONArray attendees) throws JSONException {
+        SplitAppLogger.writeLog(SplitAppLogger.DEBG, attendees.toString());
         ArrayList<String> attendes = new ArrayList<>();
         for (int i = 0; i < attendees.length(); i++) {
             String id = attendees.getJSONObject(i).getString("facebook_id");
+            SplitAppLogger.writeLog(SplitAppLogger.DEBG, id);
             if (!id.equals(Profile.getCurrentProfile().getId())) {
                 attendes.add(id);
             }
