@@ -11,10 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
-
-import com.facebook.Profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,6 +114,7 @@ public class ActiveEventsFragment extends Fragment {
                 return;
             }
             Utility.showMessage("Cancelaste el evento", Utility.getViewgroup(ActiveEventsFragment.this.getActivity()));
+            templateItem.setVisibility(View.GONE);
         });
 
         DroppyMenuPopup droppyMenuPopup = dropdown.build();
