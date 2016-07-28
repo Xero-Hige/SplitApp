@@ -281,7 +281,20 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                     price_in.setVisibility(View.VISIBLE);
                     price.setVisibility(View.GONE);
-                    done.setChecked(false);
+                    done.setChecked(done_bool);
+
+                    if (done_bool) {
+                        String settled_price = cost.toString();
+                        price.setText("$" + (settled_price.equals("") ? "0" : settled_price));
+                        price_in.setVisibility(View.GONE);
+                        price.setVisibility(View.VISIBLE);
+                        done.setChecked(true);
+                        if (isFinalized()) {
+                            done.setEnabled(false);
+                            done.setOnClickListener(u -> {
+                            });
+                        }
+                    }
 
                     done.setOnClickListener(v -> {
                         if (!done.isChecked()) {
@@ -464,23 +477,64 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
     private void addTaskStatus() {
+
         LinearLayout templates = (LinearLayout) findViewById(R.id.all_tasks_list);
         LayoutInflater inflater = getLayoutInflater();
 
-        JSONArray cant_tareas;
+        ServerHandler.executeGet(id_event, ServerHandler.EVENT_DETAIL, Profile.getCurrentProfile().getId(), "", result -> {
+            //onSucces.execute(result);
+            if (result == null) {
+                //onError.execute(null);
+            } else try {
+                JSONObject eventJson = result.getJSONObject("data");
 
-        try {
-            JSONObject objeto = new JSONObject(json_prop);
-            cant_tareas = objeto.getJSONArray("tasks");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
+                JSONArray tasks = eventJson.getJSONArray("tasks");
 
-        int tareas = cant_tareas.length();
+                SplitAppLogger.writeLog(1, tasks.toString());
 
-        for (int i = 1; i < tareas; i++) {
-            View templateItem = inflater.inflate(R.layout.task_status_layout, null);
+                SplitAppLogger.writeLog(1, "Cant de elementos: " + tasks.length());
+                for (int i = 0; i < tasks.length(); i++) {
+                    View templateItem = inflater.inflate(R.layout.task_status_layout, null);
+
+                    JSONObject task = tasks.getJSONObject(i);
+                    String name, fb_id;
+                    boolean done_bool;
+                    Double cost;
+
+                    name = task.getString("name");
+                    fb_id = task.getString("assignee");
+                    done_bool = task.getBoolean("done");
+                    cost = task.getDouble("cost");
+
+                    SplitAppLogger.writeLog(SplitAppLogger.DEBG, "Nombre: " + name);
+                    TextView text = (TextView) templateItem.findViewById(R.id.task_name);
+                    text.setText(name);
+
+                    TextView date = (TextView) templateItem.findViewById(R.id.task_status);
+                    if (done_bool) {
+                        date.setText("Hecho");
+                    } else {
+                        date.setText("Pendiente");
+                    }
+
+                    CircularImageView profile = (CircularImageView) templateItem.findViewById(R.id.task_profile_pic);
+                    if (fb_id != null) {
+                        FacebookManager.fillWithUserPic(fb_id, profile, getApplicationContext());
+                    }
+                    templates.addView(templateItem);
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                SplitAppLogger.writeLog(1, "Agarre excepcion aca");
+            }
+
+        });
+
+
+            /*View templateItem = inflater.inflate(R.layout.task_status_layout, null);
 
             TextView text = (TextView) templateItem.findViewById(R.id.task_name);
             String tarea;
@@ -508,7 +562,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             FacebookManager.fillWithUserPic(Profile.getCurrentProfile().getId(), profile, getApplicationContext());
 
             templates.addView(templateItem);
-        }
+        }*/
     }
 
     private void addExpandables() {
